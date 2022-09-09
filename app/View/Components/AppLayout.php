@@ -16,7 +16,7 @@ class AppLayout extends Component
     public $title;
     public function __construct($title = null)
     {
-        $this->title = $title ?? env('APP_NAME').' '.env('APP_VERSION');
+        $this->title = $title ?? env('APP_NAME');
     }
     /**
      * Get the view / contents that represents the component.

@@ -12,9 +12,11 @@
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
         "maatwebsite/excel": "^3.1",
-        "psr/simple-cache": "^1.0"
+        "psr/simple-cache": "^2.0",
+        "renatomarinho/laravel-page-speed": "^2.1"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.7",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
