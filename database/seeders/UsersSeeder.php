@@ -20,7 +20,6 @@ class UsersSeeder extends Seeder
             'username'=> 'mage2user',
             'email'=> 'icube@sirclo.com',
             'password'=> bcrypt('think2icube'),
-            'role'=> 'superadmin',
             'email_verified_at'=> Carbon::now()
         ]);
     }
