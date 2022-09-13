@@ -17,15 +17,15 @@
 
 <body class="font-sans antialiased">
     <div class="bg-gray-100 font-family-karla flex">
+        @include('layouts.sidebar')
         <div class="relative w-full flex">
-            @include('layouts.sidebar')
             <div class="w-full min-h-screen overflow-x-hidden border-t flex flex-col">
-                @include('layouts.navigation')
+                @include('layouts.navigation', ['title'=>$title])
                 <main class="w-full p-5 flex-grow">
                     <!-- Content goes here! 😁 -->
                     {{ $slot }}
                 </main>
-                <footer class="w-full bg-white text-right p-4 border-t">
+                <footer class="w-full bg-white text-right px-4 py-6  border-t-2 border-pink-400">
                     @include('layouts.footer')
                 </footer>
             </div>
