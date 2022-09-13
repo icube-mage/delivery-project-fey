@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backoffice\DashboardController;
+use App\Http\Controllers\Backoffice\UploadCsvController;
+use App\Http\Controllers\Backoffice\ConfigurationController;
+use App\Http\Controllers\Backoffice\HistoricalDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +26,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/calculate', function(){
         return view('pages.calculate');
     })->name('calculate.index');
+    Route::prefix('menu')->group(function(){
+        Route::get('/uploadcsv', UploadCsvController::class)->name('menu.uploadcsv');
+        Route::get('/historicaldata', HistoricalDataController::class)->name('menu.historicaldata');
+    });
+    Route::prefix('settings')->group(function(){
+        Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');
+    });
 });

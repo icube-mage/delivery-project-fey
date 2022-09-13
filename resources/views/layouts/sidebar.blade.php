@@ -1,0 +1,57 @@
+<aside class="w-1/5" aria-label="Sidebar">
+    <div class="overflow-y-auto py-4 px-3 bg-gradient-to-b from-pink-400 to-blue-300 dark:bg-gray-800">
+        <h3 class="text-center uppercase font-bold text-4xl text-white">Fey</h3>
+        <div class="relative min-h-screen">
+            <ul class="mt-5 space-y-2">
+                <li>
+                    <a href="/"
+                        class="flex items-center p-2 text-white text-base font-medium rounded-lg dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700">
+                        <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span class="ml-3">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <h3 class="text-white font-medium text-sm mb-2">Menu</h3>
+                    <a href="{{ route('menu.uploadcsv') }}"
+                        class="flex items-center p-2 text-white text-base font-medium rounded-lg dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700">
+                        <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                        <span class="ml-3">Upload Csv</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('menu.historicaldata') }}"
+                        class="flex items-center p-2 text-base text-white font-medium rounded-lg dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700">
+                        <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Historical Data</span>
+                    </a>
+                </li>
+                <li>
+                    <h3 class="text-white font-medium text-sm mb-2">Settings</h3>
+                    <a href="{{ route('settings.configuration') }}"
+                        class="flex items-center p-2 text-base text-white font-medium rounded-lg dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700">
+                        <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="flex-1 ml-3 whitespace-nowrap">Configuration</span>
+                    </a>
+                </li>
+            </ul>
+            <a href="" class="text-center text-white font-medium bg-pink-600 rounded-lg px-2 py-3 hover:text-white hover:bg-pink-500 absolute inset-x-0 bottom-0">
+                User Management
+            </a>
+        </div>
+    </div>
+</aside>
