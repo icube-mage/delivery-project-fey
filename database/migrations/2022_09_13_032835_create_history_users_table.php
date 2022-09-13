@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('history_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('brand_id');
-            $table->unsignedBigInteger('marketplace_id');
+            $table->foreignId('user_id');
+            $table->foreignId('brand_id');
+            $table->foreignId('marketplace_id');
             $table->integer('total_records');
             $table->integer('false_price');
             $table->timestamps();

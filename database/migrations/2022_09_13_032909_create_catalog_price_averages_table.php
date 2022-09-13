@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('sku', 100);
             $table->float('rrp')->comment('Price before discount');
             $table->float('cbp')->comment('Price after discount');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('brand_id');
-            $table->unsignedBigInteger('marketplace_id');
+            $table->foreignId('user_id');
+            $table->foreignId('brand_id');
+            $table->foreignId('marketplace_id');
             $table->date('start_date');
             $table->timestamps();
         });
