@@ -26,10 +26,10 @@
         </div>
     </div>
 
-    <script defer src="https://unpkg.com/alpinejs@3.8.1/dist/cdn.min.js"></script>
+    @livewireScripts
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite('resources/js/app.js')
-    @livewireScripts
     @stack('scripts')
 </body>
 </html>
