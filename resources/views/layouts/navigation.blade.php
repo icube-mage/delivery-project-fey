@@ -1,12 +1,13 @@
 <header class="w-full items-center bg-white py-2 px-6 flex border-b">
     <div class="w-1/2 flex items-center justify-start">
-        {{-- <a href="{{ route('dashboard') }}">
-            <div class="py-2 px-3 uppercase text-violet-700 font-bold text-lg hover:text-violet-600">
-                {{ $title }}
-            </div>
-        </a>
-        <a href="{{ route('calculate.index') }}" class="text-base">XXX</a> --}}
-        <h3 class="text-violet-700 font-bold text-lg hover:text-violet-600">>> {{$title ?? auth()->user()->roles[0]->name}}</h3>
+        <h3 class="text-violet-700 font-bold text-lg hover:text-violet-600">
+        >> 
+        @if(!$title && auth()->user()->roles[0]->name) 
+            {{auth()->user()->roles[0]->name}} 
+        @else 
+            {{$title}} 
+        @endif
+        </h3>
     </div>
     <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
         <button @click="isOpen = !isOpen" id="dropdownDividerButton" class="font-medium text-sm px-4 py-2.5 text-center inline-flex items-center hover:text-gray-500" type="button">{{auth()->user()->name}} 
