@@ -49,7 +49,7 @@
             </li>
         </ul>
         <div class="inset-x-3 absolute bottom-0 ">
-            <a href="" class="text-white font-medium flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-green-400 hover:to-blue-500 rounded-lg px-2 py-3 mb-3  text-center">
+            <a href="{{ route('user.manage') }}" class="text-white font-medium flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-green-400 hover:to-blue-500 rounded-lg px-2 py-3 mb-3  text-center">
                 User Management
             </a>
         </div>
