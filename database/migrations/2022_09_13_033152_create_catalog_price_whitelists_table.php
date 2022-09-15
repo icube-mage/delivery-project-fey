@@ -20,8 +20,8 @@ return new class extends Migration
             $table->float('min_price');
             $table->float('max_price');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('brand_id')->constrained();
-            $table->foreignId('marketplace_id')->constrained();
+            $table->string('brand');
+            $table->string('marketplace');
             $table->timestamps();
         });
     }

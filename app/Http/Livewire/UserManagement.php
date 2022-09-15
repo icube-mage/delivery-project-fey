@@ -28,7 +28,6 @@ class UserManagement extends Component
     public function render()
     {
         $query = '%'.$this->searchTerm.'%';
-        
         $users = User::where(function($sub_query) use($query){
             $sub_query->where('name', 'like', $query)
                     ->orWhere('username', 'like', $query)
@@ -70,7 +69,9 @@ class UserManagement extends Component
             "username" => $this->username,
             "email" => $this->email
         ];
-        if($this->password!=null && $this->titleAction == 'Update'){
+        if ($this->password!=null && $this->titleAction == 'Update') {
+            $data['password'] = bcrypt($this->password);
+        } elseif($this->password!=null && $this->titleAction != 'Update'){
             $data['password'] = bcrypt($this->password);
         } else {
             $this->password = $this->email;

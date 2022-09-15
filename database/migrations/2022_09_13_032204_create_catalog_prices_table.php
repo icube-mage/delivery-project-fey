@@ -20,8 +20,8 @@ return new class extends Migration
             $table->float('rrp')->comment('Price before discount');
             $table->float('cbp')->comment('Price after discount');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('brand_id')->constrained();
-            $table->foreignId('marketplace_id')->constrained();
+            $table->string('brand');
+            $table->string('marketplace');
             $table->date('start_date');
             $table->timestamps();
         });
