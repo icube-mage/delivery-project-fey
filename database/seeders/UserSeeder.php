@@ -15,12 +15,13 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $user = User::create([
             'name'=> 'Administrator',
             'username'=> 'mage2user',
             'email'=> 'icube@sirclo.com',
             'password'=> bcrypt('think2icube'),
             'email_verified_at'=> Carbon::now()
         ]);
+        $user->assignRole('Super Admin');
     }
 }
