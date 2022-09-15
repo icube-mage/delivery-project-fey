@@ -17,12 +17,6 @@ class ConfigSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'key' => 'csv_multiple_value_separator',
-                'value' => ',',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
                 'key' => 'average_max_time_calculate',
                 'value' => '90',
                 'created_at' => now(),

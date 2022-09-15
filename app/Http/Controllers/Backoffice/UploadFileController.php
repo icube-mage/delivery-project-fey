@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Backoffice;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class UploadCsvController extends Controller
+class UploadFileController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -15,6 +15,6 @@ class UploadCsvController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('pages.menu.uploadcsv');
+        return view('pages.menu.uploadfile');
     }
 }

@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backoffice\DashboardController;
-use App\Http\Controllers\Backoffice\UploadCsvController;
+use App\Http\Controllers\Backoffice\UploadFileController;
 use App\Http\Controllers\Backoffice\ConfigurationController;
 use App\Http\Controllers\Backoffice\HistoricalDataController;
+use App\Http\Livewire\UserManagement;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +24,12 @@ Route::post('/login', [LoginController::class, 'store'])->middleware('guest');
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
-    Route::get('/calculate', function(){
-        return view('pages.calculate');
-    })->name('calculate.index');
-    Route::prefix('menu')->group(function(){
-        Route::get('/uploadcsv', UploadCsvController::class)->name('menu.uploadcsv');
-        Route::get('/historicaldata', HistoricalDataController::class)->name('menu.historicaldata');
+    Route::prefix('user')->group(function(){
+        Route::get('/manage', UserManagement::class)->name('user.manage');
+    });
+    Route::prefix('menu')->name('menu.')->group(function(){
+        Route::get('uploadfile', UploadFileController::class)->name('fileupload');
+        Route::get('historicaldata', HistoricalDataController::class)->name('historicaldata');
     });
     Route::prefix('settings')->group(function(){
         Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');
