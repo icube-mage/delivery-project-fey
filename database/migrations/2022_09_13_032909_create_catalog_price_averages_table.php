@@ -16,11 +16,12 @@ return new class extends Migration
         Schema::create('catalog_price_averages', function (Blueprint $table) {
             $table->id();
             $table->string('sku', 100);
+            $table->string('name');
             $table->float('rrp')->comment('Price before discount');
             $table->float('cbp')->comment('Price after discount');
-            $table->foreignId('user_id');
-            $table->foreignId('brand_id');
-            $table->foreignId('marketplace_id');
+            $table->foreignId('user_id')->constrained();
+            $table->string('brand');
+            $table->string('marketplace');
             $table->date('start_date');
             $table->timestamps();
         });

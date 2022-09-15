@@ -1,22 +1,18 @@
 <div x-data="{ show: false }">
-    <form class="w-1/2 2xl:w-1/3" wire:submit.prevent="store">
+    <div class="w-1/2 2xl:w-1/3">
+        @foreach($maps as $index => $map)
         <div class="flex items-center justify-between gap-6 py-4 border-b">
-            <x-label>CSV Field Separator</x-label>
-            <x-input type="text" wire:model.defer="csv_separator"/>
+            <x-label>{{$map['marketplace']}} Excel</x-label>
+            <div class="flex items-center justify-between gap-4">
+                <x-input type="text" wire:model="config.{{$index}}"/>
+                <x-button type="button" wire:click="store('{{$map['config']}}', {{$index}})" @click="show=true">Save</x-button>
+            </div>
         </div>
-        <div class="flex items-center justify-between gap-6 py-4 border-b">
-            <x-label>Max time to keep record</x-label>
-            <x-input type="number" wire:model.defer="time_calculate"/>
-        </div>
-        <div class="flex items-center justify-between gap-6 py-4">
-            <x-label>Cron Schedule</x-label>
-            <x-input type="text" wire:model.defer="cron_schedule"/>
-        </div>
-        <div class="flex justify-end">
-            <x-button @click="show=true">Save</x-button>
-        </div>
-    </form>
-    
+        @endforeach
+    </div>
+    <div class="w-1/2 2xl:w-2/3">  
+        <p class="mt-3 text-yellow-700">Separate column name with comma. for example : sku,name,price,diskon</p>
+    </div>
     <div class="flex top-16 absolute right-4 items-center p-4 mb-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert"
         x-show="show"
         x-init="setTimeout(() => show = false, 3000)"

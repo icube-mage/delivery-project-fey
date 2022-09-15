@@ -18,7 +18,7 @@
 <body class="font-sans antialiased">
     <div class="bg-gray-100 font-family-karla flex">
         @include('layouts.sidebar')
-        <div class="relative w-full flex">
+        <div class="relative w-full flex  flex-col h-screen overflow-y-hidden">
             <div class="w-full min-h-screen overflow-x-hidden border-t flex flex-col">
                 @include('layouts.navigation', ['title'=>$title])
                 <main class="w-full p-5 flex-grow">

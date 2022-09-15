@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('marketplaces', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug');
-            $table->softDeletes();
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }
