@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Configuration;
 use App\Models\Configuration;
 use Livewire\Component;
 
-class Form extends Component
+class Shopee extends Component
 {
     public $csv_separator;
     public $time_calculate;
@@ -20,7 +20,7 @@ class Form extends Component
     }
     public function render()
     {
-        return view('livewire.configuration.form');
+        return view('livewire.configuration.shopee');
     }
     public function updatedCsvSeparator()
     {

@@ -15,7 +15,8 @@ class UserManagement extends Component
     public $currentPage = 1;
     public $name, $email, $username, $password;
     public $role;
-    protected $listeners = ['store'];
+    public $titleAction = 'Create';
+    protected $listeners = ['store', 'destroy'];
     protected $rules = [
         'name' => 'required',
         'username' => 'required|min:6',
@@ -53,18 +54,57 @@ class UserManagement extends Component
         ]);
     }
 
+    public function alertDeleteConfirm($id)
+    {
+        $this->dispatchBrowserEvent('swal:confirm', [
+            'text' => 'Do you want to create this account?',
+            'action' => 'delete',
+            'item' => $id,
+        ]);
+    }
+
     public function store()
     {
-        $this->validate();
-        $user = User::create([
+        $data = [
             "name" => $this->name,
             "username" => $this->username,
-            "email" => $this->email,
-            "password" => bcrypt($this->password),
-        ]);
+            "email" => $this->email
+        ];
+        if($this->password!=null && $this->titleAction == 'Update'){
+            $data['password'] = bcrypt($this->password);
+        } else {
+            $this->password = $this->email;
+        }
+        $this->validate();
+        $user = User::updateOrCreate([
+            'username' => $this->username
+        ],$data);
         $user->assignRole($this->role);
+        $this->reset();
         $this->dispatchBrowserEvent('swal:success', [
             'text' => 'Account successfully created',
         ]);
+    }
+
+    public function destroy($id)
+    {
+        User::where('id', $id)->delete();
+        $this->dispatchBrowserEvent('swal:success', [
+            'text' => 'Account successfully deleted',
+        ]);
+    }
+
+    public function edit(User $user){
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->username = $user->username;
+        $this->password = null;
+        $this->role = $user->getRoleNames()[0];
+        $this->titleAction = 'Update';
+    }
+
+    public function clear()
+    {
+        $this->reset();
     }
 }

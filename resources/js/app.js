@@ -10,7 +10,11 @@ window.addEventListener("swal:confirm", (e) => {
         confirmButtonColor: "#0E7490",
     }).then((response) => {
         if (response.isConfirmed) {
-            window.livewire.emit("store");
+            if (e.detail.action == "delete") {
+                window.livewire.emit("destroy", [e.detail.item]);
+            } else {
+                window.livewire.emit("store");
+            }
         }
     });
 });

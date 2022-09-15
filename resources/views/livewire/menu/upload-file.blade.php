@@ -1,6 +1,6 @@
 <div class="w-full flex flex-col">
     <h3 class="text-3xl font-bold">{{ $title }}</h3>
-    <form class="my-6 w-2/5 flex flex-col items-end" enctype="multipart/form-data">
+    <form wire:submit.prevent="submit" class="my-6 w-2/5 flex flex-col items-end" enctype="multipart/form-data">
         <div class="form-group space-y-3 mb-5">
             <div class="form-row w-full flex items-center justify-between">
                 <x-label for="brand" :value="__('Brand')" />
@@ -29,7 +29,7 @@
                     id="file" type="file">
             </div>
         </div>
-        <x-button type="button" wire:click="test" class="w-6/12">
+        <x-button class="w-6/12">
             {{ __('Upload') }}
         </x-button>
     </form>
