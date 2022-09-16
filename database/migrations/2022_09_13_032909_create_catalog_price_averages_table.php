@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('catalog_price_averages', function (Blueprint $table) {
             $table->id();
             $table->string('sku', 100);
-            $table->float('average_price');
+            $table->float('average_price', 10, 2);
             $table->integer('total_record');
             $table->foreignId('user_id')->constrained();
             $table->string('brand');

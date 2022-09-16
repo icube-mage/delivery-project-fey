@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('sku', 100);
             $table->string('name');
-            $table->float('rrp')->comment('Price before discount');
-            $table->float('cbp')->comment('Price after discount');
+            $table->float('discount_price', 10, 2);
             $table->foreignId('user_id')->constrained();
             $table->string('brand');
             $table->string('marketplace');
