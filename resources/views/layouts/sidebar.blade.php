@@ -11,8 +11,8 @@
             </li>
             <li>
                 <h3 class="text-gray-400 font-bold text-sm mb-2 uppercase mt-8 px-3">Menu</h3>
-                <a href="{{ route('menu.fileupload') }}"
-                    class="flex items-center p-2 text-white text-base font-medium rounded-lg hover:text-slate-700 dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700 @if(Route::is('menu.fileupload')) bg-pink-500 @endif">
+                <a href="{{ route('menu.uploadfile') }}"
+                    class="flex items-center p-2 text-white text-base font-medium rounded-lg hover:text-slate-700 dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700 @if(Route::is('menu.uploadfile') || Route::is('menu.uploadfile.checkprice')) bg-pink-500 @endif">
                     <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-700 group-hover:text-gray-900 dark:group-hover:text-white"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

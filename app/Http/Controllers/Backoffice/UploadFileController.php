@@ -17,4 +17,15 @@ class UploadFileController extends Controller
     {
         return view('pages.menu.uploadfile');
     }
+
+    /**
+     * Handle the incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function checkPrice(Request $request)
+    {
+        return view('pages.menu.uploadfile.checkprice');
+    }
 }

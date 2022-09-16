@@ -28,7 +28,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/manage', UserManagement::class)->name('user.manage');
     });
     Route::prefix('menu')->name('menu.')->group(function(){
-        Route::get('uploadfile', UploadFileController::class)->name('fileupload');
+        Route::get('uploadfile', UploadFileController::class)->name('uploadfile');
+        Route::get('uploadfile/checkprice', [UploadFileController::class, 'checkPrice'])->name('uploadfile.checkprice');
         Route::get('historicaldata', HistoricalDataController::class)->name('historicaldata');
     });
     Route::prefix('settings')->group(function(){
