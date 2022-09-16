@@ -20,4 +20,9 @@ class CatalogPrice extends Model
         'marketplace',
         'start_date'
     ];
+    
+    public function user()
+    {
+        $this->belongsTo(User::class);
+    }
 }

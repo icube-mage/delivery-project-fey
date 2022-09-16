@@ -40,6 +40,7 @@ class UploadFile extends Component
             'marketplace' => 'required',
             'file' => 'required|mimes:xlsx, csv, xls',
         ]);
+        CatalogPriceTemp::truncate();
         Excel::import(new FileDataImport($brandsName, $marketplaceName), $this->file);
 
         $this->userId = Auth::user()->id;

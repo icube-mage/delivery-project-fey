@@ -6,6 +6,7 @@ use App\Models\CatalogPriceTemp;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\Menu\UploadFile;
+use App\Models\CatalogPrice;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -28,11 +29,13 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow
     */
     public function model(array $row)
     {
-        DB::beginTransaction();
-        $catalogTemp = CatalogPriceTemp::all();
-        if($catalogTemp->isNotEmpty()){
-            DB::table('catalog_price_temps')->truncate();
-        }
+        // DB::beginTransaction();
+        // $catalogTemp = CatalogPriceTemp::all();
+        // if($catalogTemp->isNotEmpty()){
+        //     DB::table('catalog_price_temps')->truncate();
+        // }
+        // dd('sdfsdf');
+        // CatalogPrice::truncate();
         // dd($catalogTemp);
         // Hapus data temp
         $sku = isset($row['nama_sku']) ? $row['nama_sku'] : 0;
