@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('catalog_prices', function (Blueprint $table) {
             $table->id();
+            $table->uuid('upload_hash');
             $table->string('sku', 100);
             $table->string('name');
             $table->float('rrp')->comment('Price before discount');
