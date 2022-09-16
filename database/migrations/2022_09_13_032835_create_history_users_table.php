@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('marketplace');
             $table->integer('total_records');
             $table->integer('false_price');
+            $table->text('extras')->nullable();
             $table->timestamps();
         });
     }
