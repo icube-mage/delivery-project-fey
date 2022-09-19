@@ -12,9 +12,8 @@ class CatalogPriceAvg extends Model
 
     protected $fillable = [
         'sku',
-        'name',
-        'rrp',
-        'cbp',
+        'average_price',
+        'total_record',
         'user_id',
         'brand',
         'marketplace',
