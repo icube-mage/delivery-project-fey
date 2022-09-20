@@ -23,24 +23,17 @@ class HistoryData extends Component
     }
     public function render()
     {
-        // $input = '%'.$this->searchTerm.'%';
-        // $catalogPrices = CatalogPrice::with('user')
-        // ->where(function($sub_query) use($input){
-        //     $sub_query->where('brand', 'like', $input)
-        //             ->orWhere('marketplace', 'like', $input);
-        // })
-        // ->whereHas('user', function ($sub_query) use ($input) {
-        //     $sub_query->orWhere('name', 'like', $input);
-        // })
-        // ->paginate(10);
         $input = '%'.$this->searchTerm.'%';
         $catalogPrices = CatalogPrice::with('user')
         ->select(['upload_hash', 'brand', 'marketplace','start_date','users.name'])
         ->leftJoin('users', 'catalog_prices.user_id', '=', 'users.id')
         ->where(function($sub_query) use($input){
             $sub_query->where('brand', 'like', $input)
-                    ->orWhere('marketplace', 'like', $input)
-                    ->orWhere('upload_hash', 'like', $input);
+                ->orWhere('marketplace', 'like', $input)
+                ->orWhere('upload_hash', 'like', $input)
+                ->orWhereHas('user', function ($sub_query) use ($input) {
+                    $sub_query->where('name', 'like', $input);
+                });
         })
         ->groupBy(['upload_hash', 'brand', 'marketplace','start_date', 'users.name'])
         ->paginate(10);

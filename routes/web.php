@@ -6,6 +6,7 @@ use App\Http\Controllers\Backoffice\DashboardController;
 use App\Http\Controllers\Backoffice\UploadFileController;
 use App\Http\Controllers\Backoffice\ConfigurationController;
 use App\Http\Controllers\Backoffice\HistoricalDataController;
+use App\Http\Controllers\Backoffice\ReportController;
 use App\Http\Livewire\UserManagement;
 
 /*
