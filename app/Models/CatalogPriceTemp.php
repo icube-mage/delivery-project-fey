@@ -17,11 +17,11 @@ class CatalogPriceTemp extends Model
     protected $fillable = [
         'sku',
         'name',
-        'rrp',
-        'cbp',
+        'discount_price',
         'user_id',
         'brand',
         'marketplace',
-        'start_date'
+        'start_date',
+        'is_whitelist'
     ];
 }

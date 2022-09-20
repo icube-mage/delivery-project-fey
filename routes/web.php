@@ -6,6 +6,7 @@ use App\Http\Controllers\Backoffice\DashboardController;
 use App\Http\Controllers\Backoffice\UploadFileController;
 use App\Http\Controllers\Backoffice\ConfigurationController;
 use App\Http\Controllers\Backoffice\HistoricalDataController;
+use App\Http\Controllers\Backoffice\ReportController;
 use App\Http\Livewire\UserManagement;
 
 /*
@@ -30,7 +31,14 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('menu')->name('menu.')->group(function(){
         Route::get('uploadfile', UploadFileController::class)->name('uploadfile');
         Route::get('uploadfile/checkprice', [UploadFileController::class, 'checkPrice'])->name('uploadfile.checkprice');
-        Route::get('historicaldata', HistoricalDataController::class)->name('historicaldata');
+        Route::get('report', [ReportController::class, 'index'])->name('report');
+        Route::get('historicaldata', [HistoricalDataController::class, 'index'])->name('historicaldata');
+        Route::get('historicaldata/{hash}', [HistoricalDataController::class, 'show'])->name('historicaldata.show');
+    });
+    Route::prefix('export')->name('export.')->group(function(){
+        Route::get('export/log',  [HistoricalDataController::class, 'exportAll'])->name('catalog.price');
+        Route::get('export/log/{hash}',  [HistoricalDataController::class, 'exportByHash'])->name('catalog.price.hash');
+        Route::get('report', [ReportController::class, 'export'])->name('report');
     });
     Route::prefix('settings')->group(function(){
         Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');
