@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->uuid('upload_hash');
             $table->string('sku', 100);
-            $table->string('name')->nullable();
+            $table->string('product_name');
+            $table->float('retail_price', 10, 2);
             $table->float('discount_price', 10, 2);
             $table->foreignId('user_id')->constrained();
             $table->string('brand');

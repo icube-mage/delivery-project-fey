@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('catalog_price_temps', function (Blueprint $table) {
             $table->id();
             $table->string('sku', 100);
-            $table->string('name')->nullable();
+            $table->string('product_name');
+            $table->float('retail_price', 10, 2);
             $table->float('discount_price', 10, 2);
             $table->foreignId('user_id')->constrained();
             $table->string('brand');
