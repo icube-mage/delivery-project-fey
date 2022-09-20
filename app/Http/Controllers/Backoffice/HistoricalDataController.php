@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Backoffice;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class HistoricalDataController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function __invoke(Request $request)
+    public function index()
     {
-        return view('pages.menu.historicaldata');
+        return view('pages.menu.historydata.catalog-price');
+    }
+
+    public function show($hash)
+    {
+        return view('pages.menu.historydata.catalog-price-history', compact('hash'));
     }
 }

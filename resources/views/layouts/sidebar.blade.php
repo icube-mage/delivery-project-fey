@@ -22,6 +22,15 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('menu.report') }}"
+                    class="flex items-center p-2 text-base text-white font-medium rounded-lg hover:text-slate-700 dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700 @if(Route::is('menu.historicaldata')) bg-pink-500 @endif">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('menu.historicaldata') }}"
                     class="flex items-center p-2 text-base text-white font-medium rounded-lg hover:text-slate-700 dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700 @if(Route::is('menu.historicaldata')) bg-pink-500 @endif">
                     <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-700 group-hover:text-gray-900 dark:group-hover:text-white"

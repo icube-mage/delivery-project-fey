@@ -1,5 +1,5 @@
 <div>
-    <div>
+    <div class="flex justify-between items-center mb-6">
         <x-input type="text" placeholder="Search" wire:model="searchTerm" />
     </div>
     <x-table>
@@ -14,15 +14,15 @@
         </x-thead>
         <tbody>
             @foreach($catalogPrices as $catalogPrice)
-            <tr>
+            <tr class="hover:bg-gray-100">
                 <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ $catalogPrice->upload_hash }}
+                    <a href="{{ route('menu.historicaldata.show', $catalogPrice->upload_hash) }}" class="text-sky-600 hover:text-sky-700">{{ $catalogPrice->upload_hash }}</a>
                 </x-th>
                 <x-td>
-                    {{ \Carbon\Carbon::parse($user->created_at)->format('j F, Y H:i:s') }}
+                    {{ $catalogPrice->start_date }}
                 </x-td>
                 <x-td>
-                    {{ $catalogPrice->user->name }}
+                    {{ $catalogPrice->name }}
                 </x-td>
                 <x-td>
                     {{ $catalogPrice->brand }}
@@ -34,5 +34,5 @@
             @endforeach
         </tbody>
     </x-table>
-    {{ $users->links('livewire.pagination') }}
+    {{ $catalogPrices->links('livewire.pagination') }}
 </div>

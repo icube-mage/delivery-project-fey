@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="title">
-        Historical Data
+        Historical Log
     </x-slot>
     
     <x-content-card>
-        <livewire:table.catalog-price/>
+        <livewire:table.history-data/>
     </x-content-card>
 </x-app-layout>

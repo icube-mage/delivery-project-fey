@@ -30,7 +30,10 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('menu')->name('menu.')->group(function(){
         Route::get('uploadfile', UploadFileController::class)->name('uploadfile');
         Route::get('uploadfile/checkprice', [UploadFileController::class, 'checkPrice'])->name('uploadfile.checkprice');
-        Route::get('historicaldata', HistoricalDataController::class)->name('historicaldata');
+        Route::get('report', [ReportController::class, 'index'])->name('report');
+        Route::get('report/{user}', [ReportController::class, 'index'])->name('report.show');
+        Route::get('historicaldata', [HistoricalDataController::class, 'index'])->name('historicaldata');
+        Route::get('historicaldata/{hash}', [HistoricalDataController::class, 'show'])->name('historicaldata.show');
     });
     Route::prefix('settings')->group(function(){
         Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');
