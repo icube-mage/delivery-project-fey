@@ -11,7 +11,8 @@
         @endforeach
     </div>
     <div class="w-1/2 2xl:w-2/3">  
-        <p class="mt-3 text-yellow-700">Use equal symbol (=) to defined header name and separate by comma.<br/>for example : sku=Skus,price=Harga</p>
+        <p class="mt-3 text-yellow-700">Use equal symbol (=) to defined header name and separate by comma.<br/>mapping key : sku, product_name, retail_price, discount_price and start_date*<br/>
+        <br/>start_date is optional</p>
     </div>
     <div class="flex top-16 absolute right-4 items-center p-4 mb-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert"
         x-show="show"
