@@ -9,6 +9,7 @@
                     <span class="ml-3">Dashboard</span>
                 </a>
             </li>
+            @if(auth()->user()->hasRole(['Super Admin', 'Store Operations']))
             <li>
                 <h3 class="text-gray-400 font-bold text-sm mb-2 uppercase mt-8 px-3">Menu</h3>
                 <a href="{{ route('menu.uploadfile') }}"
@@ -18,9 +19,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                     </svg>
-                    <span class="ml-3">Upload File</span>
+                    <span class="ml-3">Price Checking</span>
                 </a>
             </li>
+            @endif
+            @if(auth()->user()->hasRole(['Super Admin', 'Key Account Manager']))
             <li>
                 <a href="{{ route('menu.report') }}"
                     class="flex items-center p-2 text-base text-white font-medium rounded-lg hover:text-slate-700 dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700 @if(Route::is('menu.report')) bg-pink-500 @endif">
@@ -30,6 +33,8 @@
                     <span class="flex-1 ml-3 whitespace-nowrap">Report</span>
                 </a>
             </li>
+            @endif
+            @if(auth()->user()->hasRole(['Super Admin', 'Store Operations', 'Key Account Manager']))
             <li>
                 <a href="{{ route('menu.historicaldata') }}"
                     class="flex items-center p-2 text-base text-white font-medium rounded-lg hover:text-slate-700 dark:text-white hover:bg-pink-500 dark:hover:bg-pink-700 @if(Route::is('menu.historicaldata')) bg-pink-500 @endif">
@@ -38,9 +43,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span class="flex-1 ml-3 whitespace-nowrap">Historical Data</span>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Historical Log</span>
                 </a>
             </li>
+            @endif
+            @if(auth()->user()->hasRole(['Super Admin', 'Store Operations']))
             <li>
                 <h3 class="text-gray-400 font-bold text-sm mb-2 uppercase mt-8 px-3">Settings</h3>
                 <a href="{{ route('settings.configuration') }}"
@@ -56,6 +63,7 @@
                     <span class="flex-1 ml-3 whitespace-nowrap">Configuration</span>
                 </a>
             </li>
+            @endif
         </ul>
         <div class="inset-x-3 absolute bottom-0 ">
             <a href="{{ route('user.manage') }}" class="text-white font-medium flex items-center justify-center bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-green-400 hover:to-blue-500 rounded-lg px-2 py-3 mb-3  text-center">
