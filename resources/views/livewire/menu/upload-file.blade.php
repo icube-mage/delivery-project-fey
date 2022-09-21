@@ -38,5 +38,6 @@
         </form>
         <a href="{{ route('menu.uploadfile.checkprice') }}" class="inline-flex h-fit mb-6 items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-pink-600 hover:bg-pink-500 active:bg-pink-500 focus:border-pink-500 justify-center tracking-widest focus:outline-none focus:ring ring-pink-300 disabled:opacity-25 transition ease-in-out duration-150">Check Price</a>
     </div>
-    <livewire:table.upload-file />
+    
+    <livewire:table.upload-file isUploaded="{{ $isUploaded }}" />
 </div>

@@ -14,9 +14,9 @@ class CatalogPrice extends Model
     protected $fillable = [
         'upload_hash',
         'sku',
-        'name',
-        'rrp',
-        'cbp',
+        'product_name',
+        'retail_price',
+        'discount_price',
         'user_id',
         'brand',
         'marketplace',

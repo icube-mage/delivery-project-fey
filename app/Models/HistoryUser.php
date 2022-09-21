@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class HistoryUser extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'brand',
+        'marketplace',
+        'total_records',
+        'false_price',
+        'extras'
+    ];
 }

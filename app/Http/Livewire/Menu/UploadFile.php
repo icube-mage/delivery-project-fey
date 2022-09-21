@@ -23,6 +23,7 @@ class UploadFile extends Component
     public $brand;
     public $marketplace;
     public $file;
+    public $isUploaded = false;
 
     public function render()
     {
@@ -73,6 +74,9 @@ class UploadFile extends Component
             
         }
 
-        return back()->withStatus('File imported succesfully');
+        $this->isUploaded  = true;
+        $this->emit('setUploaded',$this->isUploaded);
+
+        return back()->withStatus('File upload success');
     }
 }

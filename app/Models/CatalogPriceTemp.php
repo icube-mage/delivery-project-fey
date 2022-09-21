@@ -16,12 +16,15 @@ class CatalogPriceTemp extends Model
      */
     protected $fillable = [
         'sku',
-        'name',
+        'product_name',
+        'retail_price',
         'discount_price',
         'user_id',
         'brand',
         'marketplace',
         'start_date',
-        'is_whitelist'
+        'is_whitelist',
+        'is_negative'
+
     ];
 }
