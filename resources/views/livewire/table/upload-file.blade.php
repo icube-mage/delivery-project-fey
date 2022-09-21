@@ -1,4 +1,4 @@
-<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+<div class="overflow-x-auto relative shadow-md sm:rounded-lg" wire:poll>
     <x-table>
         <x-thead>
             <tr>
