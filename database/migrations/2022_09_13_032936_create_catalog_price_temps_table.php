@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('sku', 100);
             $table->string('product_name');
-            $table->float('retail_price', 10, 2);
             $table->float('discount_price', 10, 2);
             $table->foreignId('user_id')->constrained();
             $table->string('brand');
             $table->string('marketplace');
             $table->boolean('is_whitelist')->default(false);
+            $table->boolean('is_negative')->default(false);
             $table->date('start_date');
             $table->timestamps();
         });

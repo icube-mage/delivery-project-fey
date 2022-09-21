@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('catalog_prices', function (Blueprint $table) {
-            $table->float('retail_price', 10, 2)->after('name')->nullable();
+            $table->float('retail_price', 10, 2)->after('product_name')->nullable();
         });
         Schema::table('catalog_price_temps', function (Blueprint $table) {
-            $table->float('retail_price', 10, 2)->after('name')->nullable();
+            $table->float('retail_price', 10, 2)->after('product_name')->nullable();
         });
     }
 

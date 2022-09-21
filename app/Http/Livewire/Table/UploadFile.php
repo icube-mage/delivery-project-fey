@@ -13,6 +13,17 @@ class UploadFile extends Component
 
     public $sortField = 'id';
     public $sortDirection = 'asc';
+    public $isUploaded;
+
+    protected $listeners = ['setUploaded'];
+    
+    public function mount($isUploaded){
+        $this->isUploaded  = $isUploaded;
+    }
+
+    public function setUploaded($boolean){
+        $this->isUploaded = $boolean;
+    }
 
     public function setPage($url)
     {
@@ -36,6 +47,12 @@ class UploadFile extends Component
 
     public function render()
     {
-        return view('livewire.table.upload-file',['catalogPriceTemp' => CatalogPriceTemp::orderBy($this->sortField, $this->sortDirection)->paginate(10)]);
+        if($this->isUploaded == false){
+            $catalogPriceTemp = [];
+        } else{
+            $catalogPriceTemp = CatalogPriceTemp::orderBy($this->sortField, $this->sortDirection)->paginate(10);
+        }
+
+        return view('livewire.table.upload-file',['catalogPriceTemp' => $catalogPriceTemp]);
     }
 }
