@@ -25,7 +25,7 @@
                     <!-- Content goes here! 😁 -->
                     {{ $slot }}
                 </main>
-                <footer class="w-full bg-white text-right px-4 py-6  border-t-2 border-pink-400">
+                <footer class="w-full bg-white text-right px-4 py-6  border-t-2 border-indigo-400">
                     @include('layouts.footer')
                 </footer>
             </div>

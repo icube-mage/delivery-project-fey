@@ -1,5 +1,5 @@
 <aside class="w-1/5" aria-label="Sidebar">
-    <div class="relative h-screen overflow-y-auto py-4 px-3 bg-gradient-to-b from-red-400 via-purple-500 to-blue-300 dark:bg-gray-800">
+    <div class="relative h-screen overflow-y-auto py-4 px-3 bg-gradient-to-b from-sky-400 via-cyan-500 to-blue-300 dark:bg-gray-800">
         <h3 class="text-center uppercase font-bold text-4xl text-white">Fey</h3>
         <ul class="mt-5 space-y-2">
             <li>
