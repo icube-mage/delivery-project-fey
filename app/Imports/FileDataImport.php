@@ -43,7 +43,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow
                 $retailPriceConfig = array_values(explode("=",$getConfigTokped[3]));
                 $startDateConfig = array_values(explode("=",$getConfigTokped[4]));
                 
-                $nameData = end($skuConfig);
+                $nameData = end($nameConfig);
                 $skuData = end($skuConfig);
                 $discountPriceData = end($discountPriceConfig);
                 $retailPriceData = end($retailPriceConfig);
@@ -55,8 +55,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow
             break;
         }
             
-            // dd($row[$discountPriceData]);
-            // Delete data temp
+        // Delete data temp
         $sku = isset($row[$skuData]) ? $row[$skuData] : 0;
 
         $name = isset($row[$nameData]) ? $row[$nameData] : 0;
