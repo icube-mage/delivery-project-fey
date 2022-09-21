@@ -26,7 +26,7 @@
             </div>
             <div class="flex items-center justify-between gap-4">
                 {{-- <button class="p-3 bg-violet-600 rounded hover:bg-violet-700 text-white" wire:click.prevent="add({{$i}})">+</button> --}}
-                <button class="p-3 bg-violet-600 rounded-lg hover:bg-violet-700 text-white" type="button" wire:click.prevent="store()">
+                <button class="p-3 bg-sky-600 rounded-lg hover:bg-sky-700 text-white" type="button" wire:click.prevent="store()">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </button>
             </div>
