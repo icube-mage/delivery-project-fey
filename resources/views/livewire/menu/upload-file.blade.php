@@ -25,7 +25,7 @@
                     <x-select id="brand" wire:model="brand">
                         <option selected>-- Select Brand --</option>
                         @foreach ($brands as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            <option value="{{ $item->slug }}">{{ $item->name }}</option>
                         @endforeach
                     </x-select>
                 </div>
@@ -34,7 +34,7 @@
                     <x-select id="marketplace" wire:model="marketplace">
                         <option selected>-- Select Marketplace --</option>
                         @foreach ($marketplaces as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            <option value="{{ $item->slug }}">{{ $item->name }}</option>
                         @endforeach
                     </x-select>
                 </div>
