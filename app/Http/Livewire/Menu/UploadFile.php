@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\Marketplace;
 use Illuminate\Support\Str;
 use App\Models\CatalogPrice;
+use App\Models\Configuration;
 use Livewire\WithFileUploads;
 use App\Imports\FileDataImport;
 use App\Models\CatalogPriceAvg;
@@ -24,12 +25,26 @@ class UploadFile extends Component
     public $marketplace;
     public $file;
     public $isUploaded = false;
+    public $errorMsg;
+    public $submitBtn = false;
 
     public function render()
     {
         $brands = Brand::all();
         $marketplaces = Marketplace::all();
         return view('livewire.menu.upload-file', ['brands' => $brands, 'marketplaces' => $marketplaces]);
+    }
+
+    public function updatedMarketplace(){
+        $configName = $this->marketplace."_column_map";
+        $getConfigTokped = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
+
+        if(!$getConfigTokped){
+            $this->errorMsg = "Please set the config!";
+            $this->submitBtn = false;
+        } else{
+            $this->submitBtn = true;
+        }
     }
 
     public function submit()
@@ -42,7 +57,11 @@ class UploadFile extends Component
             'file' => 'required|mimes:xlsx, csv, xls',
         ]);
         CatalogPriceTemp::truncate();
-        Excel::import(new FileDataImport($brandsName, $marketplaceName), $this->file);
+        try{
+            Excel::import(new FileDataImport($brandsName, $marketplaceName), $this->file);
+        } catch(\Exception $e){
+            $this->errorMsg = $e->getMessage();
+        }
 
         $this->userId = Auth::user()->id;
         $cPriceTemp = CatalogPriceTemp::where('user_id', '=', $this->userId)
