@@ -21,7 +21,6 @@ Configuration:
 ============================================================
 * rename *.env.example* file to *.env*
 * setup database connection on DB_*
-* change LARAVEL_PAGE_SPEED_ENABLE to true
 * change LOG_CHANNEL to daily
 * for production change 
 `APP_DEBUG to false` and `APP_ENV to production`
