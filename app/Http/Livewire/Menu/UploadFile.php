@@ -48,8 +48,6 @@ class UploadFile extends Component
 
     public function submit()
     {
-        $brandsName = Brand::where('id', (int) $this->brand)->pluck('slug')->first();
-        $marketplaceName = Marketplace::where('id', (int) $this->marketplace)->pluck('slug')->first();
         $this->validate([
             'brand' => 'required',
             'marketplace' => 'required',
@@ -57,15 +55,16 @@ class UploadFile extends Component
         ]);
         CatalogPriceTemp::truncate();
         try{
-            Excel::import(new FileDataImport($brandsName, $marketplaceName), $this->file);
+            $import = new FileDataImport($this->brand, $this->marketplace);
+            Excel::import($import, $this->file);
         } catch(\Exception $e){
             $this->errorMsg = $e->getMessage();
         }
 
         $this->userId = Auth::user()->id;
         $cPriceTemp = CatalogPriceTemp::where('user_id', '=', $this->userId)
-            ->where('brand', '=', $brandsName)
-            ->where('marketplace', '=', $marketplaceName)
+            ->where('brand', '=', $this->brand)
+            ->where('marketplace', '=', $this->marketplace)
             ->get();
 
         foreach ($cPriceTemp as $cpt) {
