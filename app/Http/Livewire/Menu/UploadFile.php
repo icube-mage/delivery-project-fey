@@ -37,9 +37,8 @@ class UploadFile extends Component
 
     public function updatedMarketplace(){
         $configName = $this->marketplace."_column_map";
-        $getConfigTokped = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
-
-        if(!$getConfigTokped){
+        $getConfigTokped = Configuration::where("key",$configName)->first();
+        if($getConfigTokped == null){
             $this->errorMsg = "Please set the config!";
             $this->submitBtn = false;
         } else{
