@@ -6,11 +6,12 @@
         </div>
     @endif
     @if (session('error'))
-        <div class="p-4 mb-4 text-sm text-rose-700 bg-rose-100 rounded-md dark:bg-rose-200 dark:text-rose-800" role="alert">
+        <div class="p-4 mb-4 text-sm text-rose-700 bg-rose-100 rounded-md dark:bg-rose-200 dark:text-rose-800"
+            role="alert">
             {{ session('error') }}
         </div>
     @endif
-    
+
     @if ($errorMsg != null)
     <x-alert color="rose" status="error">
         {{ $errorMsg }}
