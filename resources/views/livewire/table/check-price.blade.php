@@ -1,4 +1,4 @@
-<div class="overflow-x-auto relative">
+<div class="overflow-x-auto relative w-full">
     <div>
         @if (session()->has('message'))
             <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
@@ -13,10 +13,20 @@
         @endif
     </div>
     <h2 class="text-center text-3xl font-bold mb-6">Price Verification</h2>
-    <div class="flex flex-end">
-        <button type="button" wire:click="verifyData()"
-        class="text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-500 focus:outline-none dark:focus:ring-sky-800">Verify
-        Price</button>
+    <div class="w-full flex flex-end mb-4 space-x-2">
+        @if (!$submitBtn)
+        <x-button class="w-2/12" wire:click="verifyData()" disabled>
+            {{ __('Verify Price') }}
+        </x-button>
+            {{-- <button type="button" wire:click="verifyData()"
+                class="text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-500 focus:outline-none dark:focus:ring-sky-800"
+                disabled>Verify Price</button> --}}
+        @else
+        <x-button class="w-2/12" wire:click="verifyData()">
+            {{ __('Verify Price') }}
+        </x-button>
+        <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{route('export.updateddata')}}">Download</a>
+        @endif
     </div>
     <x-table>
         <x-thead>

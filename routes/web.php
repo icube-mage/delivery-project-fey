@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('export/log',  [HistoricalDataController::class, 'exportAll'])->name('catalog.price');
         Route::get('export/log/{hash}',  [HistoricalDataController::class, 'exportByHash'])->name('catalog.price.hash');
         Route::get('report', [ReportController::class, 'export'])->name('report');
+        Route::get('updateddata', [UploadFileController::class, 'export'])->name('updateddata');
     });
     Route::prefix('settings')->group(function(){
         Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');

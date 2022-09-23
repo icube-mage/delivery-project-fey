@@ -8,10 +8,12 @@ use App\Models\HistoryUser;
 use Illuminate\Support\Str;
 use App\Models\CatalogPrice;
 use Livewire\WithPagination;
+use App\Exports\FileDataExport;
 use App\Models\CatalogPriceAvg;
 use App\Models\CatalogPriceTemp;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CheckPrice extends Component
 {
@@ -30,6 +32,9 @@ class CheckPrice extends Component
             'is_whitelist' => ''
         ]
     ];
+
+    public $errorData;
+    public $submitBtn = false;
 
     public function setPage($url)
     {
@@ -64,7 +69,7 @@ class CheckPrice extends Component
     }
 
     public function verifyData(){
-        $updatedCatalogPriceTemp = CatalogPriceTemp::where('user_id','=',Auth::user()->id)->whereColumn('updated_at', '>' , 'created_at')->orderBy('updated_at', 'desc')->get();
+        $updatedCatalogPriceTemp = CatalogPriceTemp::where('user_id',Auth::user()->id)->whereColumn('updated_at', '>' , 'created_at')->orderBy('updated_at', 'desc')->get();
 
         foreach ($updatedCatalogPriceTemp as $catPriceTemp) {
             # code...            
@@ -126,24 +131,24 @@ class CheckPrice extends Component
         $marketplace = "";
         $totalError = "";
         $userId = "";
-        
+        $countError="";        
         
         foreach ($catalogTemp as $items) {
             $brand = $items->brand;
             $marketplace = $items->marketplace;
             $userId = $items->user_id;
-            $countDataTemp = CatalogPriceTemp::where('sku', '=', $items->sku)
-            ->where('brand', '=', $items->brand)
-            ->where('marketplace', '=', $items->marketplace)->count();
+            $countDataTemp = CatalogPriceTemp::where('sku', $items->sku)
+            ->where('brand', $items->brand)
+            ->where('marketplace', $items->marketplace)->count();
 
-            $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', '=', $items->sku)
-            ->where('brand', '=', $items->brand)
-            ->where('marketplace', '=', $items->marketplace)->sum('discount_price');
+            $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', $items->sku)
+            ->where('brand', $items->brand)
+            ->where('marketplace', $items->marketplace)->sum('discount_price');
 
             $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
 
-            $averagePrice = CatalogPriceAvg::where('user_id','=',Auth::user()->id)
-            ->where('sku','=',$items->sku)->where('marketplace','=',$items->marketplace)->where('brand','=',$items->brand)->pluck('average_price')->first();
+            $averagePrice = CatalogPriceAvg::where('user_id',Auth::user()->id)
+            ->where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->pluck('average_price')->first();
 
             if($items->discount_price < $averagePrice){
                 $dataCatalog[] = array(
@@ -158,18 +163,31 @@ class CheckPrice extends Component
 
                 // Set is_negative true to product with price under average
                 CatalogPriceTemp::where('sku', $items->sku)->where('discount_price', '<', $averagePrice)->update(['is_negative' => true]);
-                
+                $countError = count($dataCatalog);
                 $extrasHistory[] = array(
                     'sku' => $items->sku,
                     'price' => $items->discount_price,
                     'average_discount' => $averagePrice
                 );
-            } 
+            } elseif($items->discount_price > $averagePrice){
+                $updatedCatalogPriceTemp = CatalogPriceTemp::where('user_id',Auth::user()->id)->whereColumn('updated_at', '>' , 'created_at')->orderBy('updated_at', 'desc')->get();
+
+            }
         }
+
+        // dd($updatedCatalogPriceTemp);
+        $this->errorData = $countError;
+
+
+        if($this->errorData < 1) {
+            $this->submitBtn = true;
+        }
+
+        dd($countError);
         $this->dataTemp = $dataCatalog ?? '';
         
         // Insert data to history
-        $totalError = count($dataCatalog);
+        $totalError = $countError;
         $historyData = [
             'user_id' => $userId,
             'brand' => $brand,
