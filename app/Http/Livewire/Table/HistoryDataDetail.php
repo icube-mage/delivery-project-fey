@@ -25,7 +25,7 @@ class HistoryDataDetail extends Component
         $input = '%'.$this->searchTerm.'%';
         $catalogPrices = CatalogPrice::with('user')
         ->where('upload_hash', $this->hash)
-        ->where('name', 'like', $input)
+        ->where('product_name', 'like', $input)
         ->paginate(10);
         return view('livewire.table.history-data-detail', compact('catalogPrices'));
     }

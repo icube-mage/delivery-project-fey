@@ -29,14 +29,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/manage', UserManagement::class)->name('user.manage');
     });
     Route::prefix('menu')->name('menu.')->group(function(){
-        Route::get('uploadfile', UploadFileController::class)->name('uploadfile');
+        Route::get('uploadfile', [UploadFileController::class, 'index'])->name('uploadfile');
         Route::get('uploadfile/checkprice', [UploadFileController::class, 'checkPrice'])->name('uploadfile.checkprice');
         Route::get('report', [ReportController::class, 'index'])->name('report');
         Route::get('historicaldata', [HistoricalDataController::class, 'index'])->name('historicaldata');
         Route::get('historicaldata/{hash}', [HistoricalDataController::class, 'show'])->name('historicaldata.show');
     });
     Route::prefix('export')->name('export.')->group(function(){
-        Route::get('export/log',  [HistoricalDataController::class, 'exportAll'])->name('catalog.price');
+        Route::post('export/log',  [HistoricalDataController::class, 'exportAll'])->name('catalog.price');
         Route::get('export/log/{hash}',  [HistoricalDataController::class, 'exportByHash'])->name('catalog.price.hash');
         Route::get('report', [ReportController::class, 'export'])->name('report');
         Route::get('updateddata', [UploadFileController::class, 'export'])->name('updateddata');

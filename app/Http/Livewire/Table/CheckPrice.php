@@ -183,7 +183,7 @@ class CheckPrice extends Component
             $this->submitBtn = true;
         }
 
-        dd($countError);
+        // dd($countError);
         $this->dataTemp = $dataCatalog ?? '';
         
         // Insert data to history
