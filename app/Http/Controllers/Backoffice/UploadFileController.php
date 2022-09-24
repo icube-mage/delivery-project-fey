@@ -31,9 +31,9 @@ class UploadFileController extends Controller
         return view('pages.menu.uploadfile.checkprice');
     }
 
-    public function export()
+    public function export($brand, $marketplace)
     {
         $date = date('Ymd');
-        return Excel::download(new FileDataExport, 'fey_'.$date.'.xlsx');
+        return Excel::download(new FileDataExport($brand, $marketplace), 'fey_'.$date.'.xlsx');
     }
 }

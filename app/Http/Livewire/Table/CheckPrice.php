@@ -33,6 +33,7 @@ class CheckPrice extends Component
             'is_changed' => false
         ]
     ];
+    public $brand;
     public $firstLoad = true;
     public $errorData;
     public $submitBtn = false;
@@ -221,6 +222,8 @@ class CheckPrice extends Component
             HistoryUser::create($historyData);
 
             $this->firstLoad = false;
+            $this->brand = $brand;
+            $this->marketplace = $marketplace;
         }
 
         return view('livewire.table.check-price');

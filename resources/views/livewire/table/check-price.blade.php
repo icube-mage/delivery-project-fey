@@ -31,7 +31,7 @@
                 {{ __('Submit') }}
             </x-button>
             @if($submitBtn!=0)
-                <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{route('export.updateddata')}}">Download</a>
+                <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{ route('export.updatedfile', ['brand' => $brand, 'marketplace' => $marketplace]) }}">Download</a>
             @endif
         @endif
     </div>
@@ -60,7 +60,7 @@
         </x-thead>
         <tbody>
             @forelse ($dataTemp as $index => $item)
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" wire:key="text-key-{{ $index }}-{{ time() }}">
                     <x-td>
                         {{ $item['sku'] }}
                     </x-td>
