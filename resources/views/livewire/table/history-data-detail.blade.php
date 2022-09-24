@@ -27,29 +27,31 @@
             <x-input type="text" class="ml-4" placeholder="Search" wire:model="searchTerm" />
         </div>
     </div>
-    <x-table>
-        <x-thead>
-            <tr>
-                <x-th>SKU</x-th>
-                <x-th>Product Name</x-th>
-                <x-th>Price</x-th>
-            </tr>
-        </x-thead>
-        <tbody>
-            @foreach($catalogPrices as $catalogPrice)
-            <tr class="hover:bg-gray-100">
-                <x-td>
-                    {{ $catalogPrice->sku }}
-                </x-td>
-                <x-td>
-                    {{ $catalogPrice->name }}
-                </x-td>
-                <x-td>
-                    {{ $catalogPrice->discount_price }}
-                </x-td>
-            </tr>
-            @endforeach
-        </tbody>
-    </x-table>
+    <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+        <x-table>
+            <x-thead>
+                <tr>
+                    <x-th>SKU</x-th>
+                    <x-th>Product Name</x-th>
+                    <x-th>Price</x-th>
+                </tr>
+            </x-thead>
+            <tbody>
+                @foreach($catalogPrices as $catalogPrice)
+                <tr class="hover:bg-gray-100">
+                    <x-td>
+                        {{ $catalogPrice->sku }}
+                    </x-td>
+                    <x-td>
+                        {{ $catalogPrice->product_name }}
+                    </x-td>
+                    <x-td>
+                        {{ $catalogPrice->discount_price }}
+                    </x-td>
+                </tr>
+                @endforeach
+            </tbody>
+        </x-table>
+    </div>
     {{ $catalogPrices->links('livewire.pagination') }}
 </div>

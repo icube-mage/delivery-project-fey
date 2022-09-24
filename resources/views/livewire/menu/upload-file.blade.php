@@ -11,7 +11,6 @@
             {{ session('error') }}
         </div>
     @endif
-
     @if ($errorMsg != null)
     <x-alert color="rose" status="error">
         {{ $errorMsg }}

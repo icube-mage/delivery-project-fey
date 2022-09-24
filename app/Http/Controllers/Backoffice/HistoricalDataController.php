@@ -6,6 +6,7 @@ use App\Exports\CatalogPriceDetailExport;
 use App\Exports\CatalogPriceExport;
 use App\Http\Controllers\Controller;
 use App\Models\CatalogPrice;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class HistoricalDataController extends Controller
@@ -20,9 +21,9 @@ class HistoricalDataController extends Controller
         return view('pages.menu.historydata.catalog-price-history', compact('hash'));
     }
 
-    public function exportAll()
+    public function exportAll(Request $request)
     {
-        return Excel::download(new CatalogPriceExport, 'historical_log.xlsx');
+        return Excel::download(new CatalogPriceExport($request->filter), 'historical_log.xlsx');
     }
 
     public function exportByHash($hash)
