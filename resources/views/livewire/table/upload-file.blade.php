@@ -1,4 +1,4 @@
-<div class="overflow-x-auto relative shadow-md sm:rounded-lg" wire:poll>
+<div wire:poll>
     <x-table>
         <x-thead>
             <tr>
@@ -43,10 +43,10 @@
         <tbody class="overflow-y-auto">
             @if ($catalogPriceTemp != null)
                 @foreach ($catalogPriceTemp as $item)
-                    <tr>
-                        <x-td>
+                    <tr class="hover:bg-gray-100 first-letter:bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $item->sku }}
-                        </x-td>
+                        </x-th>
                         <x-td>
                             {{ $item->product_name }}
                         </x-td>
@@ -58,9 +58,9 @@
                 @endforeach
             @else
                 <tr>
-                    <x-td colspan="3" class="text-center text-gray-900">
+                    <x-th scope="row" colspan="3" class="text-center text-gray-900">
                         Data not Available
-                    </x-td>
+                    </x-th>
                 </tr>
             @endif
         </tbody>
