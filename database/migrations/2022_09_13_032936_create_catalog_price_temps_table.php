@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('brand');
             $table->string('marketplace');
             $table->boolean('is_whitelist')->default(false);
-            $table->boolean('is_negative')->default(false);
             $table->date('start_date');
             $table->timestamps();
         });

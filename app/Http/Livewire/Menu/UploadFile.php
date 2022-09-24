@@ -62,18 +62,18 @@ class UploadFile extends Component
         }
 
         $this->userId = Auth::user()->id;
-        $cPriceTemp = CatalogPriceTemp::where('user_id', '=', $this->userId)
-            ->where('brand', '=', $this->brand)
-            ->where('marketplace', '=', $this->marketplace)
+        $cPriceTemp = CatalogPriceTemp::where('user_id', $this->userId)
+            ->where('brand', $this->brand)
+            ->where('marketplace', $this->marketplace)
             ->get();
 
         foreach ($cPriceTemp as $cpt) {
-            $countDataTemp = CatalogPriceTemp::where('sku', '=', $cpt->sku)
-            ->where('brand', '=', $cpt->brand)
-            ->where('marketplace', '=', $cpt->marketplace)->count();
-            $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', '=', $cpt->sku)->sum('discount_price');
+            $countDataTemp = CatalogPriceTemp::where('sku', $cpt->sku)
+                ->where('brand', $cpt->brand)
+                ->where('marketplace', $cpt->marketplace)->count();
+            $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)->sum('discount_price');
             $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
-            $checkPriceAvg = CatalogPriceAvg::where('sku', '=', $cpt->sku)->where('brand', '=', $cpt->brand)->where('marketplace', '=', $cpt->marketplace)->get();
+            $checkPriceAvg = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->get();
 
             // Inserting data to catalog_price_averages if empty
             if ($checkPriceAvg->isEmpty()) {
