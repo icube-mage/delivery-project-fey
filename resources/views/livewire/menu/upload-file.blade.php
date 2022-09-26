@@ -35,7 +35,7 @@
                 <div class="form-row w-full flex items-center justify-between">
                     <x-label for="brand" :value="__('Brand')" />
                     <x-select id="brand" wire:model="brand">
-                        <option selected>-- Select Brand --</option>
+                        <option value="" selected>-- Select Brand --</option>
                         @foreach ($brands as $item)
                             <option value="{{ $item->slug }}">{{ $item->name }}</option>
                         @endforeach
@@ -44,7 +44,7 @@
                 <div class="form-row w-full flex items-center justify-between">
                     <x-label for="marketplace" :value="__('Marketplace')" />
                     <x-select id="marketplace" wire:model="marketplace">
-                        <option selected>-- Select Marketplace --</option>
+                        <option value="" selected>-- Select Marketplace --</option>
                         @foreach ($marketplaces as $item)
                             <option value="{{ $item->slug }}">{{ $item->name }}</option>
                         @endforeach
