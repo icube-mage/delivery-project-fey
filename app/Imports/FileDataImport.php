@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Configuration;
 use App\Models\CatalogPriceTemp;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -16,12 +17,30 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
 {
     private $brand;
     private $marketplace;
+    private $headingRow;
+    private $startRow;
     
     public function __construct(string $brand, string $marketplace) 
     {
         HeadingRowFormatter::default('none');
         $this->brand = $brand;
         $this->marketplace = $marketplace;
+        $configuration = Configuration::where('key', $this->marketplace.'_row_map')->first();
+
+        if($configuration) {
+            $mapping_field = [];
+            $getConfig = explode(",", $configuration->value);
+            foreach($getConfig as $array)
+            {
+                $value = explode("=", $array); 
+                $mapping_field[$value[0]] = $value[1];
+            }
+            $this->headingRow = $mapping_field['heading'] ?? 1;
+            $this->startRow = $mapping_field['content'] ?? 2;
+        } else {
+            $this->headingRow = 2;
+            $this->startRow = 4;
+        }
     }
 
     /**
@@ -110,7 +129,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 break;
                 
             default:
-                $msg = "Marketplace not registered";
+                throw new \Exception ("Marketplace not registered");
                 break;
         }
 
@@ -134,10 +153,17 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
 
         
         $name = $name ?? "No Name";
-        $retailPrice = $retailPrice == "#N/A" ? str_replace("#N/A", 0, $retailPrice) : $retailPrice;
-
-        if($discountPrice == "#N/A"){
-            $discountPrice = str_replace("#N/A", 0, $discountPrice);
+        if (Str::contains($retailPrice, 'N/A')) {
+            $retailPrice = str_replace("N/A", '', $retailPrice);
+            $retailPrice = str_replace("#", '', $retailPrice);
+            $retailPrice = ($retailPrice=='' || $retailPrice==null) ? 0 : str_replace($retailPrice, 0, $retailPrice);
+        } else {
+            $retailPrice = $retailPrice;
+        }
+        if(Str::contains($discountPrice, 'N/A')){
+            $discountPrice = str_replace("N/A", 0, $discountPrice);
+            $discountPrice = str_replace("#", 0, $discountPrice);
+            $discountPrice = ($discountPrice=='' || $discountPrice==null) ? 0 : str_replace($discountPrice, 0, $discountPrice);
             $is_discount = false;
         } else {
             $discountPrice = $discountPrice;
@@ -148,7 +174,6 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         $startDate = date('Y-m-d', strtotime($startDateOriginal));
 
         if($sku == null){
-            // dd($sku);
             throw new \Exception ("Please check SKU column");
         } elseif($warehouse == null){
             throw new \Exception ("Please check Warehuse column");
@@ -176,18 +201,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
 
     public function headingRow(): int
     {
-        $configuration = Configuration::where('key', $this->marketplace.'_row_map')->first();
-        if($configuration->isEmpty()) {
-            return 2;
-        } else {
-            $mapping_field = [];
-            foreach($configuration as $array)
-            {
-                $value = explode("=", $array); 
-                $mapping_field[$value[0]] = $value[1];
-            }
-            return $mapping_field['heading'] ?? 1;
-        }
+        return $this->headingRow;
     }
 
     /**
@@ -195,18 +209,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
     */
     public function startRow(): int
     {
-        $configuration = Configuration::where('key', $this->marketplace.'_row_map')->first();
-        if($configuration->isEmpty()) {
-            return 4;
-        } else {
-            $mapping_field = [];
-            foreach($configuration as $array)
-            {
-                $value = explode("=", $array); 
-                $mapping_field[$value[0]] = $value[1];
-            }
-            return $mapping_field['content'] ?? 2;
-        }
+        return $this->startRow;
     }
 
     public function sheets(): array

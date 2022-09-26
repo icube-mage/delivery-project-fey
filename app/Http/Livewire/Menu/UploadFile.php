@@ -38,10 +38,14 @@ class UploadFile extends Component
     public function updatedMarketplace(){
         $configName = $this->marketplace."_column_map";
         $getConfigTokped = Configuration::where("key",$configName)->first();
-        if($getConfigTokped == null){
+        if($getConfigTokped == null && $this->marketplace != null){
             $this->errorMsg = "Please set the config!";
             $this->submitBtn = false;
-        } else{
+        }
+    }
+
+    public function updatedFile() {
+        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
             $this->submitBtn = true;
         }
     }
@@ -58,7 +62,8 @@ class UploadFile extends Component
             $import = new FileDataImport($this->brand, $this->marketplace);
             Excel::import($import, $this->file);
         } catch(\Exception $e){
-            $this->errorMsg = $e->getMessage();
+            $this->reset();
+            return $this->errorMsg = $e->getMessage();
         }
 
         $this->userId = Auth::user()->id;
