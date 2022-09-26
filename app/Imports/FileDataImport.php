@@ -176,7 +176,18 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
 
     public function headingRow(): int
     {
-        return 2;
+        $configuration = Configuration::where('key', $this->marketplace.'_row_map')->first();
+        if($configuration->isEmpty()) {
+            return 2;
+        } else {
+            $mapping_field = [];
+            foreach($configuration as $array)
+            {
+                $value = explode("=", $array); 
+                $mapping_field[$value[0]] = $value[1];
+            }
+            return $mapping_field['heading'] ?? 1;
+        }
     }
 
     /**
@@ -184,7 +195,18 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
     */
     public function startRow(): int
     {
-        return 4;
+        $configuration = Configuration::where('key', $this->marketplace.'_row_map')->first();
+        if($configuration->isEmpty()) {
+            return 4;
+        } else {
+            $mapping_field = [];
+            foreach($configuration as $array)
+            {
+                $value = explode("=", $array); 
+                $mapping_field[$value[0]] = $value[1];
+            }
+            return $mapping_field['content'] ?? 2;
+        }
     }
 
     public function sheets(): array

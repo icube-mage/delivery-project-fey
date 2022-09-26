@@ -1,6 +1,10 @@
 <div x-data="{ show: false }">
     <form class="w-1/2 2xl:w-1/3" wire:submit.prevent="store">
         <div class="flex items-center justify-between gap-6 py-4 border-b">
+            <x-label>CSV Field Separator</x-label>
+            <x-input type="text" wire:model.defer="csv_separator"/>
+        </div>
+        <div class="flex items-center justify-between gap-6 py-4 border-b">
             <x-label>Max time to keep record</x-label>
             <x-input type="number" wire:model.defer="time_calculate"/>
         </div>

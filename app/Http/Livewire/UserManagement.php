@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\User;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
@@ -19,7 +20,7 @@ class UserManagement extends Component
     protected $listeners = ['store', 'destroy'];
     protected $rules = [
         'name' => 'required',
-        'username' => 'required|min:6',
+        'username' => 'required|min:4',
         'email' => 'required|email',
         'password' => 'required|min:4',
         'role' => 'required'
@@ -33,7 +34,13 @@ class UserManagement extends Component
                     ->orWhere('username', 'like', $query)
                     ->orWhere('email', 'like', $query);
         })->paginate(10);
-        $roles = Role::all();
+        if(Auth::user()->hasRole('Super Admin')){
+            $roles = Role::all();
+        } elseif(Auth::user()->hasRole('Key Account Manager')){
+            $roles = Role::where('name', '<>', 'Super Admin')->get();
+        } else {
+            $roles = [];
+        }
         return view('livewire.user-management', ["users" => $users, "roles" => $roles])
             ->layout('layouts.app', ['title'=>"User Management"]);
     }

@@ -31,7 +31,13 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if(Auth::user()->hasRole('Store Operations')){
+            return redirect()->route('menu.uploadfile');
+        } else if(Auth::user()->hasRole('Key Account Manager')){
+            return redirect()->route('menu.report');
+        } else {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
     }
 
     /**
