@@ -73,7 +73,11 @@ class UploadFile extends Component
                 ->where('marketplace', $cpt->marketplace)->count();
             $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)->sum('discount_price');
             $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
-            $checkPriceAvg = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->get();
+            $checkPriceAvg = CatalogPriceAvg::where('sku', $cpt->sku)
+                ->where('brand', $cpt->brand)
+                ->where('marketplace', $cpt->marketplace)
+                ->where('warehouse', $cpt->warehouse)
+                ->get();
 
             // Inserting data to catalog_price_averages if empty
             if ($checkPriceAvg->isEmpty()) {
@@ -85,6 +89,7 @@ class UploadFile extends Component
                     'brand' => $cpt->brand,
                     'marketplace' => $cpt->marketplace,
                     'start_date' => $cpt->start_date,
+                    'warehouse' => $cpt->warehouse,
                 ];
                 CatalogPriceAvg::create($cPriceAvg);
             }

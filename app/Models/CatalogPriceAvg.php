@@ -17,6 +17,7 @@ class CatalogPriceAvg extends Model
         'user_id',
         'brand',
         'marketplace',
-        'start_date'
+        'start_date',
+        'warehouse'
     ];
 }

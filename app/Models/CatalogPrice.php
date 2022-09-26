@@ -20,7 +20,9 @@ class CatalogPrice extends Model
         'user_id',
         'brand',
         'marketplace',
-        'start_date'
+        'start_date',
+        'is_discount',
+        'warehouse'
     ];
     
     public function user()
