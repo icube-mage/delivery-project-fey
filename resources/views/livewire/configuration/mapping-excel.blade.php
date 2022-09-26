@@ -1,4 +1,4 @@
-<div x-data="{ show: false }">
+<div x-data="{ show: false }" class="flex gap-6">
     <div class="w-1/2 2xl:w-1/3">
         @foreach($maps as $index => $map)
         <div class="flex items-center justify-between gap-6 py-4 border-b">
@@ -10,9 +10,10 @@
         </div>
         @endforeach
     </div>
-    <div class="w-1/2 2xl:w-2/3">  
-        <p class="mt-3 text-yellow-700">Use equal symbol (=) to defined header name and separate by comma.<br/>mapping key : sku, product_name, retail_price, discount_price, warehouse and start_date*<br/>
-        <br/>start_date is optional</p>
+    <div class="w-1/2 2xl:w-2/3 p-4">  
+        <p class="mt-3 text-yellow-700">Use equal symbol (=) to defined header name and separate by comma.<br/>mapping key : <br/>
+        sku, product_name, retail_price, discount_price, warehouse and start_date*<br/>
+        <br/>start_date & retail_price are optional</p>
     </div>
     <div class="flex top-16 absolute right-4 items-center p-4 mb-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert"
         x-show="show"
