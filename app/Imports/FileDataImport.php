@@ -43,7 +43,11 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 }
                 $skuConfig = $mapping_field['sku'] ?? null;
                 if($skuConfig==null){
-                    throw new \Exception ("Sku is not available");
+                    throw new \Exception ("Sku config is not available");
+                }
+                $warehouseConfig = $mapping_field['warehouse'] ?? null;
+                if($warehouseConfig==null){
+                    throw new \Exception ("Warehouse config is not available");
                 }
                 $nameConfig = $mapping_field['product_name'] ?? null;
                 $discountPriceConfig = $mapping_field['discount_price'] ?? null;
@@ -113,8 +117,8 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         try{
             $sku = $row[$skuConfig];
             $discountPrice = $row[$discountPriceConfig];
+            $warehouse = $row[$warehouseConfig];
         } catch(\Exception $e){
-            dd($row);
             throw new \Exception ($e->getMessage());
         }
 
@@ -132,18 +136,26 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         $name = $name ?? "No Name";
         $retailPrice = $retailPrice == "#N/A" ? str_replace("#N/A", 0, $retailPrice) : $retailPrice;
 
-        $discountPrice = $discountPrice == "#N/A" ? str_replace("#N/A", 0, $discountPrice) : $discountPrice;
+        if($discountPrice == "#N/A"){
+            $discountPrice = str_replace("#N/A", 0, $discountPrice);
+            $is_discount = false;
+        } else {
+            $discountPrice = $discountPrice;
+            $is_discount = true;
+        }
 
         $startDateOriginal = $startDateOriginal ? str_replace('/', '-', $startDateOriginal) : $startDateOriginal;
         $startDate = date('Y-m-d', strtotime($startDateOriginal));
 
         if($sku == null){
             // dd($sku);
-            throw new \Exception ("Please check SKU");
+            throw new \Exception ("Please check SKU column");
+        } elseif($warehouse == null){
+            throw new \Exception ("Please check Warehuse column");
         } elseif($discountPrice == null){
-            throw new \Exception ("Please check Discount Price");
+            throw new \Exception ("Please check Discount Price column");
         }else{
-            $createCatalogPriceTemp = new CatalogPriceTemp([
+            $catalogPriceTemp = [
                 'sku'  => $sku,
                 'product_name'  => $name,
                 'retail_price' => $retailPrice,
@@ -151,8 +163,13 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 'user_id' => Auth::user()->id,
                 'brand' => $this->brand,
                 'marketplace' => $this->marketplace,
+                'warehouse' => $warehouse,
                 'start_date' => $startDate,
-            ]);
+            ];
+            if($is_discount==false){
+                $catalogPriceTemp['is_discount'] = false;
+            }
+            $createCatalogPriceTemp = new CatalogPriceTemp($catalogPriceTemp);
             return $createCatalogPriceTemp;
         }
     }

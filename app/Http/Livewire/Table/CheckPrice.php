@@ -175,6 +175,7 @@ class CheckPrice extends Component
             $userId = "";
             $countError=0;
             $countWhitelist = 0;
+            $countHasDiscount = 0;
             foreach ($catalogTemp as $items) {
                 $brand = $items->brand;
                 $marketplace = $items->marketplace;
@@ -191,8 +192,8 @@ class CheckPrice extends Component
 
                 $averagePrice = CatalogPriceAvg::where('user_id', Auth::user()->id)
                 ->where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->pluck('average_price')->first();
-
-                if ($items->discount_price < $averagePrice) {
+                
+                if ($items->discount_price < $averagePrice && $items->is_discount==true) {
                     $dataCatalog[] = array(
                         'id' => $items->id,
                         'sku' => $items->sku,
@@ -204,25 +205,21 @@ class CheckPrice extends Component
                         'is_changed' => false
                     );
 
-                    // Set is_negative true to product with price under average
-                    CatalogPriceTemp::where('sku', $items->sku)->where('discount_price', '<', $averagePrice)->update(['is_negative' => true]);
-                    $countError = count($dataCatalog);
                     $extrasHistory[] = array(
                         'sku' => $items->sku,
                         'price' => $items->discount_price,
                         'average_discount' => $averagePrice
                     );
-                } elseif ($items->discount_price > $averagePrice) {
-                    CatalogPriceTemp::where('user_id', Auth::user()->id)->whereColumn('updated_at', '>', 'created_at')->orderBy('updated_at', 'desc')->get();
-                }
+                } 
                 if($items->is_whitelist){
                     $countWhitelist++;
                 }
             }
 
+            $countError = count($dataCatalog);
             // dd($updatedCatalogPriceTemp);
             $this->errorData = $countError-$countWhitelist;
-
+            // dd($countError, $countWhitelist, $countHasDiscount);
 
             // dd($countError);
             $this->dataTemp = $dataCatalog ?? '';
@@ -242,6 +239,9 @@ class CheckPrice extends Component
             $this->firstLoad = false;
             $this->brand = $brand;
             $this->marketplace = $marketplace;
+            if ($this->errorData == 0) {
+                $this->submitBtn = true;
+            }
         }
 
         return view('livewire.table.check-price');

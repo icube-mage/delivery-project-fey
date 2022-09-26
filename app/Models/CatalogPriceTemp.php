@@ -24,7 +24,7 @@ class CatalogPriceTemp extends Model
         'marketplace',
         'start_date',
         'is_whitelist',
-        'is_negative'
-
+        'is_discount',
+        'warehouse'
     ];
 }

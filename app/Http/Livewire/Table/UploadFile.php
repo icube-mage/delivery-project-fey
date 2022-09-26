@@ -50,7 +50,7 @@ class UploadFile extends Component
         if($this->isUploaded == false){
             $catalogPriceTemp = [];
         } else{
-            $catalogPriceTemp = CatalogPriceTemp::orderBy($this->sortField, $this->sortDirection)->paginate(10);
+            $catalogPriceTemp = CatalogPriceTemp::orderBy($this->sortField, $this->sortDirection)->paginate(25);
         }
 
         return view('livewire.table.upload-file',['catalogPriceTemp' => $catalogPriceTemp]);
