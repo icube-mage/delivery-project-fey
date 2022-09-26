@@ -36,25 +36,27 @@
     </div>
     <div class="flex justify-between items-center">
         <h2 class="text-center text-3xl font-bold mb-6">Price Verification</h2>
-        <h2 class="text-center text-xl font-bold mb-6">You have {{$errorData}} wrong inputted</h2>
+        {{-- <h2 class="text-center text-xl font-bold mb-6">You have {{$errorData}} wrong inputted</h2> --}}
     </div>
     {{-- {{$errorData}}
     <pre>{{ var_dump($dataTemp)}}</pre> --}}
     <div class="w-full flex flex-end mb-4 space-x-2">
-        @if($errorData!=0)
-        <x-button class="w-2/12"  wire:click="verifyData()" disabled>
-            {{ __('Submit') }}
-        </x-button>
-            {{-- <button type="button" wire:click="verifyData()"
-                class="text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-sky-600 dark:hover:bg-sky-500 focus:outline-none dark:focus:ring-sky-800"
-                disabled>Verify Price</button> --}}
-        @else
-            <x-button class="w-2/12" wire:click="verifyData()" wire:loading.attr="disabled">
+        @if($beforeVerified)
+            <x-button class="w-2/12" wire:click="alertConfirm" wire:loading.attr="disabled">
                 {{ __('Submit') }}
             </x-button>
-            @if($submitBtn!=0)
-                <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{ route('export.updatedfile', ['marketplace' => $marketplace, 'brand' => $brand]) }}">Download</a>
-            @endif
+        @else
+            <x-button class="w-2/12" disabled>
+                {{ __('Submit') }}
+            </x-button>
+        @endif
+        @if($submitBtn!=0)
+            <form action="{{ route('export.updatedfile', ['marketplace' => $marketplace, 'brand' => $brand]) }}" method="POST">
+                @csrf
+                <input type="hidden" value="{{ json_encode($dataTemp) }}" name="data">
+                <button type="submit" wire:click="clearTemp" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150">Download</button>
+            </form>
+            
         @endif
     </div>
     <x-table>
