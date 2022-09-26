@@ -2,13 +2,13 @@
     <div class="relative h-screen overflow-y-auto py-4 px-3 bg-gradient-to-b from-sky-400 via-cyan-500 to-blue-300 dark:bg-gray-800">
         <h3 class="text-center uppercase font-bold text-4xl text-white">Fey</h3>
         <ul class="mt-5 space-y-2">
-            <li>
+            {{-- <li>
                 <a href="/"
                     class="flex items-center p-2 text-white text-base font-medium rounded-lg hover:text-slate-700  dark:text-white hover:bg-green-500 dark:hover:bg-green-700 @if(URL::current() == url('/')) bg-green-500 @endif">
                     <svg class="w-6 h-6 text-white transition duration-75 dark:text-gray-700 group-hover:text-gray-900 dark:group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span class="ml-3">Dashboard</span>
                 </a>
-            </li>
+            </li> --}}
             @if(auth()->user()->hasRole(['Super Admin', 'Store Operations']))
             <li>
                 <h3 class="text-gray-700 font-bold text-sm mb-2 uppercase mt-8 px-3">Menu</h3>
@@ -65,10 +65,12 @@
             </li>
             @endif
         </ul>
+        @if(auth()->user()->hasRole(['Super Admin', 'Key Account Manager']))
         <div class="inset-x-3 absolute bottom-0 ">
             <a href="{{ route('user.manage') }}" class="text-white font-medium flex items-center justify-center bg-gradient-to-r from-green-500 to-blue-500 hover:from-sky-400 hover:to-emerald-500 rounded-lg px-2 py-3 mb-3  text-center">
                 User Management
             </a>
         </div>
+        @endif
     </div>
 </aside>

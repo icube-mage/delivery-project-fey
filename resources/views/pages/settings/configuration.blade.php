@@ -21,14 +21,21 @@
                 </li>
                 <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1">
                     <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">
-                        <span class="sm:flex text-yellow-600">Excel Mapping</span>
+                        <span class="sm:flex text-yellow-600">Excel Column Map</span>
                     </a>
                 </li>
                 <li @click="openTab = 4" :class="{ '-mb-px': openTab === 4 }" class="mr-1">
                     <a :class="openTab === 4 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">
+                        <span class="sm:flex text-yellow-600">Excel Row Map</span>
+                    </a>
+                </li>
+                @if(auth()->user()->hasRole('Super Admin'))
+                <li @click="openTab = 5" :class="{ '-mb-px': openTab === 5 }" class="mr-1">
+                    <a :class="openTab === 5 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">
                         <span class="sm:flex text-yellow-600">General</span>
                     </a>
                 </li>
+                @endif
             </ul>
             <div class="w-full pt-4">
             
@@ -42,6 +49,9 @@
                     <livewire:configuration.mapping-excel/>
                 </div>
                 <div x-cloak x-show="openTab === 4">
+                    <livewire:configuration.row-excel/>
+                </div>
+                <div x-cloak x-show="openTab === 5">
                     <livewire:configuration.general/>
                 </div>
             </div>

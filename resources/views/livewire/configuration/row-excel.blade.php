@@ -4,17 +4,16 @@
         <div class="flex items-start justify-between gap-6 py-4 border-b">
             <x-label>{{$map['marketplace']}} Excel</x-label>
             <div class="flex items-start justify-between gap-4">
-                <textarea class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200" rows="3" cols="30" wire:model="config.{{$index}}"></textarea>
+                <x-input type="text" wire:model="config.{{$index}}"/>
                 <x-button type="button" wire:click="store('{{$map['config']}}', {{$index}})" @click="show=true">Save</x-button>
             </div>
         </div>
         @endforeach
     </div>
     <div class="w-1/2 2xl:w-3/5 p-4">  
-        <div class="bg-gray-100 border rounded-xl p-2">
-            <p class="text-yellow-700 text-sm">Use equal symbol (=) to defined header name and separate by comma.<br/>mapping key : <br/>
-            sku, product_name, retail_price, discount_price, warehouse and start_date*<br/>
-            <br/>start_date & retail_price are optional</p>
+        <div class="bg-gray-100 border rounded-xl p-4">
+            <p class="text-yellow-700 text-sm">Format heading=2,content=4<br/>
+            it means title on second row and content start from fourth row</p>
         </div>
     </div>
     <div class="flex top-16 absolute right-4 items-center p-4 mb-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert"
