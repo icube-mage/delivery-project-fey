@@ -22,6 +22,7 @@ class CatalogPrice extends Model
         'marketplace',
         'start_date',
         'is_discount',
+        'is_negative',
         'warehouse'
     ];
     

@@ -9,10 +9,11 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class FileDataExport implements FromCollection, WithHeadings
 {
-    public function __construct(string $marketplace, string $brand)
+    public function __construct(string $marketplace, string $brand, array $datas)
     {
         $this->marketplace = $marketplace;
         $this->brand = $brand;
+        $this->datas = $datas;
     }
 
     /**
@@ -21,7 +22,13 @@ class FileDataExport implements FromCollection, WithHeadings
     public function collection()
     {
         $userId = Auth::id();
-        return CatalogPriceTemp::select('sku', 'marketplace', 'discount_price', 'warehouse')->where('user_id',$userId)->where('marketplace', $this->marketplace)->where('brand', $this->brand)->get();
+        // return CatalogPriceTemp::select('sku', 'marketplace', 'discount_price', 'warehouse')
+        //     ->where('user_id',$userId)
+        //     ->where('marketplace', $this->marketplace)
+        //     ->where('brand', $this->brand)
+        //     ->get();
+        return CatalogPriceTemp::select('sku', 'marketplace', 'discount_price', 'warehouse')
+            ->whereIn('id', $this->datas)->get();
     }
 
     public function headings():array{

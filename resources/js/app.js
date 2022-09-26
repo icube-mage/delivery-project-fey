@@ -3,6 +3,7 @@ window.addEventListener("swal:confirm", (e) => {
     swal.fire({
         icon: "question",
         text: e.detail.text,
+        title: e.detail.title ?? "",
         showCancelButton: true,
         confirmButtonText: "Yes",
         cancelButtonText: "No",

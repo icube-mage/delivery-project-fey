@@ -29,7 +29,8 @@ class CheckPrice extends Component
             'price' => 0,
             'discount' => 0,
             'average_discount' => 0,
-            'is_whitelist' => '',
+            'is_whitelist' => null,
+            'is_negative' => true,
             'is_changed' => false
         ]
     ];
@@ -37,6 +38,8 @@ class CheckPrice extends Component
     public $firstLoad = true;
     public $errorData;
     public $submitBtn = false;
+    public $beforeVerified = true;
+    protected $listeners = ['store'];
 
     public function setPage($url)
     {
@@ -58,25 +61,22 @@ class CheckPrice extends Component
         $this->sortField = $field;
     }
 
+    public function alertConfirm()
+    {
+        $this->dispatchBrowserEvent('swal:confirm', [
+            'text' => 'Check the data twice before submit!',
+            'title' => 'Submit your changes'
+        ]);
+    }
+
     public function changePrice($index, $newPrice){
-        if((int)$newPrice >= (int)$this->dataTemp[$index]['average_discount']){
-            if($this->dataTemp[$index]['is_changed']){
-                if((int)$this->dataTemp[$index]['price'] < (int)$this->dataTemp[$index]['average_discount']) {
-                    $this->errorData = $this->errorData-1;
-                }
-            } else {
-                $this->errorData = $this->errorData-1;
-                $this->dataTemp[$index]['is_changed'] = true;
-            }
+        if ((int)$newPrice >= (int)$this->dataTemp[$index]['average_discount']) {
+            $this->dataTemp[$index]['is_negative'] = false;
         } else {
-            if ($this->dataTemp[$index]['is_changed']) {
-                if ((int)$this->dataTemp[$index]['price'] >= (int)$this->dataTemp[$index]['average_discount']) {
-                    $this->errorData = $this->errorData+1;
-                }
-            }
+            $this->dataTemp[$index]['is_negative'] = true;
         }
         $this->dataTemp[$index]['price'] = $newPrice;
-        // CatalogPriceTemp::where('id',$dataChanged['id'])->update(['discount_price' => (int)$newPrice]);
+        CatalogPriceTemp::where('id',$this->dataTemp[$index]['id'])->update(['is_negative' => $this->dataTemp[$index]['is_negative']]);
         // session()->flash('message', 'Price update success');
     }
 
@@ -91,25 +91,31 @@ class CheckPrice extends Component
         // session()->flash('message', 'Whitelist update success');
     }
 
-    public function verifyData(){
+    public function clearTemp()
+    {
+        $this->dataTemp = [];
+        $this->beforeVerified = false;
+    }
+
+    public function store(){
         // update all price after fixed
         foreach($this->dataTemp as $fixed){
-            CatalogPriceTemp::where('id',$fixed['id'])->update(['discount_price' => $fixed['price']]);
-        }
-        // clear after success update
-        $this->dataTemp = [];        
+            CatalogPriceTemp::where('id',$fixed['id'])->update([
+                'discount_price' => $fixed['price'],
+            ]);
+        }     
         $dataCatalogPriceTemp = CatalogPriceTemp::where('user_id', Auth::user()->id)->get();
 
         $generateHash = Str::uuid(); 
         $avgPriceCat = 0;
         $totalDataAvgPrice = 0;
         $totalPriceTemp = 0;
-        $sku = $band = $marketplace = '';
+        $sku = $brand = $marketplace = '';
         foreach ($dataCatalogPriceTemp as $cpt){
             $sku = $cpt->sku;
             $brand = $cpt->brand;
             $marketplace = $cpt->marketplace;
-            if($cpt->is_whitelist == false){
+            if($cpt->is_whitelist == false && $cpt->is_negative == false){
                 $avgPriceCat = CatalogPriceAvg::where('sku', $sku)->where('brand', $brand)->where('marketplace', $marketplace)->pluck('average_price')->first();
 
                 $totalDataAvgPrice = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->pluck('total_record')->first();
@@ -123,43 +129,52 @@ class CheckPrice extends Component
                 CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->update(['average_price' => $countNewAvg]);
             }
 
-            if($cpt->is_whitelist==false && $cpt->discount_price < $avgPriceCat){
-                $this->errorData = $this->errorData+1;
-                $this->dataTemp[] = array(
-                    'id' => $cpt->id,
-                    'sku' => $cpt->sku,
-                    'product_name' => $cpt->product_name,
-                    'price' => $cpt->discount_price,
-                    'discount' => $totalPriceTemp / $countPriceTemp,
-                    'average_discount' => $countNewAvg,
-                    'is_whitelist' => $cpt->is_whitelist,
-                    'is_changed' => false
-                );
-            } else {
-                $catPrice = [
-                    'upload_hash' => $generateHash,
-                    'sku' => $cpt->sku,
-                    'product_name' => $cpt->product_name,
-                    'retail_price' => $cpt->retail_price,
-                    'discount_price' => $cpt->discount_price,
-                    'user_id' => $cpt->user_id,
-                    'brand' => $cpt->brand,
-                    'marketplace' => $cpt->marketplace,
-                    'is_whitelist' => $cpt->is_whitelist,
-                    'start_date' => $cpt->start_date,
-                ];
-                CatalogPrice::create($catPrice);
+            // if($cpt->is_whitelist==false && $cpt->discount_price < $avgPriceCat){
+            //     $this->errorData = $this->errorData+1;
+            //     $this->dataTemp[] = array(
+            //         'id' => $cpt->id,
+            //         'sku' => $cpt->sku,
+            //         'product_name' => $cpt->product_name,
+            //         'price' => $cpt->discount_price,
+            //         'discount' => $totalPriceTemp / $countPriceTemp,
+            //         'average_discount' => $countNewAvg,
+            //         'is_whitelist' => $cpt->is_whitelist,
+            //         'is_changed' => false
+            //     );
+            // } else {
                 
-            }
+                
+            // }
+
+            $catPrice = [
+                'upload_hash' => $generateHash,
+                'sku' => $cpt->sku,
+                'product_name' => $cpt->product_name,
+                'retail_price' => $cpt->retail_price,
+                'discount_price' => $cpt->discount_price,
+                'user_id' => $cpt->user_id,
+                'brand' => $cpt->brand,
+                'marketplace' => $cpt->marketplace,
+                'is_whitelist' => $cpt->is_whitelist,
+                'is_negative' => $cpt->is_negative,
+                'warehouse' => $cpt->warehouse,
+                'start_date' => $cpt->start_date,
+            ];
+            CatalogPrice::create($catPrice);
 
         }
-        if ($this->errorData == 0) {
-            $this->submitBtn = true;
-            session()->flash('message', 'Data verified');
-        } else {
-            $this->submitBtn = false;
-            session()->flash('error', 'Please check the price again');
-        }
+        // if ($this->errorData == 0) {
+        //     $this->submitBtn = true;
+        //     session()->flash('message', 'Data verified');
+        // } else {
+        //     $this->submitBtn = false;
+        //     session()->flash('error', 'Please check the price again');
+        // }
+        $this->submitBtn = true;
+        $this->beforeVerified = true;
+        $this->dispatchBrowserEvent('swal:success', [
+            'text' => 'All prices successfully submitted',
+        ]);
     }
     
     public function render()
@@ -175,7 +190,6 @@ class CheckPrice extends Component
             $userId = "";
             $countError=0;
             $countWhitelist = 0;
-            $countHasDiscount = 0;
             foreach ($catalogTemp as $items) {
                 $brand = $items->brand;
                 $marketplace = $items->marketplace;
@@ -194,6 +208,7 @@ class CheckPrice extends Component
                 ->where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->pluck('average_price')->first();
                 
                 if ($items->discount_price < $averagePrice && $items->is_discount==true) {
+                    CatalogPriceTemp::where('id',$items->id)->update(['is_negative' => true]);
                     $dataCatalog[] = array(
                         'id' => $items->id,
                         'sku' => $items->sku,
@@ -202,6 +217,7 @@ class CheckPrice extends Component
                         'discount' => $avgTemp,
                         'average_discount' => $averagePrice,
                         'is_whitelist' => $items->is_whitelist,
+                        'is_negative' => true,
                         'is_changed' => false
                     );
 
@@ -239,9 +255,6 @@ class CheckPrice extends Component
             $this->firstLoad = false;
             $this->brand = $brand;
             $this->marketplace = $marketplace;
-            if ($this->errorData == 0) {
-                $this->submitBtn = true;
-            }
         }
 
         return view('livewire.table.check-price');

@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('export/log',  [HistoricalDataController::class, 'exportAll'])->name('catalog.price');
         Route::get('export/log/{hash}',  [HistoricalDataController::class, 'exportByHash'])->name('catalog.price.hash');
         Route::get('report', [ReportController::class, 'export'])->name('report');
-        Route::get('updatedfile/{marketplace}/{brand}', [UploadFileController::class, 'export'])->name('updatedfile');
+        Route::post('updatedfile/{marketplace}/{brand}', [UploadFileController::class, 'export'])->name('updatedfile');
     });
     Route::prefix('settings')->group(function(){
         Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');

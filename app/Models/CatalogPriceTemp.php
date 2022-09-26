@@ -25,6 +25,7 @@ class CatalogPriceTemp extends Model
         'start_date',
         'is_whitelist',
         'is_discount',
+        'is_negative',
         'warehouse'
     ];
 }
