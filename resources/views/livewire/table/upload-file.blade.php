@@ -73,7 +73,7 @@
                 @endforeach
             @else
                 <tr>
-                    <x-th scope="row" colspan="3" class="text-center text-gray-900">
+                    <x-th scope="row" colspan="4" class="text-center text-gray-900">
                         Data not Available
                     </x-th>
                 </tr>

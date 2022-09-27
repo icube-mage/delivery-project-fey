@@ -127,6 +127,24 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $retailPriceConfig = $mapping_field['retail_price'] ?? null;
                 $startDateConfig = $mapping_field['start_date'] ?? null;
                 break;
+            case 'blibli':
+                $configName = $this->marketplace."_column_map";
+                $getConfigBlibli = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
+                $mapping_field = [];
+                foreach($getConfigBlibli as $array)
+                {
+                    $value = explode("=", $array); 
+                    $mapping_field[$value[0]] = $value[1];
+                }
+                $skuConfig = $mapping_field['sku'] ?? null;
+                if($skuConfig==null){
+                    throw new \Exception ("Sku is not available");
+                }
+                $nameConfig = $mapping_field['product_name'] ?? null;
+                $discountPriceConfig = $mapping_field['discount_price'] ?? null;
+                $retailPriceConfig = $mapping_field['retail_price'] ?? null;
+                $startDateConfig = $mapping_field['start_date'] ?? null;
+                break;
                 
             default:
                 throw new \Exception ("Marketplace not registered");

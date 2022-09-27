@@ -7,6 +7,7 @@ use Livewire\Component;
 use App\Models\HistoryUser;
 use Illuminate\Support\Str;
 use App\Models\CatalogPrice;
+use Illuminate\Http\Request;
 use Livewire\WithPagination;
 use App\Exports\FileDataExport;
 use App\Models\CatalogPriceAvg;
@@ -14,6 +15,7 @@ use App\Models\CatalogPriceTemp;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Contracts\Session\Session;
 
 class CheckPrice extends Component
 {
@@ -39,7 +41,7 @@ class CheckPrice extends Component
     public $errorData;
     public $submitBtn = false;
     public $beforeVerified = true;
-    protected $listeners = ['store'];
+    protected $listeners = ['store','refreshPage' => '$refresh'];
 
     public function setPage($url)
     {
@@ -95,6 +97,10 @@ class CheckPrice extends Component
     {
         $this->dataTemp = [];
         $this->beforeVerified = false;
+        session()->forget('historyData');
+        session()->regenerate();
+
+        $this->emit('refreshPage');
     }
 
     public function store(){
@@ -163,6 +169,9 @@ class CheckPrice extends Component
             CatalogPrice::create($catPrice);
 
         }
+
+        // HistoryUser::create($historyData);
+
         // if ($this->errorData == 0) {
         //     $this->submitBtn = true;
         //     session()->flash('message', 'Data verified');
@@ -242,15 +251,24 @@ class CheckPrice extends Component
 
             // Insert data to history
             $totalError = $countError;
-            $historyData = [
-                'user_id' => $userId,
-                'brand' => $brand,
-                'marketplace' => $marketplace,
-                'total_records' => $catalogTemp->count(),
-                'false_price' => $totalError,
-                'extras' => json_encode($extrasHistory)
-            ];
-            HistoryUser::create($historyData);
+            $insertLogUploadFile = session()->has('historyData');
+            // dd(session()->all());
+            if(!$insertLogUploadFile){
+                $historyData = [
+                    'user_id' => $userId,
+                    'brand' => $brand,
+                    'marketplace' => $marketplace,
+                    'total_records' => $catalogTemp->count(),
+                    'false_price' => $totalError,
+                    'extras' => json_encode($extrasHistory)
+                ];
+                session()->put('historyData', $historyData);
+
+            // dd($insertLogUploadFile);
+                HistoryUser::create(session()->get('historyData'));
+            }
+
+            // dd(session()->all());
 
             $this->firstLoad = false;
             $this->brand = $brand;
