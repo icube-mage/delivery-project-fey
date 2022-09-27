@@ -52,14 +52,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
     {
         switch($this->marketplace){
             case 'tokopedia':
-                $configName = $this->marketplace."_column_map";
-                $getConfigTokped = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
-                $mapping_field = [];
-                foreach($getConfigTokped as $array)
-                {
-                    $value = explode("=", $array); 
-                    $mapping_field[$value[0]] = $value[1];
-                }
+                $mapping_field = $this->getConfig('tokopedia');
                 $skuConfig = $mapping_field['sku'] ?? null;
                 if($skuConfig==null){
                     throw new \Exception ("Sku config is not available");
@@ -74,14 +67,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $startDateConfig = $mapping_field['start_date'] ?? null;
                 break;
             case 'shopee':
-                $configName = $this->marketplace."_column_map";
-                $getConfigShopee = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
-                $mapping_field = [];
-                foreach($getConfigShopee as $array)
-                {
-                    $value = explode("=", $array); 
-                    $mapping_field[$value[0]] = $value[1];
-                }
+                $mapping_field = $this->getConfig('shopee');
                 $skuConfig = $mapping_field['sku'] ?? null;
                 if($skuConfig==null){
                     throw new \Exception ("Sku is not available");
@@ -92,14 +78,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $startDateConfig = $mapping_field['start_date'] ?? null;
                 break;
             case 'lazada':
-                $configName = $this->marketplace."_column_map";
-                $getConfigLazada = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
-                $mapping_field = [];
-                foreach($getConfigLazada as $array)
-                {
-                    $value = explode("=", $array); 
-                    $mapping_field[$value[0]] = $value[1];
-                }
+                $mapping_field = $this->getConfig('lazada');
                 $skuConfig = $mapping_field['sku'] ?? null;
                 if($skuConfig==null){
                     throw new \Exception ("Sku is not available");
@@ -110,14 +89,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $startDateConfig = $mapping_field['start_date'] ?? null;
                 break;
             case 'bukalapak':
-                $configName = $this->marketplace."_column_map";
-                $getConfigBukalapak = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
-                $mapping_field = [];
-                foreach($getConfigBukalapak as $array)
-                {
-                    $value = explode("=", $array); 
-                    $mapping_field[$value[0]] = $value[1];
-                }
+                $mapping_field = $this->getConfig('bukalapak');
                 $skuConfig = $mapping_field['sku'] ?? null;
                 if($skuConfig==null){
                     throw new \Exception ("Sku is not available");
@@ -128,14 +100,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $startDateConfig = $mapping_field['start_date'] ?? null;
                 break;
             case 'blibli':
-                $configName = $this->marketplace."_column_map";
-                $getConfigBlibli = Configuration::where("key","=",$configName)->first() ? explode(",", Configuration::where("key","=",$configName)->pluck('value')->first()) : null;
-                $mapping_field = [];
-                foreach($getConfigBlibli as $array)
-                {
-                    $value = explode("=", $array); 
-                    $mapping_field[$value[0]] = $value[1];
-                }
+                $mapping_field = $this->getConfig('blibli');
                 $skuConfig = $mapping_field['sku'] ?? null;
                 if($skuConfig==null){
                     throw new \Exception ("Sku is not available");
@@ -235,5 +200,21 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         return [
             0 => $this
         ];
+    }
+
+    protected function getConfig($marketplace){
+        $configuration = Configuration::where('key', $marketplace.'_column_map')->first();
+
+        if($configuration) {
+            $mapping_field = [];
+            $getConfig = explode(",", $configuration->value);
+            foreach($getConfig as $array)
+            {
+                $value = explode("=", $array); 
+                $mapping_field[$value[0]] = $value[1];
+            }
+            
+        }
+        return $mapping_field;
     }
 }
