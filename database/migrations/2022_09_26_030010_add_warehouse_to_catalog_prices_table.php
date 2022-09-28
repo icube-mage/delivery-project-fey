@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('catalog_prices', function (Blueprint $table) {
-            $table->string('warehouse')->after('marketplace');
+            $table->string('warehouse')->after('marketplace')->nullable();
         });
     }
 
