@@ -81,7 +81,7 @@
         </x-thead>
         <tbody>
             @forelse ($dataTemp as $index => $item)
-                <tr class="hover:bg-gray-100 first-letter:bg-white border-b dark:bg-gray-800 dark:border-gray-700" wire:key="text-key-{{ $index }}-{{ time() }}">
+                <tr class="hover:bg-gray-100 first-letter:bg-white border-b" wire:key="text-key-{{ $index }}-{{ time() }}">
                     <x-th scope="row">
                         {{ $item['sku'] }}
                     </x-th>
