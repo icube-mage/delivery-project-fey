@@ -119,18 +119,19 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         try{
             $sku = $row[$skuConfig];
             $discountPrice = $row[$discountPriceConfig];
-            $warehouse = $row[$warehouseConfig];
         } catch(\Exception $e){
             throw new \Exception ($e->getMessage());
         }
-
+        
         $retailPrice = null;
         $startDateOriginal = null;
+        $warehouse = null;
 
         try{
             $name = $row[$nameConfig];
             $retailPrice = $row[$retailPriceConfig] ?? 0;
             $startDateOriginal = $row[$startDateConfig] ?? date('d-m-Y');
+            $warehouse = $row[$warehouseConfig];
         } catch(\Exception $e){
         }
 
@@ -158,8 +159,6 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
 
         if($sku == null){
             throw new \Exception ("Please check SKU column");
-        } elseif($warehouse == null){
-            throw new \Exception ("Please check Warehuse column");
         } elseif($discountPrice == null){
             throw new \Exception ("Please check Discount Price column");
         }else{

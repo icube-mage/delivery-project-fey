@@ -8,7 +8,7 @@
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-90"
                 x-transition:enter-end="opacity-100 scale-100"
-                class="text-green-700 px-6 py-4 border-0 rounded relative mb-4 bg-green-100 dark:bg-green-200 dark:green-rose-800">
+                class="text-green-700 px-6 py-4 border-0 rounded relative mb-4 bg-green-100">
                 <span class="inline-block align-middle mr-8">
                     {{ session('message') }}
                 </span>
@@ -24,7 +24,7 @@
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 scale-90"
                 x-transition:enter-end="opacity-100 scale-100"
-                class="text-rose-700 px-6 py-4 border-0 rounded relative mb-4 bg-rose-100 dark:bg-rose-200 dark:text-rose-800">
+                class="text-rose-700 px-6 py-4 border-0 rounded relative mb-4 bg-rose-100">
                 <span class="inline-block align-middle mr-8">
                     {{ session('error') }}
                 </span>
@@ -94,7 +94,7 @@
                         @endif
                         <input type="text" id="discount_price" value="{{ $dataTemp[$index]['price'] }}"
                             wire:keydown.enter="changePrice({{ $index }}, $event.target.value)"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     </x-td>
                     <x-td>
                         {{ $item['average_discount'] }}
@@ -103,9 +103,9 @@
                         <div class="flex items-center">
                             <input type="checkbox" wire:model="dataTemp.{{ $index }}.is_whitelist" value=""
                                 wire:change="changeWhitelist({{ $dataTemp[$index]['id'] }}, $event.target.checked)"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
                             <label for="default-checkbox"
-                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Whitelist</label>
+                                class="ml-2 text-sm font-medium text-gray-900">Whitelist</label>
                         </div>
                     </x-td>
                 </tr>

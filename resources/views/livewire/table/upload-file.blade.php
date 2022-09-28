@@ -55,8 +55,8 @@
         <tbody class="overflow-y-auto">
             @if ($catalogPriceTemp != null)
                 @foreach ($catalogPriceTemp as $item)
-                    <tr class="hover:bg-gray-100 first-letter:bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
+                        <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                             {{ $item->sku }}
                         </x-th>
                         <x-td>

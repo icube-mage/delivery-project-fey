@@ -37,7 +37,7 @@
         </x-thead>
         <tbody>
             @foreach($catalogPrices as $catalogPrice)
-            <tr class="hover:bg-gray-100 first-letter:bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
                 <x-td>
                     {{ $catalogPrice->sku }}
                 </x-td>

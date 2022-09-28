@@ -19,8 +19,8 @@
         </x-thead>
         <tbody>
             @foreach($catalogPrices as $catalogPrice)
-            <tr class="hover:bg-gray-100 first-letter:bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
+                <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                     <a href="{{ route('menu.historicaldata.show', $catalogPrice->upload_hash) }}" class="text-sky-600 hover:text-sky-700">
                         {{ explode("-",$catalogPrice->upload_hash)[0] }}
                     </a>
