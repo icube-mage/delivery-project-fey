@@ -8,6 +8,7 @@ use App\Http\Controllers\Backoffice\ConfigurationController;
 use App\Http\Controllers\Backoffice\HistoricalDataController;
 use App\Http\Controllers\Backoffice\ReportController;
 use App\Http\Livewire\UserManagement;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,5 +44,12 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::prefix('settings')->group(function(){
         Route::get('/configuration', ConfigurationController::class)->name('settings.configuration');
+    });
+    // artisan command
+    Route::prefix('command')->middleware('role:Super Admin')->group(function(){
+        Route::get('catalogprice-clean', function(){
+            Artisan::call('catalogprice:clean');
+            dd('Done');
+        });
     });
 });
