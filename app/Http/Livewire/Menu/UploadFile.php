@@ -73,13 +73,25 @@ class UploadFile extends Component
             ->get();
 
         foreach ($cPriceTemp as $cpt) {
-            $countDataTemp = CatalogPriceTemp::where('sku', $cpt->sku)
+            $countDataPrice = CatalogPrice::where('sku', $cpt->sku)
                 ->where('brand', $cpt->brand)
-                ->where('marketplace', $cpt->marketplace)->count();
+                ->where('marketplace', $cpt->marketplace)
+                ->where('warehouse', $cpt->warehouse)
+                ->count();
+            if($countDataPrice==0){
+                $countDataPrice = CatalogPriceTemp::where('sku', $cpt->sku)
+                    ->where('brand', $cpt->brand)
+                    ->where('marketplace', $cpt->marketplace)
+                    ->where('warehouse', $cpt->warehouse)
+                    ->count();
+            }
             $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)
                 ->where('brand', $cpt->brand)
-                ->where('marketplace', $cpt->marketplace)->sum('discount_price');
-            $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
+                ->where('marketplace', $cpt->marketplace)
+                ->where('warehouse', $cpt->warehouse)
+                ->sum('discount_price');
+            $avgTemp = $totalDiscountPriceTemp / $countDataPrice;
+
             $checkPriceAvg = CatalogPriceAvg::where('sku', $cpt->sku)
                 ->where('brand', $cpt->brand)
                 ->where('marketplace', $cpt->marketplace)
@@ -91,7 +103,7 @@ class UploadFile extends Component
                 $cPriceAvg = [
                     'sku' => $cpt->sku,
                     'average_price' => $avgTemp,
-                    'total_record' => $countDataTemp,
+                    'total_record' => $countDataPrice,
                     'user_id' => $cpt->user_id,
                     'brand' => $cpt->brand,
                     'marketplace' => $cpt->marketplace,
@@ -99,10 +111,6 @@ class UploadFile extends Component
                     'warehouse' => $cpt->warehouse,
                 ];
                 CatalogPriceAvg::create($cPriceAvg);
-            } else{
-                CatalogPriceAvg::where('sku', $cpt->sku)
-                ->where('brand', $cpt->brand)
-                ->where('marketplace', $cpt->marketplace)->update(['average_price' => $avgTemp]);
             }
             
         }

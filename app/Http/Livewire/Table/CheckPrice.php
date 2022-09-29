@@ -98,6 +98,7 @@ class CheckPrice extends Component
         $this->dataTemp = [];
         $this->beforeVerified = false;
         session()->forget('historyData');
+        session()->forget('checkPriceHash');
         session()->regenerate();
 
         $this->emit('refreshPage');
@@ -106,13 +107,13 @@ class CheckPrice extends Component
     public function store(){
         // update all price after fixed
         foreach($this->dataTemp as $fixed){
+            // dd($fixed['id']);
             CatalogPriceTemp::where('id',$fixed['id'])->update([
                 'discount_price' => $fixed['price'],
             ]);
         }     
         $dataCatalogPriceTemp = CatalogPriceTemp::where('user_id', Auth::user()->id)->get();
 
-        $generateHash = Str::uuid(); 
         $avgPriceCat = 0;
         $totalDataAvgPrice = 0;
         $totalPriceTemp = 0;
@@ -124,15 +125,35 @@ class CheckPrice extends Component
             if($cpt->is_whitelist == false && $cpt->is_negative == false){
                 $avgPriceCat = CatalogPriceAvg::where('sku', $sku)->where('brand', $brand)->where('marketplace', $marketplace)->pluck('average_price')->first();
 
-                $totalDataAvgPrice = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->pluck('total_record')->first();
+                // $totalDataAvgPrice = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->pluck('total_record')->first();
+                $totalDataPrice = CatalogPrice::where('sku', $cpt->sku)
+                    ->where('brand', $cpt->brand)
+                    ->where('marketplace', $cpt->marketplace)
+                    ->where('warehouse', $cpt->warehouse)
+                    ->count();
                 
-                $totalPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->sum('discount_price');
+                $totalPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)
+                    ->where('brand', $cpt->brand)
+                    ->where('marketplace', $cpt->marketplace)
+                    ->where('warehouse', $cpt->warehouse)
+                    ->sum('discount_price');
                 
-                $countPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->count();
+                $countPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)
+                    ->where('brand', $cpt->brand)
+                    ->where('marketplace', $cpt->marketplace)
+                    ->where('warehouse', $cpt->warehouse)
+                    ->count();
                 
-                $countNewAvg = (($avgPriceCat * $totalDataAvgPrice) + $totalPriceTemp) / ($totalDataAvgPrice + $countPriceTemp);
+                $countNewAvg = (($avgPriceCat * $totalDataPrice) + $totalPriceTemp) / ($totalDataPrice + $countPriceTemp);
 
-                CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->update(['average_price' => $countNewAvg]);
+                CatalogPriceAvg::where('sku', $cpt->sku)
+                    ->where('brand', $cpt->brand)
+                    ->where('marketplace', $cpt->marketplace)
+                    ->where('warehouse', $cpt->warehouse)
+                    ->update([
+                        'average_price' => $countNewAvg,
+                        'total_record' => $totalDataPrice + $countPriceTemp
+                    ]);
             }
 
             // if($cpt->is_whitelist==false && $cpt->discount_price < $avgPriceCat){
@@ -147,13 +168,10 @@ class CheckPrice extends Component
             //         'is_whitelist' => $cpt->is_whitelist,
             //         'is_changed' => false
             //     );
-            // } else {
-                
-                
-            // }
-
+            // } 
+            
             $catPrice = [
-                'upload_hash' => $generateHash,
+                'upload_hash' => session()->get('checkPriceHash'),
                 'sku' => $cpt->sku,
                 'product_name' => $cpt->product_name,
                 'retail_price' => $cpt->retail_price,
@@ -166,7 +184,23 @@ class CheckPrice extends Component
                 'warehouse' => $cpt->warehouse,
                 'start_date' => $cpt->start_date,
             ];
-            CatalogPrice::create($catPrice);
+            CatalogPrice::updateOrCreate(
+                [
+                    'upload_hash' => session()->get('checkPriceHash'),
+                    'sku' => $cpt->sku,
+                    'user_id' => $cpt->user_id,
+                    'brand' => $cpt->brand,
+                    'marketplace' => $cpt->marketplace,
+                    'warehouse' => $cpt->warehouse,
+                ],[
+                    'discount_price' => $cpt->discount_price,
+                    'product_name' => $cpt->product_name,
+                    'retail_price' => $cpt->retail_price,
+                    'is_whitelist' => $cpt->is_whitelist,
+                    'is_negative' => $cpt->is_negative,
+                    'start_date' => $cpt->start_date,
+                ]
+            );
 
         }
 
@@ -262,11 +296,14 @@ class CheckPrice extends Component
                     'false_price' => $totalError,
                     'extras' => json_encode($extrasHistory)
                 ];
+                
                 session()->put('historyData', $historyData);
 
             // dd($insertLogUploadFile);
                 HistoryUser::create(session()->get('historyData'));
             }
+            $generateHash = Str::uuid();
+            session()->put('checkPriceHash', $generateHash);
 
             // dd(session()->all());
 
