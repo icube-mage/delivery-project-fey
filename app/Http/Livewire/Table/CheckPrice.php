@@ -247,10 +247,10 @@ class CheckPrice extends Component
 
                 $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
 
-                $averagePrice = CatalogPriceAvg::where('user_id', Auth::user()->id)
-                ->where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->pluck('average_price')->first();
-                
+                $averagePrice = CatalogPriceAvg::where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->where('warehouse', $items->warehouse)->pluck('average_price')->first();
+
                 if ($items->discount_price < $averagePrice && $items->is_discount==true) {
+                    // dd($averagePrice);
                     CatalogPriceTemp::where('id',$items->id)->update(['is_negative' => true]);
                     $dataCatalog[] = array(
                         'id' => $items->id,
