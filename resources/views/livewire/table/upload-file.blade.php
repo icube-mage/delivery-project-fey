@@ -54,23 +54,31 @@
         </x-thead>
         <tbody class="overflow-y-auto">
             @if ($catalogPriceTemp != null)
-                @foreach ($catalogPriceTemp as $item)
-                    <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
-                        <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
-                            {{ $item->sku }}
-                        </x-th>
-                        <x-td>
-                            {{ $item->product_name }}
-                        </x-td>
-                        <x-td>
-                            {{ $item->warehouse }}
-                        </x-td>
-                        <x-td>
-                            {{ $item->discount_price }}
-                        </x-td>
+                @if ($catalogPriceTemp->items() != null)
+                    @foreach ($catalogPriceTemp as $item)
+                        <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
+                            <x-th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
+                                {{ $item->sku }}
+                            </x-th>
+                            <x-td>
+                                {{ $item->product_name }}
+                            </x-td>
+                            <x-td>
+                                {{ $item->warehouse }}
+                            </x-td>
+                            <x-td>
+                                {{ $item->discount_price }}
+                            </x-td>
 
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <x-th scope="row" colspan="4" class="text-center text-gray-900">
+                            Data not Available
+                        </x-th>
                     </tr>
-                @endforeach
+                @endif
             @else
                 <tr>
                     <x-th scope="row" colspan="4" class="text-center text-gray-900">
