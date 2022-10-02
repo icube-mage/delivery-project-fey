@@ -12,7 +12,7 @@
         </div>
     @endif
     @if ($errorMsg != null)
-    <div x-data="{ show: true }" x-show="show"
+    <div wire:key="{{ rand() }}" x-data="{ show: true }" x-show="show"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-x-0"
         x-transition:leave-end="opacity-0 transform -translate-x-40"
@@ -69,7 +69,7 @@
             @endif
         </form>
         @if (!$isUploaded)
-            <x-button class="inline-flex h-fit mb-6" disabled>Check Price</x-button>
+            <x-button class="inline-flex h-fit mb-6 cursor-not-allowed" disabled>Check Price</x-button>
         @else
         <a href="{{ route('menu.uploadfile.checkprice') }}"
             class="inline-flex h-fit mb-6 items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-sky-600 hover:bg-sky-500 active:bg-sky-500 focus:border-sky-500 justify-center tracking-widest focus:outline-none focus:ring ring-sky-300 disabled:opacity-25 transition ease-in-out duration-150">
