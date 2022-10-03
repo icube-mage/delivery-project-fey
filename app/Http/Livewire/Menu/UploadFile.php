@@ -74,6 +74,8 @@ class UploadFile extends Component
         if($this->file == null){
             $this->submitBtn = false;
         }
+        
+        $this->errorMsg = null;
     }
 
     public function submit()
