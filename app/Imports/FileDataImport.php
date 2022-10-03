@@ -123,7 +123,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
             throw new \Exception ($e->getMessage());
         }
 
-        $name = $name ?? "No Name";
+        $name = $row[$nameConfig] ?? "No Name";
         $retailPrice = $row[$retailPriceConfig] ?? 0;
         $startDateOriginal = $row[$startDateConfig] ?? date('d-m-Y');
         $warehouse = $row[$warehouseConfig] ?? null;
