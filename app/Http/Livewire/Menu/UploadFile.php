@@ -13,6 +13,7 @@ use App\Imports\FileDataImport;
 use App\Models\CatalogPriceAvg;
 use App\Models\CatalogPriceTemp;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UploadFile extends Component
@@ -41,6 +42,8 @@ class UploadFile extends Component
         if($getConfigTokped == null && $this->marketplace != null){
             $this->errorMsg = "Please set the config!";
             $this->submitBtn = false;
+        } else{
+            $this->errorMsg = null;
         }
         if($this->brand != null && $this->marketplace != null && $this->file != null ) {
             $this->submitBtn = true;
@@ -58,6 +61,8 @@ class UploadFile extends Component
 
         if($this->brand == null){
             $this->submitBtn = false;
+        } else{
+            $this->errorMsg = null;
         }
     }
 

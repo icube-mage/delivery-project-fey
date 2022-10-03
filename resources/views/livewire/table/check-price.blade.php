@@ -42,7 +42,7 @@
     <pre>{{ var_dump($dataTemp)}}</pre> --}}
     <div class="w-full flex flex-end mb-4 space-x-2">
         @if($beforeVerified)
-            <x-button class="w-2/12" wire:click="alertConfirm" wire:loading.attr="disabled">
+            <x-button class="w-2/12 cursor-not-allowed" wire:click="alertConfirm" wire:loading.attr="disabled">
                 {{ __('Submit') }}
             </x-button>
         @else
@@ -81,7 +81,7 @@
         </x-thead>
         <tbody>
             @forelse ($dataTemp as $index => $item)
-                <tr class="hover:bg-gray-100 first-letter:bg-white border-b" wire:key="text-key-{{ $index }}-{{ time() }}">
+                <tr class="hover:bg-gray-100 first-letter:bg-white border-b" wire:key="checkbox-key-{{ $index }}-{{ time() }}">
                     <x-th scope="row">
                         {{ $item['sku'] }}
                     </x-th>
@@ -100,7 +100,7 @@
                         {{ $item['average_discount'] }}
                     </x-td>
                     <x-td class="content-center">
-                        <div class="flex items-center">
+                        <div class="flex self-center">
                             <input type="checkbox" wire:model="dataTemp.{{ $index }}.is_whitelist" value=""
                                 wire:change="changeWhitelist({{ $dataTemp[$index]['id'] }}, $event.target.checked)"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
