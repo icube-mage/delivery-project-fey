@@ -43,11 +43,11 @@
     <div class="w-full flex justify-between items-center mb-4">
         <div class="flex flex-end w-1/2 space-x-2">
         @if($beforeVerified)
-            <x-button class="w-2/12 cursor-not-allowed" wire:click="alertConfirm" wire:loading.attr="disabled">
+            <x-button class="w-2/12" wire:click="alertConfirm" wire:loading.attr="disabled">
                 {{ __('Submit') }}
             </x-button>
         @else
-            <x-button class="w-2/12" disabled>
+            <x-button class="w-2/12 cursor-not-allowed" disabled>
                 {{ __('Submit') }}
             </x-button>
         @endif
