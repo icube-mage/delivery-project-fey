@@ -72,7 +72,7 @@
                                     Select file
                                 @endif
                             </label>
-                            <input id="file" wire:model.defer="file" class="hidden" type="file"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv">
+                            <input id="file" wire:model="file" class="hidden" type="file"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv">
                         </div>
                     </div>
                     
