@@ -98,7 +98,8 @@
                             wire:keydown.enter="changePrice({{ $index }}, $event.target.value)"
                             wire:key="text-key-{{ $index }}-{{ time() }}"
                             placeholder="Press [Enter] to save"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            min="0" onkeyup="if(this.value<0){this.value= this.value * -1}">
                     </x-td>
                     <x-td>
                         {{ $item['average_discount'] }}
