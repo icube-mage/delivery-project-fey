@@ -37,7 +37,7 @@
             <div class="form-group w-full space-y-3 mb-5">
                 <div class="form-row w-full flex items-center justify-between">
                     <x-label for="brand" :value="__('Brand')" />
-                    <x-select id="brand" wire:model="brand">
+                    <x-select id="brand" wire:model.defer="brand">
                         <option value="" selected>-- Select Brand --</option>
                         @foreach ($brands as $item)
                             <option value="{{ $item->slug }}">{{ $item->name }}</option>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="form-row w-full flex items-center justify-between">
                     <x-label for="marketplace" :value="__('Marketplace')" />
-                    <x-select id="marketplace" wire:model="marketplace">
+                    <x-select id="marketplace" wire:model.lazy="marketplace">
                         <option value="" selected>-- Select Marketplace --</option>
                         @foreach ($marketplaces as $item)
                             <option value="{{ $item->slug }}">{{ $item->name }}</option>
@@ -55,10 +55,27 @@
                 </div>
                 <div class="form-row w-full flex items-center justify-between">
                     <x-label for="file" :value="__('Upload File')" />
-                    <input wire:model="file"
-                        class="block w-7/12 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer p-2 focus:outline-none"
-                        id="file" type="file"
-                        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv">
+                    <div class="w-7/12 flex justify-start items-center">
+                        <div class="w-1/12 py-2 pl-0.5 bg-gray-50 rounded-l-lg border-y border-l border-gray-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <div class="w-11/12">
+                            <label for="file" class="flex justify-start items-center text-sm text-gray-900 bg-gray-50 rounded-r-lg border-y border-r border-gray-300 cursor-pointer p-2 focus:outline-none">
+                                @if ($file) 
+                                    <span class="truncate">
+                                    {{explode(".",$file->getClientOriginalName())[0]}}
+                                    </span>
+                                    <span class="font-bold">
+                                    .{{explode(".",$file->getClientOriginalName())[1]}}
+                                    </span>
+                                @else
+                                    Select file
+                                @endif
+                            </label>
+                            <input id="file" wire:model.defer="file" class="hidden" type="file"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,text/comma-separated-values, text/csv, application/csv">
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             @if (!$submitBtn)
