@@ -13,6 +13,7 @@ use App\Imports\FileDataImport;
 use App\Models\CatalogPriceAvg;
 use App\Models\CatalogPriceTemp;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UploadFile extends Component
@@ -41,12 +42,37 @@ class UploadFile extends Component
         if($getConfigTokped == null && $this->marketplace != null){
             $this->errorMsg = "Please set the config!";
             $this->submitBtn = false;
+        } else{
+            $this->errorMsg = null;
+        }
+        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
+            $this->submitBtn = true;
+        }
+
+        if($this->marketplace == null){
+            $this->submitBtn = false;
+        }
+    }
+
+    public function updatedBrand() {
+        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
+            $this->submitBtn = true;
+        }
+
+        if($this->brand == null){
+            $this->submitBtn = false;
+        } else{
+            $this->errorMsg = null;
         }
     }
 
     public function updatedFile() {
         if($this->brand != null && $this->marketplace != null && $this->file != null ) {
             $this->submitBtn = true;
+        }
+
+        if($this->file == null){
+            $this->submitBtn = false;
         }
     }
 
@@ -72,6 +98,7 @@ class UploadFile extends Component
             ->where('marketplace', $this->marketplace)
             ->get();
 
+        $cPriceTempData = [];
         foreach ($cPriceTemp as $cpt) {
             $countDataPrice = CatalogPrice::where('sku', $cpt->sku)
                 ->where('brand', $cpt->brand)
@@ -113,9 +140,14 @@ class UploadFile extends Component
                 CatalogPriceAvg::create($cPriceAvg);
             }
             
+            $cPriceTempData = $cpt;
         }
 
-        $this->isUploaded  = true;
+        if($cPriceTempData != null){
+            $this->isUploaded  = true;
+        } else{
+            $this->isUploaded  = false;
+        }
         $this->emit('setUploaded',$this->isUploaded);
 
         return back()->withStatus('File upload success');

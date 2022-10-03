@@ -43,7 +43,7 @@
     <div class="w-full flex justify-between items-center mb-4">
         <div class="flex flex-end w-1/2 space-x-2">
         @if($beforeVerified)
-            <x-button class="w-2/12" wire:click="alertConfirm" wire:loading.attr="disabled">
+            <x-button class="w-2/12 cursor-not-allowed" wire:click="alertConfirm" wire:loading.attr="disabled">
                 {{ __('Submit') }}
             </x-button>
         @else
@@ -104,7 +104,7 @@
                         {{ $item['average_discount'] }}
                     </x-td>
                     <x-td class="content-center">
-                        <div class="flex items-center">
+                        <div class="flex self-center">
                             <input type="checkbox" wire:model="dataTemp.{{ $index }}.is_whitelist" value=""
                                 wire:change="changeWhitelist({{ $dataTemp[$index]['id'] }}, $event.target.checked)"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
