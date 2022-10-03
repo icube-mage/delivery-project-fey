@@ -14,6 +14,7 @@ class UploadFile extends Component
     public $sortField = 'id';
     public $sortDirection = 'asc';
     public $isUploaded;
+    public $currentPage = 1;
 
     protected $listeners = ['setUploaded'];
     
