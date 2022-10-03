@@ -40,7 +40,8 @@
     </div>
     {{-- {{$errorData}}
     <pre>{{ var_dump($dataTemp)}}</pre> --}}
-    <div class="w-full flex flex-end mb-4 space-x-2">
+    <div class="w-full flex justify-between items-center mb-4">
+        <div class="flex flex-end w-1/2 space-x-2">
         @if($beforeVerified)
             <x-button class="w-2/12" wire:click="alertConfirm" wire:loading.attr="disabled">
                 {{ __('Submit') }}
@@ -56,8 +57,9 @@
                 <input type="hidden" value="{{ json_encode($dataTemp) }}" name="data">
                 <button type="submit" wire:click="clearTemp" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150">Download</button>
             </form>
-            
         @endif
+        </div>
+        <div class="text-orange-600">Press Enter to save price changes</div>
     </div>
     <x-table>
         <x-thead>
@@ -81,7 +83,7 @@
         </x-thead>
         <tbody>
             @forelse ($dataTemp as $index => $item)
-                <tr class="hover:bg-gray-100 first-letter:bg-white border-b" wire:key="text-key-{{ $index }}-{{ time() }}">
+                <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
                     <x-th scope="row">
                         {{ $item['sku'] }}
                     </x-th>
@@ -92,8 +94,10 @@
                         @if($item['price'] < $item['average_discount'] && $item['is_whitelist']==false)
                             <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         @endif
-                        <input type="text" id="discount_price" value="{{ $dataTemp[$index]['price'] }}"
+                        <input type="number" id="discount_price" value="{{ $dataTemp[$index]['price'] }}"
                             wire:keydown.enter="changePrice({{ $index }}, $event.target.value)"
+                            wire:key="text-key-{{ $index }}-{{ time() }}"
+                            placeholder="Press [Enter] to save"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     </x-td>
                     <x-td>

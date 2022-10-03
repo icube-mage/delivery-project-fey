@@ -122,21 +122,12 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         } catch(\Exception $e){
             throw new \Exception ($e->getMessage());
         }
-        
-        $retailPrice = null;
-        $startDateOriginal = null;
-        $warehouse = null;
 
-        try{
-            $name = $row[$nameConfig];
-            $retailPrice = $row[$retailPriceConfig] ?? 0;
-            $startDateOriginal = $row[$startDateConfig] ?? date('d-m-Y');
-            $warehouse = $row[$warehouseConfig];
-        } catch(\Exception $e){
-        }
-
-        
         $name = $name ?? "No Name";
+        $retailPrice = $row[$retailPriceConfig] ?? 0;
+        $startDateOriginal = $row[$startDateConfig] ?? date('d-m-Y');
+        $warehouse = $row[$warehouseConfig] ?? null;
+
         if (Str::contains($retailPrice, 'N/A')) {
             $retailPrice = str_replace("N/A", '', $retailPrice);
             $retailPrice = str_replace("#", '', $retailPrice);
