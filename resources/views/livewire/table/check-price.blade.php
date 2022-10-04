@@ -1,5 +1,6 @@
 <div class="overflow-x-auto relative w-full">
     <div>
+        <div id="loading"></div>
         @if (session()->has('message'))
             <div x-data="{ show: true }" x-show="show"
                 x-transition:leave="transition ease-in duration-200"
