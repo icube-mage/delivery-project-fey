@@ -54,7 +54,7 @@ class UploadFile extends Component
         }
     }
 
-    public function updatedBrand() {
+    public function updatedBrand(){
         if($this->brand != null && $this->marketplace != null && $this->file != null ) {
             $this->submitBtn = true;
         }

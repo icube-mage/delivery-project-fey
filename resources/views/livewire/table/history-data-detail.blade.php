@@ -13,7 +13,7 @@
             </div>
             <div class="w-1/2">
                 <div class="flex justify-between items-center border-b px-2 pb-2 mb-2 w-full">
-                    <div class="text-sm font-bold">Create Date</div>
+                    <div class="text-sm font-bold">Brand</div>
                     <div class="text-sm font-bold">{{Str::upper($catalogPrices[0]->brand)}}</div>
                 </div>
                 <div class="flex justify-between items-center border-b px-2 pb-2 mb-2 w-full">
