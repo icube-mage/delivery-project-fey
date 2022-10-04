@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center mb-6">
         <div class="flex justify-between gap-16 w-1/2">
             <div class="w-1/2">
-                <div class="flex justify-between items-center border-p px-2 b pb-2 mb-2 w-full">
+                <div class="flex justify-between items-center border-b px-2 b pb-2 mb-2 w-full">
                     <div class="text-sm font-bold">Create Date</div>
                     <div class="text-sm font-bold">{{ \Carbon\Carbon::parse($catalogPrices[0]->created_at)->format('j M Y H:i')}}</div>
                 </div>
