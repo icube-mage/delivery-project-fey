@@ -41,5 +41,7 @@
             @endforeach
         </tbody>
     </x-table>
-    {{ $catalogPrices->links('livewire.pagination') }}
+    <div class="py-4">
+        {{ $catalogPrices->links('livewire.pagination') }}
+    </div>
 </div>

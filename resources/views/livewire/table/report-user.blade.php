@@ -3,7 +3,7 @@
         <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{route('export.report')}}">Download</a>
         <x-input type="text" placeholder="Search" wire:model="searchTerm" />
     </div>
-    <div class="flex items-center bg-gray-400 border p-4">
+    <div class="flex items-center bg-gray-400 border border-gray-400 p-4">
         <div class="text-center w-1/2 font-bold">User</div>
         <div class="text-center w-1/2 font-bold">Wrong Inputted Price</div>
     </div>
@@ -21,7 +21,7 @@
                 </template>
             </div>
         </div>
-        <div x-show.transition.in.duration.800ms="openedIndex == {{$index+1}}" class="border p-2 bg-slate-200">
+        <div x-cloak x-show.transition.in.duration.800ms="openedIndex == {{$index+1}}" class="border p-2 bg-slate-200">
             <x-table>
                 <x-thead>
                     <tr>
@@ -33,7 +33,7 @@
                     </tr>
                 </x-thead>
                 <tbody>
-                    @foreach($user->uploadHistory as $uploadHistory)
+                    @forelse($user->uploadHistory as $uploadHistory)
                         @php
                             $histories = json_decode($uploadHistory->extras)
                         @endphp
@@ -56,7 +56,13 @@
                             </x-td>
                         </tr>
                         @endforeach
-                    @endforeach
+                    @empty
+                        <tr class="hover:bg-gray-100 bg-white">
+                            <x-td colspan="5" class="text-center">
+                                -- No logs for this user were found--
+                            </x-td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </x-table>
         </div>
