@@ -36,6 +36,7 @@
             </tr>
         </x-thead>
         <tbody>
+            @if($errorData==false)
             @foreach($catalogPrices as $catalogPrice)
             <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
                 <x-td>
@@ -49,9 +50,18 @@
                 </x-td>
             </tr>
             @endforeach
+            @else
+                <tr class="hover:bg-gray-100 first-letter:bg-white border-b">
+                    <x-td class="text-center" colspan="3">
+                        -- Not Found --
+                    </x-td>
+                </tr>
+            @endif
         </tbody>
     </x-table>
+    @if($errorData==false)
     <div class="py-4">
         {{ $catalogPrices->links('livewire.pagination') }}
     </div>
+    @endif
 </div>
