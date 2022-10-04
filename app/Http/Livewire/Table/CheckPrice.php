@@ -16,6 +16,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Contracts\Session\Session;
+use Illuminate\Support\Facades\DB;
 
 class CheckPrice extends Component
 {
@@ -72,6 +73,9 @@ class CheckPrice extends Component
     }
 
     public function changePrice($index, $newPrice){
+        if($newPrice==null){
+            return session()->flash('error', 'Price value can not be null');
+        }
         if ((int)$newPrice >= (int)$this->dataTemp[$index]['average_discount']) {
             $this->dataTemp[$index]['is_negative'] = false;
         } else {
@@ -106,16 +110,23 @@ class CheckPrice extends Component
 
     public function store(){
         // update all price after fixed
-        foreach($this->dataTemp as $fixed){
-            // dd($fixed['id']);
-            CatalogPriceTemp::where('id',$fixed['id'])->update([
-                'discount_price' => $fixed['price'],
-            ]);
-        }     
+        DB::beginTransaction();
+        try{
+            foreach($this->dataTemp as $fixed){
+                // dd($fixed['id']);
+                CatalogPriceTemp::where('id',$fixed['id'])->update([
+                    'discount_price' => $fixed['price'],
+                ]);
+            } 
+            DB::commit();   
+        } catch(\Exception $e){
+            //if there is an error/exception in the above code before commit, it'll rollback
+            DB::rollBack();
+            $this->submitBtn = false;
+            return session()->flash('error', 'Incorrect price value, please check again!');
+        } 
         $dataCatalogPriceTemp = CatalogPriceTemp::where('user_id', Auth::user()->id)->get();
-
         $avgPriceCat = 0;
-        $totalDataAvgPrice = 0;
         $totalPriceTemp = 0;
         $sku = $brand = $marketplace = '';
         foreach ($dataCatalogPriceTemp as $cpt){
