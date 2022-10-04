@@ -24,7 +24,7 @@
         </div>
         <div>
             <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{route('export.catalog.price.hash', $catalogPrices[0]->upload_hash)}}">Download</a>
-            <x-input type="text" class="ml-4" placeholder="Search" wire:model="searchTerm" />
+            <x-input type="text" class="ml-4" placeholder="Search name or sku" wire:model="searchTerm" />
         </div>
     </div>
     <x-table>
