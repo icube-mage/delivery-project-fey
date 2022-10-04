@@ -57,14 +57,11 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 if($skuConfig==null){
                     throw new \Exception ("Sku config is not available");
                 }
-                $warehouseConfig = $mapping_field['warehouse'] ?? null;
-                if($warehouseConfig==null){
-                    throw new \Exception ("Warehouse config is not available");
-                }
                 $nameConfig = $mapping_field['product_name'] ?? null;
                 $discountPriceConfig = $mapping_field['discount_price'] ?? null;
                 $retailPriceConfig = $mapping_field['retail_price'] ?? null;
                 $startDateConfig = $mapping_field['start_date'] ?? null;
+                $warehouseConfig = $mapping_field['warehouse'] ?? null;
                 break;
             case 'shopee':
                 $mapping_field = $this->getConfig('shopee');
@@ -76,6 +73,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $discountPriceConfig = $mapping_field['discount_price'] ?? null;
                 $retailPriceConfig = $mapping_field['retail_price'] ?? null;
                 $startDateConfig = $mapping_field['start_date'] ?? null;
+                $warehouseConfig = $mapping_field['warehouse'] ?? null;
                 break;
             case 'lazada':
                 $mapping_field = $this->getConfig('lazada');
@@ -87,6 +85,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $discountPriceConfig = $mapping_field['discount_price'] ?? null;
                 $retailPriceConfig = $mapping_field['retail_price'] ?? null;
                 $startDateConfig = $mapping_field['start_date'] ?? null;
+                $warehouseConfig = $mapping_field['warehouse'] ?? null;
                 break;
             case 'bukalapak':
                 $mapping_field = $this->getConfig('bukalapak');
@@ -98,6 +97,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $discountPriceConfig = $mapping_field['discount_price'] ?? null;
                 $retailPriceConfig = $mapping_field['retail_price'] ?? null;
                 $startDateConfig = $mapping_field['start_date'] ?? null;
+                $warehouseConfig = $mapping_field['warehouse'] ?? null;
                 break;
             case 'blibli':
                 $mapping_field = $this->getConfig('blibli');
@@ -109,6 +109,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
                 $discountPriceConfig = $mapping_field['discount_price'] ?? null;
                 $retailPriceConfig = $mapping_field['retail_price'] ?? null;
                 $startDateConfig = $mapping_field['start_date'] ?? null;
+                $warehouseConfig = $mapping_field['warehouse'] ?? null;
                 break;
                 
             default:
