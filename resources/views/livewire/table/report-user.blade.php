@@ -7,21 +7,21 @@
         <div class="text-center w-1/2 font-bold">User</div>
         <div class="text-center w-1/2 font-bold">Wrong Inputted Price</div>
     </div>
-    <div x-data="{ openedIndex: 0 }" class="flex flex-col">
-        @foreach($users as $index => $user)
-        <div @click="openedIndex == 1 ? openedIndex = -1 : openedIndex = 1" class="flex items-center justify-between bg-white border p-4">
+    @foreach($users as $index => $user)
+    <div x-data="{ openedIndex: {{'-'.$index+1}} }" class="flex flex-col">
+        <div @click="openedIndex == {{$index+1}} ? openedIndex = {{'-'.$index+1}} : openedIndex = {{$index+1}}" class="flex items-center justify-between bg-white border p-4">
             <div class="text-center w-1/2">{{$user->name}}</div>
             <div class="text-center w-1/2">{{$user->uploadHistory->sum('false_price')}}</div>
             <div>
-                <template x-if="openedIndex == 1">
+                <template x-if="openedIndex == {{$index+1}}">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </template>
-                <template x-if="openedIndex != 1">
+                <template x-if="openedIndex != {{$index+1}}">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
                 </template>
             </div>
         </div>
-        <div x-show.transition.in.duration.800ms="openedIndex == 1" class="border">
+        <div x-show.transition.in.duration.800ms="openedIndex == {{$index+1}}" class="border p-2 bg-slate-200">
             <x-table>
                 <x-thead>
                     <tr>
@@ -38,7 +38,7 @@
                             $histories = json_decode($uploadHistory->extras)
                         @endphp
                         @foreach($histories as $history)
-                        <tr class="hover:bg-gray-100">
+                        <tr class="hover:bg-gray-100 bg-white">
                             <x-td>
                                 {{ $uploadHistory->brand }}
                             </x-td>
@@ -60,6 +60,6 @@
                 </tbody>
             </x-table>
         </div>
-        @endforeach
     </div>
+    @endforeach
 </div>

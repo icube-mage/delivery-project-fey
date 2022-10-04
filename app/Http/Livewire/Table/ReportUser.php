@@ -21,7 +21,7 @@ class ReportUser extends Component
                 });
         })
         ->whereHas('roles', function($query){
-            $query->where('name', '<>', 'Super Admin');
+            $query->where('name', 'Store Operations');
         })->get();
         return view('livewire.table.report-user', compact('users'));
     }
