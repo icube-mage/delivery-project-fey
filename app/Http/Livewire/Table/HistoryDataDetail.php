@@ -13,6 +13,7 @@ class HistoryDataDetail extends Component
     public $searchTerm;
     public $currentPage = 1;
     public $hash;
+    public $errorData = false;
     public function setPage($url)
     {
         $this->currentPage = explode('page=', $url)[1];
@@ -30,6 +31,11 @@ class HistoryDataDetail extends Component
             ->orWhere('sku', 'like', $input);
         })
         ->paginate(10);
+        $this->errorData = false;
+        if($catalogPrices->count()==0){
+            $catalogPrices = CatalogPrice::with('user')->where('upload_hash', $this->hash)->paginate(1);
+            $this->errorData = true;
+        }
         return view('livewire.table.history-data-detail', compact('catalogPrices'));
     }
 }
