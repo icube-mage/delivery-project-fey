@@ -115,7 +115,7 @@
                 @else
                     {{ $paginator->count() }}
                 @endif
-                {!! __('of') !!}--
+                {!! __('of') !!}
                 <span class="font-medium"> {{ $paginator->total() }}</span>
                 {!! __('results') !!}
             </p>
