@@ -50,72 +50,16 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
     */
     public function model(array $row)
     {
-        switch($this->marketplace){
-            case 'tokopedia':
-                $mapping_field = $this->getConfig('tokopedia');
-                $skuConfig = $mapping_field['sku'] ?? null;
-                if($skuConfig==null){
-                    throw new \Exception ("Sku config is not available");
-                }
-                $nameConfig = $mapping_field['product_name'] ?? null;
-                $discountPriceConfig = $mapping_field['discount_price'] ?? null;
-                $retailPriceConfig = $mapping_field['retail_price'] ?? null;
-                $startDateConfig = $mapping_field['start_date'] ?? null;
-                $warehouseConfig = $mapping_field['warehouse'] ?? null;
-                break;
-            case 'shopee':
-                $mapping_field = $this->getConfig('shopee');
-                $skuConfig = $mapping_field['sku'] ?? null;
-                if($skuConfig==null){
-                    throw new \Exception ("Sku is not available");
-                }
-                $nameConfig = $mapping_field['product_name'] ?? null;
-                $discountPriceConfig = $mapping_field['discount_price'] ?? null;
-                $retailPriceConfig = $mapping_field['retail_price'] ?? null;
-                $startDateConfig = $mapping_field['start_date'] ?? null;
-                $warehouseConfig = $mapping_field['warehouse'] ?? null;
-                break;
-            case 'lazada':
-                $mapping_field = $this->getConfig('lazada');
-                $skuConfig = $mapping_field['sku'] ?? null;
-                if($skuConfig==null){
-                    throw new \Exception ("Sku is not available");
-                }
-                $nameConfig = $mapping_field['product_name'] ?? null;
-                $discountPriceConfig = $mapping_field['discount_price'] ?? null;
-                $retailPriceConfig = $mapping_field['retail_price'] ?? null;
-                $startDateConfig = $mapping_field['start_date'] ?? null;
-                $warehouseConfig = $mapping_field['warehouse'] ?? null;
-                break;
-            case 'bukalapak':
-                $mapping_field = $this->getConfig('bukalapak');
-                $skuConfig = $mapping_field['sku'] ?? null;
-                if($skuConfig==null){
-                    throw new \Exception ("Sku is not available");
-                }
-                $nameConfig = $mapping_field['product_name'] ?? null;
-                $discountPriceConfig = $mapping_field['discount_price'] ?? null;
-                $retailPriceConfig = $mapping_field['retail_price'] ?? null;
-                $startDateConfig = $mapping_field['start_date'] ?? null;
-                $warehouseConfig = $mapping_field['warehouse'] ?? null;
-                break;
-            case 'blibli':
-                $mapping_field = $this->getConfig('blibli');
-                $skuConfig = $mapping_field['sku'] ?? null;
-                if($skuConfig==null){
-                    throw new \Exception ("Sku is not available");
-                }
-                $nameConfig = $mapping_field['product_name'] ?? null;
-                $discountPriceConfig = $mapping_field['discount_price'] ?? null;
-                $retailPriceConfig = $mapping_field['retail_price'] ?? null;
-                $startDateConfig = $mapping_field['start_date'] ?? null;
-                $warehouseConfig = $mapping_field['warehouse'] ?? null;
-                break;
-                
-            default:
-                throw new \Exception ("Marketplace not registered");
-                break;
+        $mapping_field = $this->getConfig($this->marketplace);
+        $skuConfig = $mapping_field['sku'] ?? null;
+        if($skuConfig==null){
+            throw new \Exception ("Sku config is not available");
         }
+        $nameConfig = $mapping_field['product_name'] ?? null;
+        $discountPriceConfig = $mapping_field['discount_price'] ?? null;
+        $retailPriceConfig = $mapping_field['retail_price'] ?? null;
+        $startDateConfig = $mapping_field['start_date'] ?? null;
+        $warehouseConfig = $mapping_field['warehouse'] ?? null;
 
         try{
             $sku = $row[$skuConfig];
