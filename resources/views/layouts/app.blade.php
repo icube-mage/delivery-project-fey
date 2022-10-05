@@ -12,7 +12,7 @@
             display: none
         }
     </style>
-    @livewireStyles
+    <livewire:styles/>
 </head>
 
 <body class="font-sans antialiased">
@@ -31,8 +31,8 @@
             </div>
         </div>
 
-        @livewireScripts
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <livewire:scripts/>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         @vite('resources/js/app.js')
         @stack('scripts')

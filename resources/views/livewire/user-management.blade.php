@@ -1,4 +1,4 @@
-<x-content-card  x-data="{show:false}">
+<x-content-card id="user-management-wrapper" x-data="{show: false}">
     <div class="flex justify-between items-center mb-6">
     <x-input type="text" placeholder="Search" wire:model="searchTerm" />
     <x-button @click="show=true" wire:click="clearForm" type="button">Create User</x-button>
@@ -43,7 +43,8 @@
     </div>
 
     {{-- Modal create form --}}
-    <div x-show="show" @click.outside="show = false" x-cloak class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 pl-24 transition-opacity duration-2000 linear">
+    {{-- @click.outside="show = false"  --}}
+    <div x-show="show" x-transition x-cloak class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 pl-24 transition-opacity duration-2000 linear">
         <div class="w-full h-screen p-6 bg-white  transition-all duration-200 ease-out">
             <div class="flex items-center justify-between">
                 <h3 class="text-2xl">{{$titleAction}} User</h3>
@@ -54,7 +55,7 @@
                 </svg>
             </div>
             <div class="my-4">
-                <form>
+                <form wire:submit.prevent="alertConfirm">
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Fullname</x-label>
                         <div class="grid w-2/3">
@@ -103,22 +104,23 @@
                             @error('role') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
                         </div>
                     </div>
+            
+                    @if($titleAction == 'Update')
+                        <div class="mb-4 text-orange-500">
+                            Email and username are uniques, can't be changed
+                        </div>
+                    @endif
+                    
+                    <div class="flex justify-between items-center gap-4 w-1/2">
+                        <x-button-secondary type="button" @click="show=false">Cancel</x-button-secondary>
+                        @if($canSubmit)
+                            <x-button  wire:loading.attr="disabled">Save</x-button>
+                        @else
+                            <x-button type="button" class="cursor-not-allowed" disabled>Save</x-button>
+                        @endif
+                    </div>
+            
                 </form>
-            </div>
-            
-            @if($titleAction == 'Update')
-                <div class="mb-4 text-orange-500">
-                    Email and username are uniques, can't be changed
-                </div>
-            @endif
-            
-            <div class="flex justify-between items-center gap-4 w-1/2">
-                <x-button-secondary @click="show=false">Cancel</x-button-secondary>
-                @if($canSubmit)
-                    <x-button type="button" wire:click="alertConfirm">Save</x-button>
-                @else
-                    <x-button type="button" class="cursor-not-allowed" disabled>Save</x-button>
-                @endif
             </div>
         </div>
     </div>

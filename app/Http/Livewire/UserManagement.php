@@ -17,7 +17,8 @@ class UserManagement extends Component
     public $canSubmit = false;
     public $name, $email, $username, $password, $role;
     public $titleAction = 'Create';
-    protected $listeners = ['store', 'destroy'];
+    public $showModal = false;
+    protected $listeners = ['store', 'destroy', 'closeModal'];
     protected function rules()
     {
         $validator =  [
@@ -106,6 +107,10 @@ class UserManagement extends Component
             'action' => 'delete',
             'item' => $id,
         ]);
+    }
+
+    public function closeModal(){
+        $this->showModal = false;
     }
 
     public function store()

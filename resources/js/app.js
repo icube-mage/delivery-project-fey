@@ -31,6 +31,7 @@ window.addEventListener("swal:confirm", (e) => {
     });
 });
 window.addEventListener("swal:success", (e) => {
+    window.livewire.emit("closeModal");
     swal.fire({
         title: "Success",
         text: e.detail.text,
