@@ -41,6 +41,10 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
             $this->headingRow = 2;
             $this->startRow = 4;
         }
+
+        if($this->headingRow == $this->startRow){
+            throw new \Exception ("Please check Heading Start & Content Start again on Configuration");
+        }
     }
 
     /**
