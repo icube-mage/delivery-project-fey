@@ -15,12 +15,13 @@ class HistoryUserExport implements FromCollection,WithHeadings
             'Marketplace',
             'brand',
             'Total Record',
-            'Wrong Price'
+            'Wrong Price',
+            'Created At'
         ];
     } 
     public function collection()
     {
-        return HistoryUser::select('users.name', 'marketplace', 'brand', 'total_records', 'false_price')
+        return HistoryUser::select('users.name', 'marketplace', 'brand', 'total_records', 'false_price', 'history_users.created_at')
         ->leftJoin('users', 'history_users.user_id', '=', 'users.id')
         ->get();
     }

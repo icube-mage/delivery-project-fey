@@ -64,6 +64,12 @@ class UploadFile extends Component
         } else{
             $this->errorMsg = null;
         }
+        
+        $configName = $this->marketplace."_column_map";
+        $getConfigTokped = Configuration::where("key",$configName)->first();
+        if($getConfigTokped == null && $this->marketplace != null){
+            $this->submitBtn = false;
+        }
     }
 
     public function updatedFile() {
@@ -73,9 +79,16 @@ class UploadFile extends Component
 
         if($this->file == null){
             $this->submitBtn = false;
+        } else{
+            $this->errorMsg = null;
         }
         
-        $this->errorMsg = null;
+
+        $configName = $this->marketplace."_column_map";
+        $getConfigTokped = Configuration::where("key",$configName)->first();
+        if($getConfigTokped == null && $this->marketplace != null){
+            $this->submitBtn = false;
+        }
     }
 
     public function submit()
