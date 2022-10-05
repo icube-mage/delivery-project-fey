@@ -9,6 +9,7 @@ window.addEventListener("swal:confirm", (e) => {
         cancelButtonText: "No",
         iconColor: "#0E7490",
         confirmButtonColor: "#0E7490",
+        allowOutsideClick: false,
     }).then((response) => {
         if (response.isConfirmed) {
             if (document.getElementById("loading")) {
@@ -36,6 +37,7 @@ window.addEventListener("swal:success", (e) => {
         title: "Success",
         text: e.detail.text,
         icon: "success",
+        allowOutsideClick: false,
     });
     if (document.getElementById("loading")) {
         document.getElementById("loading").innerHTML = "";
