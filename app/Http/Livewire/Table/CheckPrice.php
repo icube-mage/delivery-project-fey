@@ -105,7 +105,8 @@ class CheckPrice extends Component
         session()->forget('checkPriceHash');
         session()->regenerate();
 
-        $this->emit('refreshPage');
+        // $this->emit('refreshPage');
+        return redirect()->to('menu/uploadfile');
     }
 
     public function store(){
