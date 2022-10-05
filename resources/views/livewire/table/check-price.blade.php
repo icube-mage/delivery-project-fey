@@ -101,7 +101,7 @@
                             wire:key="text-key-{{ $index }}-{{ time() }}"
                             placeholder="Press [Enter] to save"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                            min="0" onkeyup="if(this.value<0){this.value= this.value * -1}">
+                            min="0" max="99999999" onkeyup="if(this.value<0){this.value= this.value * -1} if(this.value.length>8){ this.value = this.value.slice(0,8); }" >
                         </div>
                     </x-td>
                     <x-td>
