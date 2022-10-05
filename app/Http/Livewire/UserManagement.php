@@ -14,17 +14,51 @@ class UserManagement extends Component
     use WithPagination;
     public $searchTerm;
     public $currentPage = 1;
-    public $name, $email, $username, $password;
-    public $role;
+    public $canSubmit = false;
+    public $name, $email, $username, $password, $role;
     public $titleAction = 'Create';
     protected $listeners = ['store', 'destroy'];
-    protected $rules = [
-        'name' => 'required',
-        'username' => 'required|min:4',
-        'email' => 'required|email',
-        'password' => 'required|min:4',
-        'role' => 'required'
-    ];
+    protected function rules()
+    {
+        $validator =  [
+            'name' => 'required|min:3',
+            'role' => 'required|in:"Store Operations","Key Account Manager","Super Admin"',
+        ];
+        if($this->titleAction == 'Create') {
+            $validator['password'] = 'required|min:6';
+            $validator['email'] = 'required|email|unique:users,email,'.$this->email;
+            $validator['username'] = 'required|min:4|unique:users,username,'.$this->username;
+        } else {
+            $validator['email'] = 'required|email';
+            $validator['username'] = 'required|min:4';
+        }
+        return $validator;
+    } 
+    public function updated($propertyName)
+    {
+        $this->canSubmit = false;
+        $validator =  [
+            'email' => 'required|email|unique:users,email,'.$this->email,
+            'username' => 'required|min:4|unique:users,username,'.$this->username,
+            'name' => 'required|min:3',
+            'role' => 'required|in:"Store Operations","Key Account Manager","Super Admin"',
+        ];
+        if($this->titleAction == 'Create') {
+            $validator['password'] = 'required|min:6';
+            $validator['email'] = 'required|email|unique:users,email,'.$this->email;
+            $validator['username'] = 'required|min:4|unique:users,username,'.$this->username;
+        } else {
+            $validator['email'] = 'required|email';
+            $validator['username'] = 'required|min:4';
+        }
+        $this->validateOnly($propertyName, $validator);
+        try {
+            $this->validate(); 
+            $this->canSubmit = true;
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // dd($e->errors(), $this->email);
+        }
+    }
 
     public function render()
     {
@@ -55,15 +89,20 @@ class UserManagement extends Component
 
     public function alertConfirm()
     {
+        if ($this->titleAction == 'Create') {
+            $wording = 'Do you want to create this account?';
+        } else {
+            $wording = 'Do you want to update this account?';
+        }
         $this->dispatchBrowserEvent('swal:confirm', [
-            'text' => 'Do you want to create this account?',
+            'text' => $wording,
         ]);
     }
 
     public function alertDeleteConfirm($id)
     {
         $this->dispatchBrowserEvent('swal:confirm', [
-            'text' => 'Do you want to create this account?',
+            'text' => 'Do you want to delete this account?',
             'action' => 'delete',
             'item' => $id,
         ]);
@@ -87,10 +126,15 @@ class UserManagement extends Component
         $user = User::updateOrCreate([
             'username' => $this->username
         ],$data);
-        $user->assignRole($this->role);
+        $user->syncRoles($this->role);
+        if ($this->titleAction == 'Create') {
+            $wording = 'Account successfully created';
+        } else {
+            $wording = 'Account successfully updated';
+        }
         $this->reset();
         $this->dispatchBrowserEvent('swal:success', [
-            'text' => 'Account successfully created',
+            'text' => $wording,
         ]);
     }
 
@@ -111,8 +155,9 @@ class UserManagement extends Component
         $this->titleAction = 'Update';
     }
 
-    public function clear()
+    public function clearForm()
     {
         $this->reset();
+        $this->resetValidation();
     }
 }
