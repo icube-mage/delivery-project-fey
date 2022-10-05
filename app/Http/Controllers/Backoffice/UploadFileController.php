@@ -38,6 +38,7 @@ class UploadFileController extends Controller
         foreach($dataTemps as $data){
             $ids[] = $data->id;
         }
+        session()->flash('downloaded-excel-after-submit', 'success');
         return Excel::download(new FileDataExport($marketplace, $brand, $ids), 'fey_'.$brand.'_'.$marketplace.'.xlsx');
     }
 }
