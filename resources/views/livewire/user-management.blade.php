@@ -1,7 +1,7 @@
 <x-content-card  x-data="{show:false}">
     <div class="flex justify-between items-center mb-6">
     <x-input type="text" placeholder="Search" wire:model="searchTerm" />
-    <x-button @click="show=true" wire:click="clear" type="button">Create User</x-button>
+    <x-button @click="show=true" wire:click="clearForm" type="button">Create User</x-button>
     </div>
     <x-table>
         <x-thead>
@@ -38,7 +38,9 @@
             @endforeach
         </tbody>
     </x-table>
+    <div class="p-4">
     {{ $users->links('livewire.pagination') }}
+    </div>
 
     {{-- Modal create form --}}
     <div x-show="show" @click.outside="show = false" x-cloak class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 pl-24 transition-opacity duration-2000 linear">
@@ -55,35 +57,43 @@
                 <form>
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Fullname</x-label>
-                        <div class="grid">
-                            <x-input type="text" wire:model="name" placeholder="Fullname" />
+                        <div class="grid w-2/3">
+                            <x-input type="text" wire:model.lazy="name" placeholder="Fullname" />
                             @error('name') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Username</x-label>
-                        <div class="grid">
-                            <x-input type="text" wire:model="username" placeholder="Username to login" />
+                        <div class="grid w-2/3">
+                            @if($titleAction == 'Update')
+                                <x-input type="text" wire:model.lazy="username" readonly class="bg-gray-300" placeholder="Username to login" autocomplete="off" />
+                            @else
+                                <x-input type="text" wire:model.lazy="username" placeholder="Username to login" autocomplete="off" />
+                            @endif
                             @error('username') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Email</x-label>
-                        <div class="grid">
-                            <x-input type="email" wire:model="email" placeholder="john.doe@sirclo.com" />
+                        <div class="grid w-2/3">
+                            @if($titleAction == 'Update')
+                                <x-input type="email" wire:model.lazy="email" readonly class="bg-gray-300" placeholder="john.doe@sirclo.com" autocomplete="off"/>
+                            @else
+                                <x-input type="email" wire:model.lazy="email" placeholder="john.doe@sirclo.com" autocomplete="off"/>
+                            @endif
                             @error('email') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Password</x-label>
-                        <div class="grid">
-                            <x-input type="password" wire:model="password" placeholder="••••••••" />
+                        <div class="grid w-2/3">
+                            <x-input type="password" wire:model.lazy="password" placeholder="••••••••" />
                             @error('password') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Role</x-label>
-                        <div class="grid">
+                        <div class="grid w-2/3">
                             <select wire:model="role" class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200">
                                 <option value=''>-- choose --</option>
                                 @foreach($roles as $rl)
@@ -95,9 +105,20 @@
                     </div>
                 </form>
             </div>
+            
+            @if($titleAction == 'Update')
+                <div class="mb-4 text-orange-500">
+                    Email and username are uniques, can't be changed
+                </div>
+            @endif
+            
             <div class="flex justify-between items-center gap-4 w-1/2">
                 <x-button-secondary @click="show=false">Cancel</x-button-secondary>
-                <x-button type="button" wire:click="alertConfirm">Save</x-button>
+                @if($canSubmit)
+                    <x-button type="button" wire:click="alertConfirm">Save</x-button>
+                @else
+                    <x-button type="button" class="cursor-not-allowed" disabled>Save</x-button>
+                @endif
             </div>
         </div>
     </div>
