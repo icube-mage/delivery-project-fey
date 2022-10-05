@@ -89,15 +89,20 @@ class UserManagement extends Component
 
     public function alertConfirm()
     {
+        if ($this->titleAction == 'Create') {
+            $wording = 'Do you want to create this account?';
+        } else {
+            $wording = 'Do you want to update this account?';
+        }
         $this->dispatchBrowserEvent('swal:confirm', [
-            'text' => 'Do you want to create this account?',
+            'text' => $wording,
         ]);
     }
 
     public function alertDeleteConfirm($id)
     {
         $this->dispatchBrowserEvent('swal:confirm', [
-            'text' => 'Do you want to create this account?',
+            'text' => 'Do you want to delete this account?',
             'action' => 'delete',
             'item' => $id,
         ]);
@@ -122,9 +127,14 @@ class UserManagement extends Component
             'username' => $this->username
         ],$data);
         $user->syncRoles($this->role);
+        if ($this->titleAction == 'Create') {
+            $wording = 'Account successfully created';
+        } else {
+            $wording = 'Account successfully updated';
+        }
         $this->reset();
         $this->dispatchBrowserEvent('swal:success', [
-            'text' => 'Account successfully created',
+            'text' => $wording,
         ]);
     }
 
