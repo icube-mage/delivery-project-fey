@@ -38,56 +38,48 @@ class UploadFile extends Component
 
     public function updatedMarketplace(){
         $configName = $this->marketplace."_column_map";
-        $getConfigTokped = Configuration::where("key",$configName)->first();
-        if($getConfigTokped == null && $this->marketplace != null){
+        $getConfigMp = Configuration::where("key",$configName)->first();
+        if($getConfigMp == null && $this->marketplace != null){
             $this->errorMsg = "Please set the config!";
+            $this->submitBtn = false;
+        } 
+
+        if($this->marketplace == null){
             $this->submitBtn = false;
         } else{
             $this->errorMsg = null;
         }
-        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
-            $this->submitBtn = true;
-        }
 
-        if($this->marketplace == null){
-            $this->submitBtn = false;
+        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
+            if($getConfigMp == null){
+                $this->submitBtn = false;
+            } else{
+                $this->submitBtn = true;
+            }
         }
     }
 
     public function updatedBrand(){
-        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
-            $this->submitBtn = true;
-        }
-
         if($this->brand == null){
             $this->submitBtn = false;
         } else{
             $this->errorMsg = null;
         }
-        
-        $configName = $this->marketplace."_column_map";
-        $getConfigTokped = Configuration::where("key",$configName)->first();
-        if($getConfigTokped == null && $this->marketplace != null){
-            $this->submitBtn = false;
+
+        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
+            $this->submitBtn = true;
         }
     }
 
     public function updatedFile() {
-        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
-            $this->submitBtn = true;
-        }
-
         if($this->file == null){
             $this->submitBtn = false;
         } else{
             $this->errorMsg = null;
         }
-        
 
-        $configName = $this->marketplace."_column_map";
-        $getConfigTokped = Configuration::where("key",$configName)->first();
-        if($getConfigTokped == null && $this->marketplace != null){
-            $this->submitBtn = false;
+        if($this->brand != null && $this->marketplace != null && $this->file != null ) {
+            $this->submitBtn = true;
         }
     }
 
