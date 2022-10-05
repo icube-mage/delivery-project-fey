@@ -1,4 +1,4 @@
-<x-content-card id="user-management-wrapper" x-data="{show: false}">
+<x-content-card id="user-management-wrapper" x-data="{show: $wire.entangle('showModal')}">
     <div class="flex justify-between items-center mb-6">
     <x-input type="text" placeholder="Search" wire:model="searchTerm" />
     <x-button @click="show=true" wire:click="clearForm" type="button">Create User</x-button>
