@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ strip_tags($title) }}</title>
     <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{asset('assets/images/fairytail.png')}}">
     @vite('resources/css/app.css')
     <style>
         [x-cloak] {
