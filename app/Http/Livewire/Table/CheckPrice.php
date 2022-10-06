@@ -42,7 +42,7 @@ class CheckPrice extends Component
     public $errorData;
     public $submitBtn = false;
     public $beforeVerified = true;
-    protected $listeners = ['store','refreshPage' => '$refresh'];
+    protected $listeners = ['store','refreshPage' => '$refresh', 'clearTemp'];
 
     public function setPage($url)
     {
@@ -70,6 +70,10 @@ class CheckPrice extends Component
             'text' => 'Check the data twice before submit!',
             'title' => 'Submit your changes'
         ]);
+    }
+
+    public function updated(){
+        $this->firstLoad = false;
     }
 
     public function changePrice($index, $newPrice){
@@ -231,95 +235,82 @@ class CheckPrice extends Component
     
     public function render()
     {
-        if ($this->firstLoad) {
-            $catalogTemp = CatalogPriceTemp::where('user_id', '=', Auth::user()->id)->get();
-            $dataCatalog = [];
-            $brand = "";
-            $countDataTemp = "";
-            $extrasHistory = [];
-            $marketplace = "";
-            $totalError = "";
-            $userId = "";
-            $countError=0;
-            $countWhitelist = 0;
-            foreach ($catalogTemp as $items) {
-                $brand = $items->brand;
-                $marketplace = $items->marketplace;
-                $userId = $items->user_id;
-                $countDataTemp = CatalogPriceTemp::where('sku', $items->sku)
-                ->where('brand', $items->brand)
-                ->where('marketplace', $items->marketplace)->count();
-
-                $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', $items->sku)
-                ->where('brand', $items->brand)
-                ->where('marketplace', $items->marketplace)->sum('discount_price');
-
-                $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
-
-                $averagePrice = CatalogPriceAvg::where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->where('warehouse', $items->warehouse)->pluck('average_price')->first();
-
-                if ($items->discount_price < $averagePrice && $items->is_discount==true) {
-                    // dd($averagePrice);
-                    CatalogPriceTemp::where('id',$items->id)->update(['is_negative' => true]);
-                    $dataCatalog[] = array(
-                        'id' => $items->id,
-                        'sku' => $items->sku,
-                        'product_name' => $items->product_name,
-                        'price' => $items->discount_price,
-                        'discount' => $avgTemp,
-                        'average_discount' => $averagePrice,
-                        'is_whitelist' => $items->is_whitelist,
-                        'is_negative' => true,
-                        'is_changed' => false
-                    );
-
-                    $extrasHistory[] = array(
-                        'sku' => $items->sku,
-                        'price' => $items->discount_price,
-                        'average_discount' => $averagePrice
-                    );
-                } 
-                if($items->is_whitelist){
-                    $countWhitelist++;
-                }
+        $catalogTemp = CatalogPriceTemp::where('user_id', '=', Auth::user()->id)->get();
+        $dataCatalog = [];
+        $brand = "";
+        $countDataTemp = "";
+        $extrasHistory = [];
+        $marketplace = "";
+        $totalError = "";
+        $userId = "";
+        $countError=0;
+        $countWhitelist = 0;
+        foreach ($catalogTemp as $items) {
+            $brand = $items->brand;
+            $marketplace = $items->marketplace;
+            $userId = $items->user_id;
+            $countDataTemp = CatalogPriceTemp::where('sku', $items->sku)
+            ->where('brand', $items->brand)
+            ->where('marketplace', $items->marketplace)->count();
+            $totalDiscountPriceTemp = CatalogPriceTemp::where('sku', $items->sku)
+            ->where('brand', $items->brand)
+            ->where('marketplace', $items->marketplace)->sum('discount_price');
+            $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
+            $averagePrice = CatalogPriceAvg::where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->where('warehouse', $items->warehouse)->pluck('average_price')->first();
+            if ($items->discount_price < $averagePrice && $items->is_discount==true) {
+                // dd($averagePrice);
+                CatalogPriceTemp::where('id',$items->id)->update(['is_negative' => true]);
+                $dataCatalog[] = array(
+                    'id' => $items->id,
+                    'sku' => $items->sku,
+                    'product_name' => $items->product_name,
+                    'price' => $items->discount_price,
+                    'discount' => $avgTemp,
+                    'average_discount' => $averagePrice,
+                    'is_whitelist' => $items->is_whitelist,
+                    'is_negative' => true,
+                    'is_changed' => false
+                );
+                $extrasHistory[] = array(
+                    'sku' => $items->sku,
+                    'price' => $items->discount_price,
+                    'average_discount' => $averagePrice
+                );
+            } 
+            if($items->is_whitelist){
+                $countWhitelist++;
             }
-
-            $countError = count($dataCatalog);
-            // dd($updatedCatalogPriceTemp);
-            $this->errorData = $countError-$countWhitelist;
-            // dd($countError, $countWhitelist, $countHasDiscount);
-
-            // dd($countError);
-            $this->dataTemp = $dataCatalog ?? '';
-
-            // Insert data to history
-            $totalError = $countError;
-            $insertLogUploadFile = session()->has('historyData');
-            // dd(session()->all());
-            if(!$insertLogUploadFile){
-                $historyData = [
-                    'user_id' => $userId,
-                    'brand' => $brand,
-                    'marketplace' => $marketplace,
-                    'total_records' => $catalogTemp->count(),
-                    'false_price' => $totalError,
-                    'extras' => json_encode($extrasHistory)
-                ];
-                
-                session()->put('historyData', $historyData);
-
-            // dd($insertLogUploadFile);
-                HistoryUser::create(session()->get('historyData'));
-            }
-            $generateHash = Str::uuid();
-            session()->put('checkPriceHash', $generateHash);
-
-            // dd(session()->all());
-
-            $this->firstLoad = false;
-            $this->brand = $brand;
-            $this->marketplace = $marketplace;
         }
+        $countError = count($dataCatalog);
+        // dd($updatedCatalogPriceTemp);
+        $this->errorData = $countError-$countWhitelist;
+        // dd($countError, $countWhitelist, $countHasDiscount);
+        // dd($countError);
+        $this->dataTemp = $dataCatalog ?? '';
+        // Insert data to history
+        $totalError = $countError;
+        $insertLogUploadFile = session()->has('historyData');
+        // dd(session()->all());
+        if(!$insertLogUploadFile){
+            $historyData = [
+                'user_id' => $userId,
+                'brand' => $brand,
+                'marketplace' => $marketplace,
+                'total_records' => $catalogTemp->count(),
+                'false_price' => $totalError,
+                'extras' => json_encode($extrasHistory)
+            ];
+            
+            session()->put('historyData', $historyData);
+        // dd($insertLogUploadFile);
+            HistoryUser::create(session()->get('historyData'));
+        }
+        $generateHash = Str::uuid();
+        session()->put('checkPriceHash', $generateHash);
+        // dd(session()->all());
+        $this->firstLoad = false;
+        $this->brand = $brand;
+        $this->marketplace = $marketplace;
 
         return view('livewire.table.check-price');
     }

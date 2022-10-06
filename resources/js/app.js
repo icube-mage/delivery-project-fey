@@ -42,4 +42,5 @@ window.addEventListener("swal:success", (e) => {
     if (document.getElementById("loading")) {
         document.getElementById("loading").innerHTML = "";
     }
+    window.livewire.emit("clearTemp");
 });

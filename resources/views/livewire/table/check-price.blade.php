@@ -42,7 +42,7 @@
             <form action="{{ route('export.updatedfile', ['marketplace' => $marketplace, 'brand' => $brand]) }}" method="POST">
                 @csrf
                 <input type="hidden" value="{{ json_encode($dataTemp) }}" name="data">
-                <button type="submit" wire:click="clearTemp" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150">Download</button>
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150">Download</button>
             </form>
             @endif
         </div>
@@ -98,7 +98,12 @@
             @empty
             <tr>
                 <x-th scope="row" colspan="6" class="text-center text-gray-900">
-                    All data is good!, you can continue to download it
+                    All data is good!, 
+                    @if ($firstLoad && count($dataTemp) == 0)
+                        Please submit your data!
+                    @else
+                        you can continue to download it {{ $firstLoad }}
+                    @endif
                 </x-th>
             </tr>
             @endforelse

@@ -33,4 +33,4 @@ function print() { __p += __j.call(arguments, '') }
                     <span class="inline-block align-middle mr-8">
                         Your data is being processed, Don't leave this page until you get <strong>success</strong> message or your data will be corrupted
                     </span>
-                </div>`),a.detail.action=="delete"?window.livewire.emit("destroy",[a.detail.item]):window.livewire.emit("store"))})});window.addEventListener("swal:success",a=>{window.livewire.emit("closeModal"),swal.fire({title:"Success",text:a.detail.text,icon:"success",allowOutsideClick:!1}),document.getElementById("loading")&&(document.getElementById("loading").innerHTML="")});
+                </div>`),a.detail.action=="delete"?window.livewire.emit("destroy",[a.detail.item]):window.livewire.emit("store"))})});window.addEventListener("swal:success",a=>{window.livewire.emit("closeModal"),swal.fire({title:"Success",text:a.detail.text,icon:"success",allowOutsideClick:!1}),document.getElementById("loading")&&(document.getElementById("loading").innerHTML=""),window.livewire.emit("clearTemp")});
