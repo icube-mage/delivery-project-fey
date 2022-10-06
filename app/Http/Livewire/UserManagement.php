@@ -27,10 +27,10 @@ class UserManagement extends Component
         ];
         if($this->titleAction == 'Create') {
             $validator['password'] = 'required|min:6';
-            $validator['email'] = 'required|email|unique:users,email,'.$this->email;
+            $validator['email'] = 'required|email:rfc,dns|unique:users,email,'.$this->email;
             $validator['username'] = 'required|min:4|unique:users,username,'.$this->username;
         } else {
-            $validator['email'] = 'required|email';
+            $validator['email'] = 'required|email:rfc,dns';
             $validator['username'] = 'required|min:4';
         }
         return $validator;
@@ -39,17 +39,15 @@ class UserManagement extends Component
     {
         $this->canSubmit = false;
         $validator =  [
-            'email' => 'required|email|unique:users,email,'.$this->email,
-            'username' => 'required|min:4|unique:users,username,'.$this->username,
             'name' => 'required|min:3',
             'role' => 'required|in:"Store Operations","Key Account Manager","Super Admin"',
         ];
         if($this->titleAction == 'Create') {
             $validator['password'] = 'required|min:6';
-            $validator['email'] = 'required|email|unique:users,email,'.$this->email;
+            $validator['email'] = 'required|email:rfc,dns|unique:users,email,'.$this->email;
             $validator['username'] = 'required|min:4|unique:users,username,'.$this->username;
         } else {
-            $validator['email'] = 'required|email';
+            $validator['email'] = 'required|email:rfc,dns';
             $validator['username'] = 'required|min:4';
         }
         $this->validateOnly($propertyName, $validator);
