@@ -38,7 +38,7 @@ class UserManagement extends Component
 
     public function updatedName()
     {
-        $this->validateOnly('name', ['name' => 'required|min:3']);
+        $this->validateOnly('name', ['name' => 'required|min:3']);  
     }
 
     public function updatedRole()
@@ -88,6 +88,11 @@ class UserManagement extends Component
             $roles = [];
         } 
 
+        if(count($this->getErrorBag()->messages())==0 && $this->role != ''){
+            $this->canSubmit = true;
+        } else {
+            $this->canSubmit = false;
+        }
         return view('livewire.user-management', ["users" => $users, "roles" => $roles])
             ->layout('layouts.app', ['title'=>"User Management"]);
     }

@@ -95,7 +95,7 @@
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Role</x-label>
                         <div class="grid w-2/3">
-                            <select wire:model.lazy="role" class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200">
+                            <select wire:model="role" class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200">
                                 @if($titleAction=='Create')
                                 <option value=''>-- choose --</option>
                                 @endif
