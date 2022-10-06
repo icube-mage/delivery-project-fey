@@ -50,8 +50,6 @@ class UserManagement extends Component
     {
         if ($this->titleAction == 'Create') {
             $this->validateOnly('password', ['password' => 'required|min:6']);
-        } else {
-            $this->validateOnly('password', ['password' => 'required|email:rfc,dns']);
         }
     }
 
