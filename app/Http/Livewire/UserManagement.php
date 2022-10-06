@@ -183,4 +183,9 @@ class UserManagement extends Component
         $this->reset();
         $this->resetValidation();
     }
+
+    public function hideModal()
+    {
+        $this->resetValidation();
+    }
 }
