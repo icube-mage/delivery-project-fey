@@ -27,37 +27,47 @@ class UserManagement extends Component
         ];
         if($this->titleAction == 'Create') {
             $validator['password'] = 'required|min:6';
-            $validator['email'] = 'required|email|unique:users,email,'.$this->email;
+            $validator['email'] = 'required|email:rfc,dns|unique:users,email,'.$this->email;
             $validator['username'] = 'required|min:4|unique:users,username,'.$this->username;
         } else {
-            $validator['email'] = 'required|email';
+            $validator['email'] = 'required|email:rfc,dns';
             $validator['username'] = 'required|min:4';
         }
         return $validator;
     } 
-    public function updated($propertyName)
+
+    public function updatedName()
     {
-        $this->canSubmit = false;
-        $validator =  [
-            'email' => 'required|email|unique:users,email,'.$this->email,
-            'username' => 'required|min:4|unique:users,username,'.$this->username,
-            'name' => 'required|min:3',
-            'role' => 'required|in:"Store Operations","Key Account Manager","Super Admin"',
-        ];
-        if($this->titleAction == 'Create') {
-            $validator['password'] = 'required|min:6';
-            $validator['email'] = 'required|email|unique:users,email,'.$this->email;
-            $validator['username'] = 'required|min:4|unique:users,username,'.$this->username;
-        } else {
-            $validator['email'] = 'required|email';
-            $validator['username'] = 'required|min:4';
+        $this->validateOnly('name', ['name' => 'required|min:3']);  
+    }
+
+    public function updatedRole()
+    {
+        $this->validateOnly('role', ['role' => 'required|in:"Store Operations","Key Account Manager","Super Admin"']);
+    }
+
+    public function updatedPassword()
+    {
+        if ($this->titleAction == 'Create') {
+            $this->validateOnly('password', ['password' => 'required|min:6']);
         }
-        $this->validateOnly($propertyName, $validator);
-        try {
-            $this->validate(); 
-            $this->canSubmit = true;
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // dd($e->errors(), $this->email);
+    }
+
+    public function updatedUsername()
+    {
+        if ($this->titleAction == 'Create') {
+            $this->validateOnly('username', ['username' => 'required|min:4|unique:users,username,'.$this->username]);
+        } else {
+            $this->validateOnly('username', ['username' => 'required|min:6']);
+        }
+    }
+
+    public function updatedEmail()
+    {
+        if ($this->titleAction == 'Create') {
+            $this->validateOnly('email', ['email' => 'required|email:rfc,dns|unique:users,email,'.$this->email]);
+        } else {
+            $this->validateOnly('email', ['email' => 'required|email:rfc,dns']);
         }
     }
 
@@ -69,12 +79,19 @@ class UserManagement extends Component
                     ->orWhere('username', 'like', $query)
                     ->orWhere('email', 'like', $query);
         })->paginate(10);
+
         if(Auth::user()->hasRole('Super Admin')){
             $roles = Role::all();
         } elseif(Auth::user()->hasRole('Key Account Manager')){
             $roles = Role::where('name', '<>', 'Super Admin')->get();
         } else {
             $roles = [];
+        } 
+
+        if(count($this->getErrorBag()->messages())==0 && $this->role != ''){
+            $this->canSubmit = true;
+        } else {
+            $this->canSubmit = false;
         }
         return view('livewire.user-management', ["users" => $users, "roles" => $roles])
             ->layout('layouts.app', ['title'=>"User Management"]);
@@ -157,12 +174,18 @@ class UserManagement extends Component
         $this->username = $user->username;
         $this->password = null;
         $this->role = $user->getRoleNames()[0];
+        $this->resetValidation();
         $this->titleAction = 'Update';
     }
 
     public function clearForm()
     {
         $this->reset();
+        $this->resetValidation();
+    }
+
+    public function hideModal()
+    {
         $this->resetValidation();
     }
 }

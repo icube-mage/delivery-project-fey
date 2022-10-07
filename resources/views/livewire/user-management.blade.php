@@ -48,7 +48,7 @@
         <div class="w-full h-screen p-6 bg-white  transition-all duration-200 ease-out">
             <div class="flex items-center justify-between">
                 <h3 class="text-2xl">{{$titleAction}} User</h3>
-                <svg @click="show=false" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 cursor-pointer" fill="none" viewBox="0 0 24 24"
+                <svg @click="show=false"  wire:click="hideModal" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 cursor-pointer" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -59,7 +59,7 @@
                     <div class="flex justify-between items-center gap-4 w-1/2 mb-4">
                         <x-label>Fullname</x-label>
                         <div class="grid w-2/3">
-                            <x-input type="text" wire:model.lazy="name" placeholder="Fullname" />
+                            <x-input type="text" wire:model.lazy="name" placeholder="Fullname" required/>
                             @error('name') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <x-label>Username</x-label>
                         <div class="grid w-2/3">
                             @if($titleAction == 'Update')
-                                <x-input type="text" wire:model.lazy="username" readonly class="bg-gray-300" placeholder="Username to login" autocomplete="off" />
+                                <x-input type="text" wire:model.lazy="username" readonly class="bg-gray-300" placeholder="Username to login" required autocomplete="off" />
                             @else
                                 <x-input type="text" wire:model.lazy="username" placeholder="Username to login" autocomplete="off" />
                             @endif
@@ -78,7 +78,7 @@
                         <x-label>Email</x-label>
                         <div class="grid w-2/3">
                             @if($titleAction == 'Update')
-                                <x-input type="email" wire:model.lazy="email" readonly class="bg-gray-300" placeholder="john.doe@sirclo.com" autocomplete="off"/>
+                                <x-input type="email" wire:model.lazy="email" readonly class="bg-gray-300" placeholder="john.doe@sirclo.com" requiredautocomplete="off"/>
                             @else
                                 <x-input type="email" wire:model.lazy="email" placeholder="john.doe@sirclo.com" autocomplete="off"/>
                             @endif
@@ -96,9 +96,11 @@
                         <x-label>Role</x-label>
                         <div class="grid w-2/3">
                             <select wire:model="role" class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200">
+                                @if($titleAction=='Create')
                                 <option value=''>-- choose --</option>
+                                @endif
                                 @foreach($roles as $rl)
-                                    <option value="{{ $rl->name }}">{{ $rl->name }}</option>
+                                    <option value="{{ $rl->name }}" wire:key="{{$rl->id}}">{{ $rl->name }}</option>
                                 @endforeach
                             </select>
                             @error('role') <span class="text-red-600 text-right">{{ $message }}</span> @enderror
@@ -110,9 +112,9 @@
                             Email and username are uniques, can't be changed
                         </div>
                     @endif
-                    
+
                     <div class="flex justify-between items-center gap-4 w-1/2">
-                        <x-button-secondary type="button" @click="show=false">Cancel</x-button-secondary>
+                        <x-button-secondary type="button" @click="show=false" wire:click="hideModal">Cancel</x-button-secondary>
                         @if($canSubmit)
                             <x-button  wire:loading.attr="disabled">Save</x-button>
                         @else
