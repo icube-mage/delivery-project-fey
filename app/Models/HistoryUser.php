@@ -15,7 +15,8 @@ class HistoryUser extends Model
         'marketplace',
         'total_records',
         'false_price',
-        'extras'
+        'extras',
+        'session_hash'
     ];
 
     public function User()

@@ -1,6 +1,6 @@
 <div>
     <div class="flex justify-between items-center mb-6">
-        <a class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-semibold text-sm text-white uppercase bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-500 focus:border-emerald-500 justify-center tracking-widest focus:outline-none focus:ring ring-emerald-300 disabled:opacity-25 transition ease-in-out duration-150" href="{{route('export.report')}}">Download</a>
+        <a class="excel-btn" href="{{route('export.report')}}">Download</a>
         <x-input type="text" placeholder="Search" wire:model="searchTerm" />
     </div>
     <div class="flex items-center bg-gray-400 border border-gray-400 p-4">
@@ -14,10 +14,10 @@
             <div class="text-center w-1/2">{{$user->uploadHistory->sum('false_price')}}</div>
             <div>
                 <template x-if="openedIndex == {{$index+1}}">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
                 </template>
                 <template x-if="openedIndex != {{$index+1}}">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </template>
             </div>
         </div>

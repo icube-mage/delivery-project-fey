@@ -20,7 +20,7 @@
             <div class="flex items-center justify-around gap-4 w-full">
                 <x-label>Name</x-label>
                 <div class="grid w-full">
-                    <input type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200" wire:model="marketplace" placeholder="Brand name">
+                    <input type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200" wire:model="marketplace" placeholder="Marketplace name">
                     @error('marketplace') <span class="text-red-600 text-right">{{ $message }}</span>@enderror
                 </div>
             </div>

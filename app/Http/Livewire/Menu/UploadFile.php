@@ -46,7 +46,9 @@ class UploadFile extends Component
 
         if($this->marketplace == null){
             $this->submitBtn = false;
-        } else{
+        }
+
+        if($getConfigMp != null || $this->marketplace == null){
             $this->errorMsg = null;
         }
 
@@ -93,12 +95,16 @@ class UploadFile extends Component
         CatalogPriceTemp::truncate();
         try{
             $import = new FileDataImport($this->brand, $this->marketplace);
-            Excel::import($import, $this->file);
         } catch(\Exception $e){
             $this->reset();
             return $this->errorMsg = $e->getMessage();
         }
-
+        
+        try{
+            Excel::import($import, $this->file);
+        } catch(\Exception $e){
+            return $this->errorMsg = "Content start are not correct, please check your configuration!";
+        }
         $this->userId = Auth::user()->id;
         $cPriceTemp = CatalogPriceTemp::where('user_id', $this->userId)
             ->where('brand', $this->brand)
