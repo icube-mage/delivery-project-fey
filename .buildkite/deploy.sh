@@ -14,7 +14,7 @@ dockerImageTag=$(buildkite-agent meta-data get "image-tag")
 echo "apply docker tag version " + $dockerImageTag
 git clone ssh://git@phabricator.sirclo.com:2222/diffusion/309/swift-express.git
 cd swift-express
-yq w -i helmfile.d/values/$environ/$2/values.yaml lava.image.tag $dockerImageTag
+yq e -i '.lava.image.tag="'$dockerImageTag'"' helmfile.d/values/$environ/$2/values.yaml
 git config --global user.email "buildkite-agent@sirclo.com"
 git config --global user.name "buildkite-agent"
 git add .
