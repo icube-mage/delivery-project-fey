@@ -1,0 +1,25 @@
+steps:
+  
+  - block: "Request build docker image"
+
+  - label: ":docker: build docker"
+    command:
+      - "sh .buildkite/build.sh fey"
+    agents:
+      - "gce-kns-nonprod=true"
+    
+  - block: "deploy staging"
+
+  - label: "Release to staging"
+    command:
+      - "sh .buildkite/deploy.sh kns-nonprod fey"
+    agents:
+      - "gce-kns-nonprod=true"
+  
+  - block: "Release to production"
+
+  - label: ":rocket: Deploy kns-prod"
+    command:
+      - "sh .buildkite/deploy.sh kns-prod fey"
+    agents:
+      - "kns-prod=true"
