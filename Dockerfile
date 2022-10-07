@@ -12,7 +12,7 @@ RUN printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d
 RUN mkdir -p /root/.ssh
 RUN apt update -y && apt --no-install-recommends -y install mysql-client curl sudo software-properties-common wget git redis-tools nano screen && \
     add-apt-repository -y ppa:ondrej/php && add-apt-repository -y ppa:nginx/stable && apt-get install -y --no-install-recommends nginx && \
-    apt-get -y install supervisor tzdata zip unzip php8.1 php8.1-fpm php8.1-cli php8.1-mysql php8.1-mbstring php8.1-exif php8.1-bcmath php8.1-gd php8.1-curl php8.1-dom libpng-dev libonig-dev libxml2-dev ca-certificates apt-transport-https
+    apt-get -y install supervisor tzdata zip unzip php8.1 php8.1-fpm php8.1-cli php8.1-mysql php8.1-mbstring php8.1-exif php8.1-bcmath php8.1-gd php8.1-curl php8.1-dom php8.1-zip libpng-dev libonig-dev libxml2-dev ca-certificates apt-transport-https
 
 #Change timezone
 ENV TZ=Asia/Jakarta
