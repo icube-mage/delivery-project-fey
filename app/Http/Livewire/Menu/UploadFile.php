@@ -46,7 +46,9 @@ class UploadFile extends Component
 
         if($this->marketplace == null){
             $this->submitBtn = false;
-        } else{
+        }
+
+        if($getConfigMp != null || $this->marketplace == null){
             $this->errorMsg = null;
         }
 
