@@ -118,7 +118,7 @@ class CheckPrice extends Component
         $sku = '';
         foreach ($dataCatalogPriceTemp as $cpt){
             $sku = $cpt->sku;
-            if($cpt->is_whitelist == false && $cpt->is_negative == false){
+            if($cpt->is_whitelist == false){
                 $avgPriceCat = CatalogPriceAvg::where('sku', $sku)->where('brand', $this->brand)->where('marketplace', $this->marketplace)->pluck('average_price')->first();
 
                 // $totalDataAvgPrice = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->pluck('total_record')->first();
