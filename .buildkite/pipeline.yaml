@@ -14,7 +14,7 @@ steps:
     command:
       - "sh .buildkite/deploy.sh kns-nonprod fey"
     agents:
-      - "icube-staging=true"
+      - "gce-kns-nonprod-icube=true"
   
   - block: "Release to production"
 
@@ -22,4 +22,4 @@ steps:
     command:
       - "sh .buildkite/deploy.sh kns-prod fey"
     agents:
-      - "iii-prod=true"
+      - "kns-prod-icube=true"
