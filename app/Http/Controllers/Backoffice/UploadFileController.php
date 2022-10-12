@@ -56,7 +56,7 @@ class UploadFileController extends Controller
                             ->where('marketplace', $items->marketplace)->sum('discount_price');
             $avgTemp = $totalDiscountPriceTemp / $countDataTemp;
             $averagePrice = CatalogPriceAvg::where('sku', $items->sku)->where('marketplace', $items->marketplace)->where('brand', $items->brand)->where('warehouse', $items->warehouse)->pluck('average_price')->first();
-            if ($items->discount_price < $averagePrice && $items->is_discount==true) {
+            if ($items->discount_price < ceil($averagePrice) && $items->is_discount==true) {
                 CatalogPriceTemp::where('id', $items->id)->update(['is_negative' => true]);
                 $dataCatalog[] = array(
                     'id' => $items->id,
