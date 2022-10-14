@@ -99,7 +99,7 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
 
         if($sku == null){
             throw new \Exception ("Please check SKU column");
-        } elseif($discountPrice == null){
+        } elseif($discountPrice === null){
             throw new \Exception ("Please check Discount Price column");
         }else{
             $catalogPriceTemp = [

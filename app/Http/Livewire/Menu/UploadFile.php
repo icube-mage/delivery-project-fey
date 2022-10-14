@@ -103,7 +103,11 @@ class UploadFile extends Component
         try{
             Excel::import($import, $this->file);
         } catch(\Exception $e){
-            return $this->errorMsg = "Content start are not correct, please check your configuration!";
+            if(stristr($e->getMessage(), "Please")){
+                return $this->errorMsg = $e->getMessage();
+            } else {
+                return $this->errorMsg = "Content start are not correct, please check your configuration!";
+            }
         }
         $this->userId = Auth::user()->id;
         $cPriceTemp = CatalogPriceTemp::where('user_id', $this->userId)
