@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Menu;
 use App\Models\Brand;
 use Livewire\Component;
 use App\Models\Marketplace;
-use Illuminate\Support\Str;
 use App\Models\CatalogPrice;
 use App\Models\Configuration;
 use Livewire\WithFileUploads;
@@ -13,7 +12,6 @@ use App\Imports\FileDataImport;
 use App\Models\CatalogPriceAvg;
 use App\Models\CatalogPriceTemp;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UploadFile extends Component
