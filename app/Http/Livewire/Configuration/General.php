@@ -33,6 +33,7 @@ class General extends Component
         Configuration::where('key', 'crontab_schedule_running')->update([
             'value' => $this->cron_schedule
         ]);
+        $this->dispatchBrowserEvent('refresh');
         session()->flash('success', 'Value has been changed');
     }
 }

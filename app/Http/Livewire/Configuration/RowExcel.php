@@ -9,21 +9,41 @@ use Livewire\Component;
 class RowExcel extends Component
 {
     protected $listeners = ['refreshConfigRow' => '$refresh'];
-    public $config = [];
+    public $config;
+    public $templateConfig = [
+        "heading"=>"",
+        "content"=>"",
+    ];
 
-    public function store($key, $index)
+    public function store($configName, $index)
     {
+        $arrayValue = [];
+        foreach($this->config[$index] as $key => $value ){
+            if($value!=''){
+                $arrayValue[] = $key."=".$value;
+            }
+        }
+        $stringValue = implode(",", $arrayValue);
         if($this->config[$index] == '')
         {
-            Configuration::where('key', $key)->delete();
+            Configuration::where('key', $configName)->delete();
         } else {
             Configuration::updateOrCreate([
-                'key' => $key
+                'key' => $configName
             ],[
-                'key' => $key,
-                'value' => $this->config[$index]
+                'key' => $configName,
+                'value' => $stringValue
             ]);
         }
+        $this->dispatchBrowserEvent('refresh');
+    }
+
+    public function clearConfig($configName, $index){
+        Configuration::where('key', $configName)->delete();
+        $this->config[$index] = [
+            "heading"=>"",
+            "content"=>"",
+        ];
     }
 
     public function render()
@@ -32,12 +52,20 @@ class RowExcel extends Component
         $maps = [];
         foreach($marketplaces as $marketplace){
             $configuration = Configuration::where('key', $marketplace->slug.'_row_map')->first();
+            $getValue = $configuration->value ?? '';
             $maps[] = [
                 "marketplace" => $marketplace->name,
                 "config" => $configuration->key ?? $marketplace->slug.'_row_map',
-                "value" => $configuration->value ?? '',
             ];
-            $this->config[] = $configuration->value ?? '';
+            $basicConfig = $this->templateConfig;
+            if ($getValue) {
+                $getConfig = explode(",", $configuration->value);
+                foreach ($getConfig as $array) {
+                    $value = explode("=", $array);
+                    $basicConfig[$value[0]] = $value[1];
+                }
+            }
+            $this->config[] = $basicConfig;
         }
         return view('livewire.configuration.row-excel', ['maps' => $maps]);
     }
