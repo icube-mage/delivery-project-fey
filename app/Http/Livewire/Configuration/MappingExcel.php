@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class MappingExcel extends Component
 {
+    protected $listeners = ['refreshConfigColumn' => '$refresh'];
     public $config = [];
 
     public function store($key, $index)
