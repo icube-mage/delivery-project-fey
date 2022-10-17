@@ -21,6 +21,9 @@ class MappingExcel extends Component
 
     public function store($configName, $index)
     {
+        if($this->config[$index]['sku'] != '' && $this->config[$index]['discount_price'] != '' && $this->config[$index]['product_name'] != ''){
+            $this->dispatchBrowserEvent('save');
+        }
         $arrayValue = [];
         foreach($this->config[$index] as $key => $value ){
             if($value!=''){

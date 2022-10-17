@@ -17,6 +17,9 @@ class RowExcel extends Component
 
     public function store($configName, $index)
     {
+        if($this->config[$index]['heading'] != '' && $this->config[$index]['content'] != ''){
+            $this->dispatchBrowserEvent('save');
+        }
         $arrayValue = [];
         foreach($this->config[$index] as $key => $value ){
             if($value!=''){

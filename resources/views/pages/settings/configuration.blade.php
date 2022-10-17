@@ -2,7 +2,7 @@
     <x-content-card>
         <div 
             x-data="{
-            openTab: @if(session()->has('tab')) {{ session()->get('tab') }} @else 4 @endif,
+            openTab: @if(session()->has('tab')) {{ session()->get('tab') }} @else 1 @endif,
             activeClasses: 'border-l border-t border-r rounded-t text-blue-700',
             inactiveClasses: 'text-blue-500 hover:text-blue-800'
             }" 

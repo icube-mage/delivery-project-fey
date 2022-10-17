@@ -49,7 +49,7 @@
                     </div>
                     <div class="text-right mt-3">
                         <x-button type="button" wire:click="clearConfig('{{$map['config']}}', {{$index}})" class="bg-red-400 hover:bg-red-600 mr-3">Clear</x-button>
-                        <x-button type="submit" @click="show=true">Save</x-button>
+                        <x-button type="submit" @save.window="show=true">Save</x-button>
                     </div>
                 </form>
             </div>
