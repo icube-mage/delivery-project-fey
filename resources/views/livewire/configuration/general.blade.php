@@ -19,7 +19,7 @@
     
     <div class="flex top-16 absolute right-4 items-center p-4 mb-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow" role="alert"
         x-show="show"
-        x-init="setTimeout(() => show = false, 3000)"
+        x-init="setTimeout(() => show = false, 3000)" @refresh.window="setTimeout(() => show = false, 2000)"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-x-0"
         x-transition:leave-end="opacity-0 transform -translate-x-40"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Configuration;
 
+use App\Models\Configuration;
 use App\Models\Marketplace;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -27,7 +28,9 @@ class MarketplaceForm extends Component
     }
     public function destroy($id)
     {
-        Marketplace::find($id)->delete();
+        $marketplace = Marketplace::find($id);
+        Configuration::where('key', 'LIKE', "%$marketplace->name%")->delete();
+        $marketplace->delete();
         $this->emitTo('configuration.mapping-excel', 'refreshConfigColumn');
         $this->emitTo('configuration.row-excel', 'refreshConfigRow');
     }

@@ -2,7 +2,6 @@
 namespace App\Exports;
 
 use App\Models\CatalogPrice;
-use App\Models\Student;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -27,7 +26,8 @@ class CatalogPriceExport implements FromCollection,WithHeadings
     public function collection()
     {
         $filter = '%'.$this->filter.'%';
-        return CatalogPrice::select('marketplace', 'brand', 'sku', 'product_name', 'retail_price','discount_price','users.name', 'catalog_prices.created_at as date')
+        $catalogPricesAll = collect([]);
+        CatalogPrice::select('marketplace', 'brand', 'sku', 'product_name', 'retail_price','discount_price','users.name', 'catalog_prices.created_at as date')
         ->leftJoin('users', 'catalog_prices.user_id', '=', 'users.id')
         ->where(function($query) use($filter){
             $query->where('brand', 'like', $filter)
@@ -37,6 +37,20 @@ class CatalogPriceExport implements FromCollection,WithHeadings
                     $sub_query->where('name', 'like', $filter);
                 });
         })
-        ->get();
+        ->chunk(1000, function ($catalogPrices) use($catalogPricesAll){
+            foreach ($catalogPrices as $catalogPrice) {
+                $catalogPricesAll->push([
+                    "marketplace"=>$catalogPrice->marketplace,
+                    "brand"=>$catalogPrice->brand,
+                    "sku"=>$catalogPrice->sku,
+                    "product_name"=>$catalogPrice->product_name,
+                    "retail_price"=>$catalogPrice->retail_price,
+                    "discount_price"=>$catalogPrice->discount_price,
+                    "name"=>$catalogPrice->name,
+                    "date"=>$catalogPrice->date,
+                ]);
+            }
+        });
+        return $catalogPricesAll;
     }
 }

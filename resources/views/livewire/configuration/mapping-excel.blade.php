@@ -1,25 +1,76 @@
 <div x-data="{ show: false }" class="flex gap-1">
     <div class="w-1/2 2xl:w-2/5">
         @foreach($maps as $index => $map)
-        <div class="flex items-start justify-between gap-6 py-4 border-b">
-            <x-label>{{$map['marketplace']}} Excel</x-label>
-            <div class="flex items-start justify-between gap-4">
-                <textarea class="rounded-lg border-gray-300 focus:border-blue-600 focus:ring focus:ring-blue-200 transition duration-200" rows="3" cols="30" wire:model="config.{{$index}}"></textarea>
-                <x-button type="button" wire:click="store('{{$map['config']}}', {{$index}})" @click="show=true">Save</x-button>
+        @php
+        $initialPosition = '-'.$index+1;
+        if($index==0){
+            $initialPosition = $index+1;
+        }
+        @endphp
+        <div class="grid py-4 border-b" x-data="{ openedColumnIndex: {{$initialPosition}} }">
+            <div class="flex items-center justify-between" @click="openedColumnIndex == {{$index+1}} ? openedColumnIndex = {{'-'.$index+1}} : openedColumnIndex = {{$index+1}}">
+                <h3 class="font-bold text-lg">
+                    {{$map['marketplace']}} Excel
+                </h3>
+                <div>
+                    <template x-if="openedColumnIndex == {{$index+1}}">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                    </template>
+                    <template x-if="openedColumnIndex != {{$index+1}}">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </template>
+                </div>
+            </div>
+            <div class="grid" x-cloak x-show.transition.in.duration.800ms="openedColumnIndex == {{$index+1}}">
+                <form  wire:submit.prevent="store('{{$map['config']}}', {{$index}})">
+                    <div class="flex items-center justify-between">
+                        <x-label>SKU<span class="text-red-600">*</span></x-label>
+                        <x-input type="text" wire:model="config.{{$index}}.sku" class="w-2/3" required/>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <x-label>Product Name<span class="text-red-600">*</span></x-label>
+                        <x-input type="text" wire:model="config.{{$index}}.product_name" class="w-2/3" required/>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <x-label>Discount Price<span class="text-red-600">*</span></x-label>
+                        <x-input type="text" wire:model="config.{{$index}}.discount_price" class="w-2/3" required/>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <x-label>Warehouse</x-label>
+                        <x-input type="text" wire:model="config.{{$index}}.warehouse" class="w-2/3"/>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <x-label>Retail Price</x-label>
+                        <x-input type="text" wire:model="config.{{$index}}.retail_price" class="w-2/3"/>
+                    </div>
+                    <div class="flex items-center justify-between mt-3">
+                        <x-label>Start Date</x-label>
+                        <x-input type="text" wire:model="config.{{$index}}.start_date" class="w-2/3"/>
+                    </div>
+                    <div class="text-right mt-3">
+                        <x-button type="button" wire:click="clearConfig('{{$map['config']}}', {{$index}})" class="bg-red-400 hover:bg-red-600 mr-3">Clear</x-button>
+                        <x-button type="submit" @save.window="show=true">Save</x-button>
+                    </div>
+                </form>
             </div>
         </div>
         @endforeach
     </div>
     <div class="w-1/2 2xl:w-3/5 p-4">  
         <div class="bg-gray-100 border rounded-xl p-2">
-            <p class="text-yellow-700 text-sm">Use equal symbol (=) to defined header name and separate by comma.<br/>mapping key : <br/>
-            sku, product_name, retail_price, discount_price, warehouse and start_date*<br/>
-            <br/>start_date & retail_price are optional</p>
+            <p class="text-yellow-700 text-sm">Example value :<br/>
+            SKU = Nama SKU<br/>
+            Product Name = Nama Produk<br/>
+            Discount Price = Harga Diskon (Rp)<br/>
+            Warehouse = Lokasi Produk/Warehouse<br/>
+            Retail Price = Harga<br/>
+            Start Date = Tanggal Mulai</p><br/>
+            <p class="text-sm"><span class="text-red-600">*</span> is require</p>
         </div>
     </div>
     <div class="flex top-16 absolute right-4 items-center p-4 mb-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow" role="alert"
-        x-show="show"
-        x-init="setTimeout(() => show = false, 2000)"
+        x-show.timeout.3000ms="show"
+        x-init="setTimeout(() => show = false, 2000)" @refresh.window="setTimeout(() => show = false, 2000)"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-x-0"
         x-transition:leave-end="opacity-0 transform -translate-x-40"
