@@ -68,11 +68,11 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
         try{
             $sku = $row[$skuConfig];
             $discountPrice = $row[$discountPriceConfig];
+            $name = $row[$nameConfig];
         } catch(\Exception $e){
             throw new \Exception ($e->getMessage());
         }
 
-        $name = $row[$nameConfig] ?? "No Name";
         $retailPrice = $row[$retailPriceConfig] ?? 0;
         $startDateOriginal = $row[$startDateConfig] ?? date('d-m-Y');
         $warehouse = $row[$warehouseConfig] ?? null;
@@ -101,7 +101,9 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
             throw new \Exception ("Please check SKU column");
         } elseif($discountPrice === null){
             throw new \Exception ("Please check Discount Price column");
-        }else{
+        } elseif($name === null){
+            throw new \Exception ("Please check Product Name column");
+        } else{
             $catalogPriceTemp = [
                 'sku'  => $sku,
                 'product_name'  => $name,
