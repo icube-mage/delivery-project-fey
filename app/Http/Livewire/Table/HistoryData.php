@@ -27,6 +27,7 @@ class HistoryData extends Component
         $catalogPrices = CatalogPrice::with('user')
         ->select(['upload_hash', 'brand', 'marketplace','start_date','users.name'])
         ->leftJoin('users', 'catalog_prices.user_id', '=', 'users.id')
+        ->where('user_id', auth()->user()->id)
         ->where(function($sub_query) use($input){
             $sub_query->where('brand', 'like', $input)
                 ->orWhere('marketplace', 'like', $input)

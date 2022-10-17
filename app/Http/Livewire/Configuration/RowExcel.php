@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class RowExcel extends Component
 {
+    protected $listeners = ['refreshConfigRow' => '$refresh'];
     public $config = [];
 
     public function store($key, $index)

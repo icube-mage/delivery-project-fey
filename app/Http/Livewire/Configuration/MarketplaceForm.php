@@ -17,6 +17,8 @@ class MarketplaceForm extends Component
         ]);
         Marketplace::create(['name' => $this->marketplace, 'slug' => Str::slug($this->marketplace)]);
         $this->reset();
+        $this->emitTo('configuration.mapping-excel', 'refreshConfigColumn');
+        $this->emitTo('configuration.row-excel', 'refreshConfigRow');
     }
     public function render()
     {
@@ -26,5 +28,7 @@ class MarketplaceForm extends Component
     public function destroy($id)
     {
         Marketplace::find($id)->delete();
+        $this->emitTo('configuration.mapping-excel', 'refreshConfigColumn');
+        $this->emitTo('configuration.row-excel', 'refreshConfigRow');
     }
 }
