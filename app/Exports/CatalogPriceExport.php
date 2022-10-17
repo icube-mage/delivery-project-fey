@@ -37,7 +37,7 @@ class CatalogPriceExport implements FromCollection,WithHeadings
                     $sub_query->where('name', 'like', $filter);
                 });
         })
-        ->chunk(1000, function ($catalogPrices) use($catalogPricesAll){
+        ->chunk(10000, function ($catalogPrices) use($catalogPricesAll){
             foreach ($catalogPrices as $catalogPrice) {
                 $catalogPricesAll->push([
                     "marketplace"=>$catalogPrice->marketplace,
