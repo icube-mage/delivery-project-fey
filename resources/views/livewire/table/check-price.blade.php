@@ -66,7 +66,10 @@
                     Average
                 </x-th>
                 <x-th>
-
+                    <div class="flex items-center self-center">
+                        <input type="checkbox" wire:change="selectAllWhitelist($event.target.checked)" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
+                        <label for="default-checkbox" class="ml-2">Select All</label>
+                    </div>
                 </x-th>
             </tr>
         </x-thead>
@@ -92,7 +95,7 @@
                 </x-td>
                 <x-td class="content-center">
                     <div class="flex self-center">
-                        <input type="checkbox" wire:model="dataTemp.{{ $index }}.is_whitelist" value="" wire:change="changeWhitelist({{ $dataTemp[$index]['id'] }}, $event.target.checked)" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
+                        <input type="checkbox" wire:model="dataTemp.{{ $index }}.is_whitelist" value="" wire:change="changeWhitelist({{ $dataTemp[$index]['id'] }}, $event.target.checked)" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2" >
                         <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900">Whitelist</label>
                     </div>
                 </x-td>
