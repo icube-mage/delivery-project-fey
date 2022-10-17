@@ -10,10 +10,11 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
-class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMultipleSheets, WithCalculatedFormulas
+class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMultipleSheets, WithCalculatedFormulas, WithChunkReading
 {
     private $brand;
     private $marketplace;
@@ -157,5 +158,10 @@ class FileDataImport implements ToModel, WithHeadingRow, WithStartRow, WithMulti
             
         }
         return $mapping_field;
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }
