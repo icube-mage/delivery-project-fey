@@ -116,7 +116,8 @@
     </x-table>
     @if(Session::has('downloaded-excel-after-submit'))
     <script>
-        const host = '{{env('APP_URL')}}'+'/menu/uploadfile';
+        let app_url = '{{env('APP_URL')}}';
+        const host = app_url.replace(/\/$/, '')+'/menu/uploadfile';
         window.location.replace(host);
     </script>
     @endif

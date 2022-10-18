@@ -131,41 +131,41 @@ class CheckPrice extends Component
         foreach ($dataCatalogPriceTemp as $cpt){
             $sku = $cpt->sku;
             if($cpt->is_whitelist == false && $cpt->is_discount == true){
-                $avgPriceCat = CatalogPriceAvg::where('sku', $sku)
-                    ->where('brand', $this->brand)
-                    ->where('marketplace', $this->marketplace)
-                    ->where('warehouse', $cpt->warehouse)
-                    ->pluck('average_price')->first();
+                // $avgPriceCat = CatalogPriceAvg::where('sku', $sku)
+                //     ->where('brand', $this->brand)
+                //     ->where('marketplace', $this->marketplace)
+                //     ->where('warehouse', $cpt->warehouse)
+                //     ->pluck('average_price')->first();
 
-                $totalDataPrice = CatalogPrice::where('sku', $cpt->sku)
-                    ->where('brand', $this->brand)
-                    ->where('marketplace', $this->marketplace)
-                    ->where('warehouse', $cpt->warehouse)
-                    ->count();
-                $catalogPriceTemp = CatalogPriceTemp::select(DB::raw('COUNT(*) AS count, SUM(discount_price) AS sum'))
-                        ->where('sku', $cpt->sku)
-                        ->where('brand', $this->brand)
-                        ->where('marketplace', $this->marketplace)
-                        ->where('warehouse', $cpt->warehouse)
-                        ->first();
+                // $totalDataPrice = CatalogPrice::where('sku', $cpt->sku)
+                //     ->where('brand', $this->brand)
+                //     ->where('marketplace', $this->marketplace)
+                //     ->where('warehouse', $cpt->warehouse)
+                //     ->count();
+                // $catalogPriceTemp = CatalogPriceTemp::select(DB::raw('COUNT(*) AS count, SUM(discount_price) AS sum'))
+                //         ->where('sku', $cpt->sku)
+                //         ->where('brand', $this->brand)
+                //         ->where('marketplace', $this->marketplace)
+                //         ->where('warehouse', $cpt->warehouse)
+                //         ->first();
 
-                $totalPriceTemp = $catalogPriceTemp->sum;
+                // $totalPriceTemp = $catalogPriceTemp->sum;
                 
-                $countPriceTemp = $catalogPriceTemp->count;
+                // $countPriceTemp = $catalogPriceTemp->count;
                 
-                $countNewAvg = (($avgPriceCat * $totalDataPrice) + $totalPriceTemp) / ($totalDataPrice + $countPriceTemp);
+                // $countNewAvg = (($avgPriceCat * $totalDataPrice) + $totalPriceTemp) / ($totalDataPrice + $countPriceTemp);
 
-                CatalogPriceAvg::where('sku', $cpt->sku)
-                    ->where('brand', $this->brand)
-                    ->where('marketplace', $this->marketplace)
-                    ->where('warehouse', $cpt->warehouse)
-                    ->update([
-                        'average_price' => $countNewAvg,
-                        'total_record' => $totalDataPrice + $countPriceTemp
-                    ]);
+                // CatalogPriceAvg::where('sku', $cpt->sku)
+                //     ->where('brand', $this->brand)
+                //     ->where('marketplace', $this->marketplace)
+                //     ->where('warehouse', $cpt->warehouse)
+                //     ->update([
+                //         'average_price' => $countNewAvg,
+                //         'total_record' => $totalDataPrice + $countPriceTemp
+                //     ]);
             }
-            
-            CatalogPrice::updateOrCreate(
+
+            CatalogPrice::firstOrCreate(
                 [
                     'upload_hash' => session()->get('checkPriceHash'),
                     'sku' => $cpt->sku,
