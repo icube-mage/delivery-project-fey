@@ -29,6 +29,7 @@ class CheckPrice extends Component
     public $beforeVerified = true;
     public $downloadBtn = 'Download';
     protected $listeners = ['store', 'clearTemp'];
+    public $checkAll = false;
 
     public function setDownloadBtn($label){
         $this->downloadBtn = $label;
@@ -90,8 +91,14 @@ class CheckPrice extends Component
     public function changeWhitelist($id, $whitelistStatus){
         if($whitelistStatus == false){
             $this->errorData = $this->errorData+1;
+            $this->checkAll = false;
         } else {
             $this->errorData = $this->errorData-1;
+            $countWhitelist = array_count_values(array_map(function($val) {return $val ? 'true':'false';},array_column($this->dataTemp, 'is_whitelist')))['true'];
+            if($countWhitelist == count($this->dataTemp)){
+                $this->checkAll = true;
+            }
+
         }
         CatalogPriceTemp::where('id',$id)->update(['is_whitelist' => $whitelistStatus]);
         $this->firstLoad = false;
