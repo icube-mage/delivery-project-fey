@@ -111,68 +111,95 @@ class CheckPrice extends Component
             $this->submitBtn = false;
             return session()->flash('error', 'Incorrect price value, please check again!');
         } 
-
-        $dataCatalogPriceTemp = CatalogPriceTemp::where('user_id', Auth::user()->id)->where('brand', $this->brand)->where('marketplace', $this->marketplace)->get();
-        $avgPriceCat = 0;
-        $totalPriceTemp = 0;
-        $sku = '';
-        foreach ($dataCatalogPriceTemp as $cpt){
-            $sku = $cpt->sku;
-            if($cpt->is_whitelist == false && $cpt->is_discount == true){
+        $preCatalogPrices = [];
+        CatalogPriceTemp::where('user_id', Auth::user()->id)->where('brand', $this->brand)->where('marketplace', $this->marketplace)
+        ->chunk(100, function ($dataCatalogPriceTemp) use($preCatalogPrices) {
+            $avgPriceCat = 0;
+            $totalPriceTemp = 0;
+            $sku = '';
+            foreach ($dataCatalogPriceTemp as $cpt) {
+                // $sku = $cpt->sku;
+                // if($cpt->is_whitelist == false && $cpt->is_discount == true){
                 // $avgPriceCat = CatalogPriceAvg::where('sku', $sku)
-                //     ->where('brand', $this->brand)
-                //     ->where('marketplace', $this->marketplace)
-                //     ->where('warehouse', $cpt->warehouse)
-                //     ->pluck('average_price')->first();
+                            //     ->where('brand', $this->brand)
+                            //     ->where('marketplace', $this->marketplace)
+                            //     ->where('warehouse', $cpt->warehouse)
+                            //     ->pluck('average_price')->first();
 
                 // $totalDataPrice = CatalogPrice::where('sku', $cpt->sku)
-                //     ->where('brand', $this->brand)
-                //     ->where('marketplace', $this->marketplace)
-                //     ->where('warehouse', $cpt->warehouse)
-                //     ->count();
+                            //     ->where('brand', $this->brand)
+                            //     ->where('marketplace', $this->marketplace)
+                            //     ->where('warehouse', $cpt->warehouse)
+                            //     ->count();
                 // $catalogPriceTemp = CatalogPriceTemp::select(DB::raw('COUNT(*) AS count, SUM(discount_price) AS sum'))
-                //         ->where('sku', $cpt->sku)
-                //         ->where('brand', $this->brand)
-                //         ->where('marketplace', $this->marketplace)
-                //         ->where('warehouse', $cpt->warehouse)
-                //         ->first();
+                            //         ->where('sku', $cpt->sku)
+                            //         ->where('brand', $this->brand)
+                            //         ->where('marketplace', $this->marketplace)
+                            //         ->where('warehouse', $cpt->warehouse)
+                            //         ->first();
 
                 // $totalPriceTemp = $catalogPriceTemp->sum;
-                
+
                 // $countPriceTemp = $catalogPriceTemp->count;
-                
+
                 // $countNewAvg = (($avgPriceCat * $totalDataPrice) + $totalPriceTemp) / ($totalDataPrice + $countPriceTemp);
 
                 // CatalogPriceAvg::where('sku', $cpt->sku)
-                //     ->where('brand', $this->brand)
-                //     ->where('marketplace', $this->marketplace)
-                //     ->where('warehouse', $cpt->warehouse)
-                //     ->update([
-                //         'average_price' => $countNewAvg,
-                //         'total_record' => $totalDataPrice + $countPriceTemp
-                //     ]);
+                            //     ->where('brand', $this->brand)
+                            //     ->where('marketplace', $this->marketplace)
+                            //     ->where('warehouse', $cpt->warehouse)
+                            //     ->update([
+                            //         'average_price' => $countNewAvg,
+                            //         'total_record' => $totalDataPrice + $countPriceTemp
+                            //     ]);
+                // }
+
+                // CatalogPrice::firstOrCreate(
+                //     [
+                //         'upload_hash' => session()->get('checkPriceHash'),
+                //         'sku' => $cpt->sku,
+                //         'user_id' => $cpt->user_id,
+                //         'brand' => $cpt->brand,
+                //         'marketplace' => $cpt->marketplace,
+                //         'warehouse' => $cpt->warehouse,
+                //     ],
+                //     [
+                //         'discount_price' => $cpt->discount_price,
+                //         'product_name' => $cpt->product_name,
+                //         'retail_price' => $cpt->retail_price,
+                //         'is_whitelist' => $cpt->is_whitelist,
+                //         'is_negative' => $cpt->is_negative,
+                //         'start_date' => $cpt->start_date,
+                //     ]
+                // );
+                $checkCatalogPrices = CatalogPrice::where('upload_hash', session()->get('checkPriceHash'))
+                                ->where('sku', $cpt->sku)
+                                ->where('user_id', $cpt->user_id)
+                                ->where('brand', $cpt->brand)
+                                ->where('marketplace', $cpt->marketplace)
+                                ->where('warehouse', $cpt->warehouse)
+                                ->first();
+                if ($checkCatalogPrices != null) {
+                    $preCatalogPrices[] = [
+                        'upload_hash' => session()->get('checkPriceHash'),
+                        'sku' => $cpt->sku,
+                        'user_id' => $cpt->user_id,
+                        'brand' => $cpt->brand,
+                        'marketplace' => $cpt->marketplace,
+                        'warehouse' => $cpt->warehouse,
+                        'discount_price' => $cpt->discount_price,
+                        'product_name' => $cpt->product_name,
+                        'retail_price' => $cpt->retail_price,
+                        'is_whitelist' => $cpt->is_whitelist,
+                        'is_negative' => $cpt->is_negative,
+                        'start_date' => $cpt->start_date,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
             }
-
-            CatalogPrice::firstOrCreate(
-                [
-                    'upload_hash' => session()->get('checkPriceHash'),
-                    'sku' => $cpt->sku,
-                    'user_id' => $cpt->user_id,
-                    'brand' => $cpt->brand,
-                    'marketplace' => $cpt->marketplace,
-                    'warehouse' => $cpt->warehouse,
-                ],[
-                    'discount_price' => $cpt->discount_price,
-                    'product_name' => $cpt->product_name,
-                    'retail_price' => $cpt->retail_price,
-                    'is_whitelist' => $cpt->is_whitelist,
-                    'is_negative' => $cpt->is_negative,
-                    'start_date' => $cpt->start_date,
-                ]
-            );
-
-        }
-
+        });
+        CatalogPrice::insert($preCatalogPrices);
         $this->submitBtn = true;
         $this->dispatchBrowserEvent('swal:success', [
             'text' => 'All prices successfully submitted',
