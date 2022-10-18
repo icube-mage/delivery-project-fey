@@ -131,26 +131,27 @@ class CheckPrice extends Component
         foreach ($dataCatalogPriceTemp as $cpt){
             $sku = $cpt->sku;
             if($cpt->is_whitelist == false && $cpt->is_discount == true){
-                $avgPriceCat = CatalogPriceAvg::where('sku', $sku)->where('brand', $this->brand)->where('marketplace', $this->marketplace)->pluck('average_price')->first();
+                $avgPriceCat = CatalogPriceAvg::where('sku', $sku)
+                    ->where('brand', $this->brand)
+                    ->where('marketplace', $this->marketplace)
+                    ->where('warehouse', $cpt->warehouse)
+                    ->pluck('average_price')->first();
 
-                // $totalDataAvgPrice = CatalogPriceAvg::where('sku', $cpt->sku)->where('brand', $cpt->brand)->where('marketplace', $cpt->marketplace)->pluck('total_record')->first();
                 $totalDataPrice = CatalogPrice::where('sku', $cpt->sku)
                     ->where('brand', $this->brand)
                     ->where('marketplace', $this->marketplace)
                     ->where('warehouse', $cpt->warehouse)
                     ->count();
+                $catalogPriceTemp = CatalogPriceTemp::select(DB::raw('COUNT(*) AS count, SUM(discount_price) AS sum'))
+                        ->where('sku', $cpt->sku)
+                        ->where('brand', $this->brand)
+                        ->where('marketplace', $this->marketplace)
+                        ->where('warehouse', $cpt->warehouse)
+                        ->first();
+
+                $totalPriceTemp = $catalogPriceTemp->sum;
                 
-                $totalPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)
-                    ->where('brand', $this->brand)
-                    ->where('marketplace', $this->marketplace)
-                    ->where('warehouse', $cpt->warehouse)
-                    ->sum('discount_price');
-                
-                $countPriceTemp = CatalogPriceTemp::where('sku', $cpt->sku)
-                    ->where('brand', $this->brand)
-                    ->where('marketplace', $this->marketplace)
-                    ->where('warehouse', $cpt->warehouse)
-                    ->count();
+                $countPriceTemp = $catalogPriceTemp->count;
                 
                 $countNewAvg = (($avgPriceCat * $totalDataPrice) + $totalPriceTemp) / ($totalDataPrice + $countPriceTemp);
 

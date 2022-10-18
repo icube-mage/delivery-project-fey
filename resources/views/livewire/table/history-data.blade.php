@@ -1,11 +1,11 @@
 <div>
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-start items-center gap-x-4 mb-6">
+        <x-input type="text" class="w-80" placeholder="Filter by id, user, brand or marketplace" wire:model="searchTerm" />
         <form action="{{route('export.catalog.price')}}" method="POST">
             @csrf
             <input type="hidden" name="filter" value="{{$searchTerm}}"/>
             <button type="submit" class="excel-btn">Download</button>
         </form>
-        <x-input type="text" placeholder="Search" wire:model="searchTerm" />
     </div>
     <x-table>
         <x-thead>
