@@ -67,7 +67,7 @@
                 </x-th>
                 <x-th>
                     <div class="flex items-center self-center">
-                        <input type="checkbox" wire:change="selectAllWhitelist($event.target.checked)" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
+                        <input type="checkbox" wire:model="checkAll" wire:change="selectAllWhitelist($event.target.checked)" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2">
                         <label for="default-checkbox" class="ml-2">Select All</label>
                     </div>
                 </x-th>
