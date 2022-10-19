@@ -54,18 +54,6 @@ class CheckPrice extends Component
         $this->sortField = $field;
     }
 
-    public function selectAllWhitelist($value){
-        foreach($this->dataTemp as $key => $item){
-            if($value){
-                $this->dataTemp[$key]['is_whitelist'] = $value;
-                CatalogPriceTemp::where('id',$this->dataTemp[$key])->update(['is_whitelist' => $value]);
-            } else{
-                $this->dataTemp[$key]['is_whitelist'] = $value;
-                CatalogPriceTemp::where('id',$this->dataTemp[$key])->update(['is_whitelist' => $value]);
-            }
-        }
-    }
-
     public function alertConfirm()
     {
         $this->dispatchBrowserEvent('swal:confirm', [
