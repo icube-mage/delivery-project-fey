@@ -11,25 +11,31 @@ CREATE
 	SET @warehouse = NEW.warehouse;
 	SET @is_whitelist = NEW.is_whitelist;
 	SET @is_discount = NEW.is_discount;
+	SET @user_id = NEW.user_id;
 	IF @is_whitelist = 0  THEN
 		IF @is_discount = 1  THEN
 			IF @warehouse IS NULL THEN
-				SET @avgPriceCat = (SELECT average_price FROM catalog_price_averages WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL);
-				SET @totalDataPrice = (SELECT COUNT(*) AS `count` FROM catalog_prices WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND is_discount=1 AND is_whitelist=0);
-				SET @countPriceTemp = (SELECT COUNT(*) AS `count` FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND is_discount=1 AND is_whitelist=0);
-				SET @totalPriceTemp = (SELECT COALESCE(SUM(discount_price),0) AS `sum` FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND is_discount=1 AND is_whitelist=0);
-				SET @countNewAvg = (((@avgPriceCat * @totalDataPrice) + @totalPriceTemp) / (@totalDataPrice + @countPriceTemp));
-				SET @newTotalRecord = (@totalDataPrice+@countPriceTemp);
-				UPDATE catalog_price_averages SET average_price=@countNewAvg, total_record=@newTotalRecord WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL;
+				SET @isFirstRecord = (SELECT total_record FROM catalog_price_averages WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL);
+				SET @countDataPrice = (SELECT COUNT(*) AS `count` FROM catalog_prices WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND is_discount=1 AND is_whitelist=0);
+				IF @isFirstRecord <> @countDataPrice THEN
+					
+					SET @totalPrice = (SELECT SUM(discount_price) AS `sum` FROM catalog_prices WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND is_discount=1 AND is_whitelist=0);
+					SET @countNewAvg = (@totalPrice / @countDataPrice);
+	
+					UPDATE catalog_price_averages SET average_price=@countNewAvg, total_record=@countDataPrice WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL;
+					DELETE FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND user_id=@user_id AND is_discount=1 AND is_whitelist=0;
+				END IF;
 			ELSE
-				SET @avgPriceCat = (SELECT average_price FROM catalog_price_averages WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse);
-				SET @totalDataPrice = (SELECT COUNT(*) AS `count` FROM catalog_prices WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND is_discount=1 AND is_whitelist=0);
-				SET @countPriceTemp = (SELECT COUNT(*) AS `count` FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND is_discount=1 AND is_whitelist=0);
-				SET @totalPriceTemp = (SELECT COALESCE(SUM(discount_price),0) AS `sum` FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND is_discount=1 AND is_whitelist=0);
-				SET @countNewAvg = (((@avgPriceCat * @totalDataPrice) + @totalPriceTemp) / (@totalDataPrice + @countPriceTemp));
-				
-				SET @newTotalRecord = (@totalDataPrice+@countPriceTemp);
-				UPDATE catalog_price_averages SET average_price=@countNewAvg, total_record=@newTotalRecord WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse;
+				SET @isFirstRecord = (SELECT total_record FROM catalog_price_averages WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse);
+				SET @countDataPrice = (SELECT COUNT(*) AS `count` FROM catalog_prices WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND is_discount=1 AND is_whitelist=0);
+				IF @isFirstRecord <> @totalDataPrice THEN
+					
+					SET @totalPrice = (SELECT SUM(discount_price) AS `sum` FROM catalog_prices WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND is_discount=1 AND is_whitelist=0);
+					SET @countNewAvg = (@totalPrice / @countDataPrice);
+	
+					UPDATE catalog_price_averages SET average_price=@countNewAvg, total_record=@countDataPrice WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse;
+					DELETE FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND user_id=@user_id AND is_discount=1 AND is_whitelist=0;
+				END IF;
 			END IF;
 			INSERT INTO temp (`sku`, `data1`, `data2`, `data3`, `average`, `text`) VALUES(@sku, @brand, @marketplace, @warehouse, @newTotalRecord, @countNewAvg);
 		END IF;
