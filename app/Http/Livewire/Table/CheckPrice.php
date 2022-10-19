@@ -130,12 +130,13 @@ class CheckPrice extends Component
             $this->submitBtn = false;
             return session()->flash('error', 'Incorrect price value, please check again!');
         } 
-        $preCatalogPrices = [];
+        
         CatalogPriceTemp::where('user_id', Auth::user()->id)->where('brand', $this->brand)->where('marketplace', $this->marketplace)
-        ->chunk(100, function ($dataCatalogPriceTemp) use($preCatalogPrices) {
-            $avgPriceCat = 0;
-            $totalPriceTemp = 0;
-            $sku = '';
+        ->chunk(100, function ($dataCatalogPriceTemp) {
+            // $avgPriceCat = 0;
+            // $totalPriceTemp = 0;
+            // $sku = '';
+            $preCatalogPrices = [];
             foreach ($dataCatalogPriceTemp as $cpt) {
                 // $sku = $cpt->sku;
                 // if($cpt->is_whitelist == false && $cpt->is_discount == true){
@@ -198,7 +199,7 @@ class CheckPrice extends Component
                                 ->where('marketplace', $cpt->marketplace)
                                 ->where('warehouse', $cpt->warehouse)
                                 ->first();
-                if ($checkCatalogPrices != null) {
+                if ($checkCatalogPrices == null) {
                     $preCatalogPrices[] = [
                         'upload_hash' => session()->get('checkPriceHash'),
                         'sku' => $cpt->sku,
@@ -217,8 +218,8 @@ class CheckPrice extends Component
                     ];
                 }
             }
+            CatalogPrice::insert($preCatalogPrices);
         });
-        CatalogPrice::insert($preCatalogPrices);
         $this->submitBtn = true;
         $this->dispatchBrowserEvent('swal:success', [
             'text' => 'All prices successfully submitted',
