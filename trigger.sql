@@ -23,7 +23,6 @@ CREATE
 					SET @countNewAvg = (@totalPrice / @countDataPrice);
 	
 					UPDATE catalog_price_averages SET average_price=@countNewAvg, total_record=@countDataPrice WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL;
-					DELETE FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse IS NULL AND user_id=@user_id AND is_discount=1 AND is_whitelist=0;
 				END IF;
 			ELSE
 				SET @isFirstRecord = (SELECT total_record FROM catalog_price_averages WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse);
@@ -34,10 +33,8 @@ CREATE
 					SET @countNewAvg = (@totalPrice / @countDataPrice);
 	
 					UPDATE catalog_price_averages SET average_price=@countNewAvg, total_record=@countDataPrice WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse;
-					DELETE FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND user_id=@user_id AND is_discount=1 AND is_whitelist=0;
 				END IF;
 			END IF;
-			INSERT INTO temp (`sku`, `data1`, `data2`, `data3`, `average`, `text`) VALUES(@sku, @brand, @marketplace, @warehouse, @newTotalRecord, @countNewAvg);
 		END IF;
 	END IF;
 END;
