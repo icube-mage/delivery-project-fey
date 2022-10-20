@@ -21,19 +21,23 @@ class FileDataExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $userId = Auth::id();
-        // return CatalogPriceTemp::select('sku', 'marketplace', 'discount_price', 'warehouse')
-        //     ->where('user_id',$userId)
-        //     ->where('marketplace', $this->marketplace)
-        //     ->where('brand', $this->brand)
-        //     ->get();
-        return CatalogPriceTemp::select('sku', 'marketplace', 'discount_price', 'warehouse')
-            ->whereIn('id', $this->datas)->get();
+        $filterColumn = [];
+        foreach($this->datas as $data){
+            $filterColumn[] = [
+                "sku"=>$data->sku,
+                "product_name"=>$data->product_name,
+                "marketplace"=>$this->marketplace,
+                "discount_price"=>$data->price,
+                "warehouse"=>$data->warehouse,
+            ];
+        }
+        return collect($filterColumn);
     }
 
     public function headings():array{
         return[
             'SKU',
+            'Product Name',
             'Marketplace',
             'Discount',
             'Warehouse'

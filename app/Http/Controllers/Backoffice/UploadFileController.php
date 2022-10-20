@@ -38,7 +38,6 @@ class UploadFileController extends Controller
         $brand = "";
         $countDataTemp = "";
         $extrasHistory = [];
-        $errorIds=[];
         $marketplace = "";
         $totalError = "";
         $userId = "";
@@ -64,12 +63,12 @@ class UploadFileController extends Controller
                     'product_name' => $items->product_name,
                     'price' => $items->discount_price,
                     'discount' => $avgTemp,
+                    'warehouse' => $items->warehouse,
                     'average_discount' => $averagePrice,
                     'is_whitelist' => $items->is_whitelist,
                     'is_negative' => true,
                     'is_changed' => false
                 );
-                $errorIds[] = $items->id;
                 $extrasHistory[] = array(
                     'sku' => $items->sku,
                     'price' => $items->discount_price,
@@ -110,13 +109,12 @@ class UploadFileController extends Controller
         }
         
         return view('pages.menu.uploadfile.checkprice', 
-            compact('dataCatalog', 'brand', 'marketplace', 'errorData', 'errorIds'));
+            compact('dataCatalog', 'brand', 'marketplace', 'errorData'));
     }
 
     public function export($marketplace, $brand, Request $request)
     {
-        $ids = explode(",",$request->data);
         session()->flash('downloaded-excel-after-submit', 'success');
-        return Excel::download(new FileDataExport($marketplace, $brand, $ids), 'fey_'.$brand.'_'.$marketplace.'.xlsx');
+        return Excel::download(new FileDataExport($marketplace, $brand, json_decode($request->data)), 'fey_'.$brand.'_'.$marketplace.'.xlsx');
     }
 }
