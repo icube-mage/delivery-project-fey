@@ -131,29 +131,11 @@ class CheckPrice extends Component
             return session()->flash('error', 'Incorrect price value, please check again!');
         } 
 
-        $dataCatalogPriceTemp = CatalogPriceTemp::where('user_id', Auth::user()->id)->where('brand', $this->brand)->where('marketplace', $this->marketplace)->get();
-
-        $preCatalogPrices = [];
-        foreach ($dataCatalogPriceTemp as $cpt) {
-            $preCatalogPrices[] = [
-                'upload_hash' => session()->get('checkPriceHash'),
-                'sku' => $cpt->sku,
-                'user_id' => $cpt->user_id,
-                'brand' => $cpt->brand,
-                'marketplace' => $cpt->marketplace,
-                'warehouse' => $cpt->warehouse,
-                'discount_price' => $cpt->discount_price,
-                'product_name' => $cpt->product_name,
-                'retail_price' => $cpt->retail_price,
-                'is_whitelist' => $cpt->is_whitelist,
-                'is_negative' => $cpt->is_negative,
-                'start_date' => $cpt->start_date,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+        try {
+            DB::select("CALL moveTempToPrice('".session()->get('checkPriceHash')."', ".Auth::user()->id.", '".$this->brand."', '".$this->marketplace."');");
+        } catch(\Exception $e){
+            dd($e->getMessage());
         }
-        CatalogPrice::insert($preCatalogPrices);
-
         $this->submitBtn = true;
         $this->dispatchBrowserEvent('swal:success', [
             'text' => 'All prices successfully submitted',
