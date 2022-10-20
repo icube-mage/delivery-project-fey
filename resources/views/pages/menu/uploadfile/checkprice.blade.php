@@ -3,6 +3,6 @@
         <a href="{{route('menu.uploadfile')}}">Upload File</a> > Check Price
     </x-slot>
     <x-content-card id="main">
-        <livewire:table.check-price :dataTemp="$dataCatalog" :brand="$brand" :marketplace="$marketplace" :errorData="$errorData" :errorIds="$errorIds"/>
+        <livewire:table.check-price :dataTemp="$dataCatalog" :brand="$brand" :marketplace="$marketplace" :errorData="$errorData"/>
     </x-content-card>
 </x-app-layout>
