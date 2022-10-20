@@ -37,7 +37,6 @@ CREATE
 					DELETE FROM catalog_price_temps WHERE sku=@sku AND brand=@brand AND marketplace=@marketplace AND warehouse=@warehouse AND user_id=@user_id AND is_discount=1 AND is_whitelist=0;
 				END IF;
 			END IF;
-			INSERT INTO temp (`sku`, `data1`, `data2`, `data3`, `average`, `text`) VALUES(@sku, @brand, @marketplace, @warehouse, @newTotalRecord, @countNewAvg);
 		END IF;
 	END IF;
 END;
