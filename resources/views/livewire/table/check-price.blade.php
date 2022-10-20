@@ -39,7 +39,7 @@
             @if($submitBtn!=0)
             <form action="{{ route('export.updatedfile', ['marketplace' => $marketplace, 'brand' => $brand]) }}" method="POST">
                 @csrf
-                <input type="hidden" value="{{ implode(",",$errorIds) }}" name="data">
+                <input type="hidden" value='{{ json_encode($errorIds) }}' name="data">
                 @if($downloadBtn=='Download')
                 <button type="submit" wire:click="setDownloadBtn('Back to upload')" class="excel-btn">{{$downloadBtn}}</button>
                 @else

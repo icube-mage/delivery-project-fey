@@ -106,6 +106,7 @@ class CheckPrice extends Component
 
     public function clearTemp()
     {
+        $this->errorIds = $this->dataTemp;
         $this->dataTemp = [];
         $this->firstLoad = false;
         $this->beforeVerified = false;
