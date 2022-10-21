@@ -1,6 +1,8 @@
 <div>
     <div class="flex justify-start items-center gap-x-4 mb-6">
-        <x-input type="text" class="w-80" placeholder="Filter by id, user, brand or marketplace" wire:model="searchTerm" />
+        <x-input type="text" class="w-80" 
+            placeholder="{{auth()->user()->hasRole('Store Operations') ? 'Filter by id, brand or marketplace' : 'Filter by id, user, brand or marketplace'}}" 
+            wire:model="searchTerm" />
         <form action="{{route('export.catalog.price')}}" method="POST">
             @csrf
             <input type="hidden" name="filter" value="{{$searchTerm}}"/>
