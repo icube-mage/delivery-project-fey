@@ -24,20 +24,34 @@ class HistoryData extends Component
     public function render()
     {
         $input = '%'.$this->searchTerm.'%';
-        $catalogPrices = CatalogPrice::with('user')
-        ->select(['upload_hash', 'brand', 'marketplace','start_date','users.name'])
-        ->leftJoin('users', 'catalog_prices.user_id', '=', 'users.id')
-        ->where('user_id', auth()->user()->id)
-        ->where(function($sub_query) use($input){
-            $sub_query->where('brand', 'like', $input)
-                ->orWhere('marketplace', 'like', $input)
-                ->orWhere('upload_hash', 'like', $input)
-                ->orWhereHas('user', function ($sub_query) use ($input) {
-                    $sub_query->where('name', 'like', $input);
-                });
-        })
-        ->groupBy(['upload_hash', 'brand', 'marketplace','start_date', 'users.name'])
-        ->paginate(10);
+        if(auth()->user()->hasRole('Store Operations')) {
+            $catalogPrices = CatalogPrice::with('user')
+            ->select(['upload_hash', 'brand', 'marketplace','start_date','users.name'])
+            ->leftJoin('users', 'catalog_prices.user_id', '=', 'users.id')
+            ->where('user_id', auth()->user()->id)
+            ->where(function($sub_query) use($input){
+                $sub_query->where('brand', 'like', $input)
+                    ->orWhere('marketplace', 'like', $input)
+                    ->orWhere('upload_hash', 'like', $input);
+            })
+            ->groupBy(['upload_hash', 'brand', 'marketplace','start_date', 'users.name'])
+            ->paginate(10);
+        } else {
+            $catalogPrices = CatalogPrice::with('user')
+            ->select(['upload_hash', 'brand', 'marketplace','start_date','users.name'])
+            ->leftJoin('users', 'catalog_prices.user_id', '=', 'users.id')
+            ->where(function($sub_query) use($input){
+                $sub_query->where('brand', 'like', $input)
+                    ->orWhere('marketplace', 'like', $input)
+                    ->orWhere('upload_hash', 'like', $input)
+                    ->orWhereHas('user', function ($sub_query) use ($input) {
+                        $sub_query->where('name', 'like', $input);
+                    });
+            })
+            ->groupBy(['upload_hash', 'brand', 'marketplace','start_date', 'users.name'])
+            ->paginate(10);
+        }
+        
         return view('livewire.table.history-data', compact('catalogPrices'));
     }
 }
