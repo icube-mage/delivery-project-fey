@@ -20,7 +20,7 @@ echo $dockerImageTag
 echo "apply docker tag version " + $dockerImageTag
 git clone ssh://git@phabricator.sirclo.com:2222/diffusion/309/swift-express.git
 cd swift-express
-yq e -i '.image.tag="'$dockerImageTag'"' helmfile.d/values/$environ/$2/values.yaml
+yq e -i '.lava.image.tag="'$dockerImageTag'"' helmfile.d/values/$environ/$2/values.yaml
 git config --global user.email "jenkins-agent@sirclo.com"
 git config --global user.name "jenkins-agent"
 git add .
