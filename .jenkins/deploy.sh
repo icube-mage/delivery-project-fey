@@ -10,13 +10,10 @@ if [ -z "$2" ] ; then
         exit 1
 fi
 
-#getImage="/tmp/imagetag.txt"
-ts=$(date +"%Y%m%d")
 bid=$(echo $BUILD_ID)
 githead=$(git rev-parse HEAD)
 set -ex
-dockerImageTag=$githead-$ts$bid
-echo $dockerImageTag
+dockerImageTag=$githead-$bid
 echo "apply docker tag version " + $dockerImageTag
 git clone ssh://git@phabricator.sirclo.com:2222/diffusion/309/swift-express.git
 cd swift-express
